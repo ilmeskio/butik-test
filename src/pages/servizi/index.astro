@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 
 const servizi = (await getCollection('servizi', e => !e.data.draft))
   .sort((a, b) => a.data.order - b.data.order);
@@ -22,9 +23,11 @@ const servizi = (await getCollection('servizi', e => !e.data.draft))
       {servizi.map(s => (
         <a href={`/servizi/${s.id}`} class="group block">
           <div class="overflow-hidden mb-5">
-            <img
+            <Image
               src={s.data.heroImage}
               alt={s.data.heroAlt}
+              widths={[400, 700]}
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
             />
           </div>

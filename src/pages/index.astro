@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 
 const servizi = (await getCollection('servizi', e => !e.data.draft))
   .sort((a, b) => a.data.order - b.data.order)
@@ -34,16 +35,10 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
         utilizzando la musica come strumento per valorizzare territori e attivare comunità.
       </p>
       <div class="flex flex-wrap gap-4 justify-center">
-        <a
-          href="/servizi"
-          class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 bg-butik-red text-white hover:bg-red-700 transition-colors"
-        >
+        <a href="/servizi" class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 bg-butik-red text-white hover:bg-red-700 transition-colors">
           I Nostri Servizi
         </a>
-        <a
-          href="/progetti"
-          class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 border border-white text-white hover:bg-white hover:text-butik-dark transition-colors"
-        >
+        <a href="/progetti" class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 border border-white text-white hover:bg-white hover:text-butik-dark transition-colors">
           I Nostri Progetti
         </a>
       </div>
@@ -62,9 +57,11 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
           {servizi.map(s => (
             <a href={`/servizi/${s.id}`} class="group block">
               <div class="overflow-hidden mb-4">
-                <img
+                <Image
                   src={s.data.heroImage}
                   alt={s.data.heroAlt}
+                  widths={[400, 700]}
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
@@ -74,10 +71,7 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
           ))}
         </div>
         <div class="text-center mt-12">
-          <a
-            href="/servizi"
-            class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 bg-butik-red text-white hover:bg-red-700 transition-colors inline-block"
-          >
+          <a href="/servizi" class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 bg-butik-red text-white hover:bg-red-700 transition-colors inline-block">
             Tutti i Servizi
           </a>
         </div>
@@ -97,9 +91,11 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
           {progetti.map(p => (
             <a href={`/progetti/${p.id}`} class="group block">
               <div class="overflow-hidden mb-4">
-                <img
+                <Image
                   src={p.data.heroImage}
                   alt={p.data.heroAlt}
+                  widths={[400, 700]}
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
@@ -112,10 +108,7 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
           ))}
         </div>
         <div class="text-center mt-12">
-          <a
-            href="/progetti"
-            class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 border-2 border-butik-red text-butik-red hover:bg-butik-red hover:text-white transition-colors inline-block"
-          >
+          <a href="/progetti" class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 border-2 border-butik-red text-butik-red hover:bg-butik-red hover:text-white transition-colors inline-block">
             Tutti i Progetti
           </a>
         </div>
