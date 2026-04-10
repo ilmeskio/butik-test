@@ -1,11 +1,10 @@
 ---
 title: "Progettazione Culturale"
 subtitle: "Supportiamo enti, istituzioni e operatori nella progettazione e realizzazione di iniziative culturali ad impatto sociale."
-heroImage: "https://picsum.photos/1600/900?random=20"
+heroImage: "./hero.jpg"
 heroAlt: "Progettazione culturale con la musica"
 metaTitle: "Progettazione Culturale — Butik"
 metaDescription: "Scopri come Butik supporta enti e istituzioni nella progettazione culturale attraverso la musica."
-ogImage: "https://picsum.photos/1200/630?random=20"
 order: 1
 draft: false
 ---
@@ -15,6 +14,13 @@ import ImageLeft from '#components/mdx/ImageLeft.astro';
 import ImageBlock from '#components/mdx/ImageBlock.astro';
 import ImageCarousel from '#components/mdx/ImageCarousel.astro';
 
+import imgRight from './img-right.jpg';
+import imgLeft from './img-left.jpg';
+import imgBlock from './img-block.jpg';
+import gallery1 from './gallery-1.jpg';
+import gallery2 from './gallery-2.jpg';
+import gallery3 from './gallery-3.jpg';
+
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vehicula, libero vel cursus fermentum, felis nisl scelerisque libero, nec facilisis purus metus vel velit. Proin ac libero id arcu vestibulum gravida vel nec enim. Sed consequat, urna non gravida dignissim, justo lorem condimentum nisi, vel malesuada urna felis eget felis.
 
 Vivamus tincidunt erat id eros congue, non commodo augue efficitur. Donec suscipit felis vel odio consequat, in volutpat urna aliquet. Curabitur vel tortor at arcu euismod consequat. Integer facilisis lectus non mi pharetra, ac venenatis lorem laoreet.
@@ -23,7 +29,7 @@ Vivamus tincidunt erat id eros congue, non commodo augue efficitur. Donec suscip
 
 Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.
 
-<ImageRight src="https://picsum.photos/800/600?random=21" alt="Team al lavoro su progetto culturale" caption="Il nostro team durante un workshop di progettazione">
+<ImageRight src={imgRight} alt="Team al lavoro su progetto culturale" caption="Il nostro team durante un workshop di progettazione">
   ### Metodo partecipativo
 
   Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi.
@@ -33,21 +39,21 @@ Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac tu
 
 Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Sed posuere consectetur est at lobortis. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
 
-<ImageLeft src="https://picsum.photos/800/600?random=22" alt="Evento culturale in piazza" caption="Un evento organizzato nell'ambito del progetto">
+<ImageLeft src={imgLeft} alt="Evento culturale in piazza" caption="Un evento organizzato nell'ambito del progetto">
   ### Impatto territoriale
 
   Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod.
 
-  Donec sed odio dui. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+  Donec sed odio dui. Cras mattis consectetur purus sit amet fermentum. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
 </ImageLeft>
 
 ## Risultati e Impatto
 
-Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Sed posuere consectetur est at lobortis. Donec sed odio dui.
+Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
 
-<ImageBlock src="https://picsum.photos/1600/700?random=23" alt="Concerto en plein air" caption="Festival organizzato in collaborazione con il Comune di Milano" />
+<ImageBlock src={imgBlock} alt="Concerto en plein air" caption="Festival organizzato in collaborazione con il Comune di Milano" />
 
-Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
 
 ### Cosa offriamo
 
@@ -61,10 +67,9 @@ Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatib
 ## Gallery
 
 <ImageCarousel images={[
-  { src: "https://picsum.photos/1200/700?random=24", alt: "Workshop di progettazione", caption: "Workshop con operatori culturali — Milano, 2024" },
-  { src: "https://picsum.photos/1200/700?random=25", alt: "Presentazione del progetto", caption: "Presentazione del progetto ai partner istituzionali" },
-  { src: "https://picsum.photos/1200/700?random=26", alt: "Evento conclusivo", caption: "Evento conclusivo del percorso — Piazza del Duomo" },
-  { src: "https://picsum.photos/1200/700?random=27", alt: "Partecipanti al workshop", caption: "I partecipanti durante le attività laboratoriali" },
+  { src: gallery1, alt: "Workshop di progettazione", caption: "Workshop con operatori culturali — Milano, 2024" },
+  { src: gallery2, alt: "Presentazione del progetto", caption: "Presentazione del progetto ai partner istituzionali" },
+  { src: gallery3, alt: "Evento conclusivo", caption: "Evento conclusivo del percorso — Piazza del Duomo" },
 ]} />
 
-Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.
