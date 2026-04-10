@@ -16,7 +16,7 @@ const { src, alt = '', caption } = Astro.props;
     {typeof src === 'string' ? (
       <img src={src} alt={alt} class="w-full h-auto object-cover rounded-sm" />
     ) : (
-      <Image src={src} alt={alt} class="w-full h-auto object-cover rounded-sm" widths={[400, 800]} sizes="(max-width: 768px) 100vw, 50vw" />
+      <Image src={src} alt={alt} class="w-full h-auto object-cover rounded-sm" widths={[400, 800]} sizes="(max-width: 768px) 100vw, 50vw" quality={72} />
     )}
     {caption && (
       <figcaption class="mt-2 text-center text-sm text-butik-body font-sans italic">{caption}</figcaption>

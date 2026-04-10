@@ -28,6 +28,7 @@ const servizi = (await getCollection('servizi', e => !e.data.draft))
               alt={s.data.heroAlt}
               widths={[400, 700]}
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              quality={72}
               class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
             />
           </div>
