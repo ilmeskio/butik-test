@@ -10,7 +10,7 @@ interface Props {
   heroAlt?: string;
   metaTitle?: string;
   metaDescription?: string;
-  ogImage?: ImageMetadata | string;
+  ogImage?: string;
   // Extra info (used by projects)
   client?: string;
   year?: number;
@@ -34,7 +34,7 @@ const {
 <BaseLayout
   title={metaTitle ?? `${title} — Butik`}
   description={metaDescription ?? subtitle}
-  ogImage={ogImage ?? heroImage}
+  ogImage={ogImage ?? (typeof heroImage === 'string' ? heroImage : heroImage.src)}
 >
   <HeroBanner title={title} subtitle={subtitle} image={heroImage} imageAlt={heroAlt} />
 
