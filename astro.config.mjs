@@ -7,6 +7,9 @@ export default defineConfig({
   prefetch: {
     prefetchAll: true,
   },
+  build: {
+    inlineStylesheets: 'always',
+  },
   integrations: [mdx()],
   vite: {
     plugins: [tailwindcss()],
