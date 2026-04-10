@@ -1,15 +1,16 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import HeroBanner from '../components/HeroBanner.astro';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
   title: string;
   subtitle?: string;
-  heroImage: string;
+  heroImage: ImageMetadata | string;
   heroAlt?: string;
   metaTitle?: string;
   metaDescription?: string;
-  ogImage?: string;
+  ogImage?: ImageMetadata | string;
   // Extra info (used by projects)
   client?: string;
   year?: number;

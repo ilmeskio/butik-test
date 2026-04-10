@@ -20,7 +20,7 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
   <section class="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0">
       <img
-        src="https://picsum.photos/1600/900?random=10"
+        src="/hero-home.jpg"
         alt="Butik hero"
         class="w-full h-full object-cover"
       />
@@ -50,7 +50,7 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
     <section class="py-24 bg-butik-light">
       <div class="max-w-7xl mx-auto px-6">
         <div class="mb-12 text-center">
-          <h3 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Cosa facciamo</h3>
+          <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Cosa facciamo</p>
           <h2 class="font-heading text-4xl font-bold text-butik-dark">I Nostri Servizi</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -84,7 +84,7 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
     <section class="py-24">
       <div class="max-w-7xl mx-auto px-6">
         <div class="mb-12 text-center">
-          <h3 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Portfolio</h3>
+          <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Portfolio</p>
           <h2 class="font-heading text-4xl font-bold text-butik-dark">I Nostri Progetti</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
