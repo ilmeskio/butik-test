@@ -4,6 +4,12 @@ import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
+  prefetch: {
+    prefetchAll: true,
+  },
+  build: {
+    inlineStylesheets: 'always',
+  },
   integrations: [mdx()],
   vite: {
     plugins: [tailwindcss()],

@@ -1,11 +1,12 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import HeroBanner from '../components/HeroBanner.astro';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
   title: string;
   subtitle?: string;
-  heroImage: string;
+  heroImage: ImageMetadata | string;
   heroAlt?: string;
   metaTitle?: string;
   metaDescription?: string;
@@ -33,7 +34,7 @@ const {
 <BaseLayout
   title={metaTitle ?? `${title} — Butik`}
   description={metaDescription ?? subtitle}
-  ogImage={ogImage ?? heroImage}
+  ogImage={ogImage ?? (typeof heroImage === 'string' ? heroImage : heroImage.src)}
 >
   <HeroBanner title={title} subtitle={subtitle} image={heroImage} imageAlt={heroAlt} />
 

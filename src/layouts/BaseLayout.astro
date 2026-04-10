@@ -2,6 +2,10 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import logo from '../assets/logo.webp';
+
+const optimizedOg = await getImage({ src: logo, width: 1200, format: 'png' });
 
 interface Props {
   title?: string;
@@ -12,7 +16,7 @@ interface Props {
 const {
   title = 'Butik',
   description = 'La prima impresa sociale italiana specializzata in progettazione culturale e sviluppo territoriale attraverso la musica.',
-  ogImage = '/logo.png',
+  ogImage = optimizedOg.src,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
@@ -23,8 +27,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin)
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Preload font per spezzare la catena CSS → font -->
+    <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/josefin-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jost-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -42,14 +51,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin)
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={ogImage} />
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Josefin+Sans:wght@300;400;700&family=Jost:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
   </head>
   <body class="flex flex-col min-h-screen">
     <Header />

@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import heroHome from '../assets/hero-home.jpg';
 
 const servizi = (await getCollection('servizi', e => !e.data.draft))
   .sort((a, b) => a.data.order - b.data.order)
@@ -18,10 +20,15 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
   <!-- Hero -->
   <section class="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0">
-      <img
-        src="https://picsum.photos/1600/900?random=10"
+      <Image
+        src={heroHome}
         alt="Butik hero"
+        widths={[640, 1024, 1600]}
+        sizes="100vw"
+        quality={72}
         class="w-full h-full object-cover"
+        loading="eager"
+        fetchpriority="high"
       />
       <div class="absolute inset-0 bg-black/50"></div>
     </div>
@@ -34,16 +41,10 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
         utilizzando la musica come strumento per valorizzare territori e attivare comunità.
       </p>
       <div class="flex flex-wrap gap-4 justify-center">
-        <a
-          href="/servizi"
-          class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 bg-butik-red text-white hover:bg-red-700 transition-colors"
-        >
+        <a href="/servizi" class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 bg-butik-red text-white hover:bg-red-700 transition-colors">
           I Nostri Servizi
         </a>
-        <a
-          href="/progetti"
-          class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 border border-white text-white hover:bg-white hover:text-butik-dark transition-colors"
-        >
+        <a href="/progetti" class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 border border-white text-white hover:bg-white hover:text-butik-dark transition-colors">
           I Nostri Progetti
         </a>
       </div>
@@ -55,16 +56,19 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
     <section class="py-24 bg-butik-light">
       <div class="max-w-7xl mx-auto px-6">
         <div class="mb-12 text-center">
-          <h3 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Cosa facciamo</h3>
+          <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Cosa facciamo</p>
           <h2 class="font-heading text-4xl font-bold text-butik-dark">I Nostri Servizi</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           {servizi.map(s => (
             <a href={`/servizi/${s.id}`} class="group block">
               <div class="overflow-hidden mb-4">
-                <img
+                <Image
                   src={s.data.heroImage}
                   alt={s.data.heroAlt}
+                  widths={[400, 700]}
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  quality={72}
                   class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
@@ -74,10 +78,7 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
           ))}
         </div>
         <div class="text-center mt-12">
-          <a
-            href="/servizi"
-            class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 bg-butik-red text-white hover:bg-red-700 transition-colors inline-block"
-          >
+          <a href="/servizi" class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 bg-butik-red text-white hover:bg-red-700 transition-colors inline-block">
             Tutti i Servizi
           </a>
         </div>
@@ -90,16 +91,19 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
     <section class="py-24">
       <div class="max-w-7xl mx-auto px-6">
         <div class="mb-12 text-center">
-          <h3 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Portfolio</h3>
+          <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Portfolio</p>
           <h2 class="font-heading text-4xl font-bold text-butik-dark">I Nostri Progetti</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           {progetti.map(p => (
             <a href={`/progetti/${p.id}`} class="group block">
               <div class="overflow-hidden mb-4">
-                <img
+                <Image
                   src={p.data.heroImage}
                   alt={p.data.heroAlt}
+                  widths={[400, 700]}
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  quality={72}
                   class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
@@ -112,10 +116,7 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
           ))}
         </div>
         <div class="text-center mt-12">
-          <a
-            href="/progetti"
-            class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 border-2 border-butik-red text-butik-red hover:bg-butik-red hover:text-white transition-colors inline-block"
-          >
+          <a href="/progetti" class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 border-2 border-butik-red text-butik-red hover:bg-butik-red hover:text-white transition-colors inline-block">
             Tutti i Progetti
           </a>
         </div>
