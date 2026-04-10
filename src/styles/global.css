@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* Evita FOIT: mostra testo con font di sistema finché i web font non sono pronti */
+@font-face { font-family: "DM Sans"; font-display: swap; src: local("DM Sans"); }
+@font-face { font-family: "Josefin Sans"; font-display: swap; src: local("Josefin Sans"); }
+@font-face { font-family: "Jost"; font-display: swap; src: local("Jost"); }
+
 @theme {
   /* Fonts */
   --font-sans: "DM Sans", sans-serif;
