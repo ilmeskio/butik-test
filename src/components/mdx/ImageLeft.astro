@@ -1,0 +1,30 @@
+---
+interface Props {
+  src: string;
+  alt?: string;
+  caption?: string;
+}
+
+const { src, alt = '', caption } = Astro.props;
+---
+
+<div class="my-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center not-prose">
+  <!-- Image (left) -->
+  <figure class="m-0">
+    <img
+      src={src}
+      alt={alt}
+      class="w-full h-auto object-cover rounded-sm"
+    />
+    {caption && (
+      <figcaption class="mt-2 text-center text-sm text-butik-body font-sans italic">
+        {caption}
+      </figcaption>
+    )}
+  </figure>
+
+  <!-- Text (right) -->
+  <div class="prose prose-lg max-w-none">
+    <slot />
+  </div>
+</div>

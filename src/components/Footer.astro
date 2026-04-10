@@ -1,0 +1,45 @@
+---
+const socialLinks = [
+  { href: 'mailto:info@wearebutik.com', label: 'Mail' },
+  { href: 'https://www.instagram.com/wearebutik/', label: 'Instagram' },
+  { href: 'https://www.facebook.com/wearebutikcom/', label: 'Facebook' },
+  { href: 'https://www.youtube.com/channel/UCn0tOGnc1FWyDa1qbOX_nHQ', label: 'YouTube' },
+  { href: 'https://www.linkedin.com/company/butik-s-r-l', label: 'LinkedIn' },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-butik-red text-white">
+  <div class="max-w-7xl mx-auto px-6 py-12 flex flex-col items-center gap-8 text-center">
+
+    <!-- Company info -->
+    <p class="font-display text-xs font-bold tracking-widest uppercase leading-relaxed">
+      Butik S.r.l. Social Enterprise&nbsp;&mdash;&nbsp;Via Plinio 14, 20129 Milano&nbsp;&mdash;&nbsp;Italy
+      <br />
+      P. IVA 10429130965
+    </p>
+
+    <!-- Divider -->
+    <div class="w-16 h-px bg-white/40"></div>
+
+    <!-- Social links -->
+    <nav class="flex flex-wrap justify-center gap-6">
+      {socialLinks.map(link => (
+        <a
+          href={link.href}
+          target={link.href.startsWith('mailto') ? undefined : '_blank'}
+          rel={link.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+          class="font-display text-xs font-medium tracking-widest uppercase text-white/80 hover:text-white transition-colors"
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Copyright -->
+    <p class="font-display text-xs tracking-widest uppercase text-white/60">
+      &copy;Butik{year}
+    </p>
+  </div>
+</footer>

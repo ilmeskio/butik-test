@@ -1,0 +1,72 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import HeroBanner from '../components/HeroBanner.astro';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  heroImage: string;
+  heroAlt?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  ogImage?: string;
+  // Extra info (used by projects)
+  client?: string;
+  year?: number;
+  category?: string;
+}
+
+const {
+  title,
+  subtitle,
+  heroImage,
+  heroAlt,
+  metaTitle,
+  metaDescription,
+  ogImage,
+  client,
+  year,
+  category,
+} = Astro.props;
+---
+
+<BaseLayout
+  title={metaTitle ?? `${title} — Butik`}
+  description={metaDescription ?? subtitle}
+  ogImage={ogImage ?? heroImage}
+>
+  <HeroBanner title={title} subtitle={subtitle} image={heroImage} imageAlt={heroAlt} />
+
+  <!-- Metadata bar (only for projects) -->
+  {(client || year || category) && (
+    <div class="border-b border-gray-100">
+      <div class="max-w-7xl mx-auto px-6 py-5 flex flex-wrap gap-8">
+        {client && (
+          <div>
+            <span class="font-display text-xs font-bold tracking-widest uppercase text-butik-red block mb-1">Cliente</span>
+            <span class="font-sans text-sm text-butik-dark">{client}</span>
+          </div>
+        )}
+        {year && (
+          <div>
+            <span class="font-display text-xs font-bold tracking-widest uppercase text-butik-red block mb-1">Anno</span>
+            <span class="font-sans text-sm text-butik-dark">{year}</span>
+          </div>
+        )}
+        {category && (
+          <div>
+            <span class="font-display text-xs font-bold tracking-widest uppercase text-butik-red block mb-1">Categoria</span>
+            <span class="font-sans text-sm text-butik-dark">{category}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  )}
+
+  <!-- Content -->
+  <article class="max-w-5xl mx-auto px-6 py-16">
+    <div class="prose prose-lg max-w-none">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

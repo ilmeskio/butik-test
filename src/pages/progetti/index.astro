@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const progetti = (await getCollection('progetti', e => !e.data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  title="Progetti — Butik"
+  description="Esplora i progetti di Butik: dalla Milano Music Week al Festival del Turismo Musicale."
+>
+  <!-- Page header -->
+  <div class="pt-20 pb-12 text-center">
+    <h3 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Portfolio</h3>
+    <h1 class="font-heading text-5xl font-bold text-butik-dark">Progetti</h1>
+  </div>
+
+  <!-- Grid -->
+  <section class="max-w-7xl mx-auto px-6 pb-24">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      {progetti.map(p => (
+        <a href={`/progetti/${p.id}`} class="group block">
+          <div class="overflow-hidden mb-5">
+            <img
+              src={p.data.heroImage}
+              alt={p.data.heroAlt}
+              class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+          <div class="flex flex-wrap items-center gap-3 mb-2">
+            {p.data.category && (
+              <span class="font-display text-xs font-bold tracking-widest uppercase text-butik-red">
+                {p.data.category}
+              </span>
+            )}
+            {p.data.year && (
+              <span class="font-display text-xs text-butik-body">{p.data.year}</span>
+            )}
+          </div>
+          <h2 class="font-heading text-xl font-bold text-butik-dark mb-2 group-hover:text-butik-red transition-colors">
+            {p.data.title}
+          </h2>
+          <p class="font-sans text-sm text-butik-body leading-relaxed">
+            {p.data.subtitle}
+          </p>
+          {p.data.client && (
+            <p class="mt-2 font-display text-xs tracking-widest uppercase text-butik-body">
+              Cliente: {p.data.client}
+            </p>
+          )}
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

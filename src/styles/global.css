@@ -1,0 +1,80 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  /* Fonts */
+  --font-sans: "DM Sans", sans-serif;
+  --font-heading: "Josefin Sans", sans-serif;
+  --font-display: "Jost", sans-serif;
+
+  /* Colors */
+  --color-butik-red: #E0242B;
+  --color-butik-dark: #2B2B2B;
+  --color-butik-darker: #141414;
+  --color-butik-body: #616161;
+  --color-butik-light: #F5F5F5;
+}
+
+/* Base typography */
+body {
+  font-family: var(--font-sans);
+  color: var(--color-butik-body);
+  background-color: #ffffff;
+}
+
+h1, h2 {
+  font-family: var(--font-heading);
+  color: var(--color-butik-dark);
+}
+
+h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-butik-red);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Prose customization */
+.prose h1,
+.prose h2 {
+  font-family: var(--font-heading);
+  color: var(--color-butik-dark);
+}
+
+.prose h3,
+.prose h4 {
+  font-family: var(--font-display);
+  color: var(--color-butik-red);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.prose p,
+.prose li {
+  color: var(--color-butik-body);
+  font-family: var(--font-sans);
+}
+
+.prose a {
+  color: var(--color-butik-red);
+  text-decoration: underline;
+}
+
+/* Carousel */
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: 1rem;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+}

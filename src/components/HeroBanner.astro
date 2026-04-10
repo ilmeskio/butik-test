@@ -1,0 +1,35 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  image: string;
+  imageAlt?: string;
+}
+
+const { title, subtitle, image, imageAlt = '' } = Astro.props;
+---
+
+<section class="relative h-[70vh] min-h-[400px] flex items-end overflow-hidden">
+  <!-- Background image -->
+  <div class="absolute inset-0">
+    <img
+      src={image}
+      alt={imageAlt}
+      class="w-full h-full object-cover"
+    />
+    <!-- Dark overlay -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent"></div>
+  </div>
+
+  <!-- Text content -->
+  <div class="relative z-10 max-w-7xl mx-auto px-6 pb-16 w-full">
+    <h1 class="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight max-w-3xl">
+      {title}
+    </h1>
+    {subtitle && (
+      <p class="mt-4 font-sans text-lg md:text-xl text-white/80 max-w-2xl">
+        {subtitle}
+      </p>
+    )}
+  </div>
+</section>

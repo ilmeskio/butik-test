@@ -1,0 +1,121 @@
+---
+interface CarouselImage {
+  src: string;
+  alt?: string;
+  caption?: string;
+}
+
+interface Props {
+  images: CarouselImage[];
+}
+
+const { images } = Astro.props;
+const id = `carousel-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div class="my-12 not-prose" data-carousel={id}>
+  <!-- Track -->
+  <div
+    class="carousel-track rounded-sm overflow-hidden"
+    id={`${id}-track`}
+  >
+    {images.map((img, i) => (
+      <div class="carousel-slide relative" data-index={i}>
+        <figure class="m-0">
+          <img
+            src={img.src}
+            alt={img.alt ?? ''}
+            class="w-full h-80 md:h-[500px] object-cover"
+          />
+          {img.caption && (
+            <figcaption class="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-sm font-sans italic px-4 py-2 text-center">
+              {img.caption}
+            </figcaption>
+          )}
+        </figure>
+      </div>
+    ))}
+  </div>
+
+  <!-- Controls -->
+  <div class="flex items-center justify-between mt-4">
+    <!-- Prev -->
+    <button
+      id={`${id}-prev`}
+      aria-label="Immagine precedente"
+      class="flex items-center gap-2 font-display text-xs font-bold tracking-widest uppercase text-butik-dark hover:text-butik-red transition-colors disabled:opacity-30"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      Prev
+    </button>
+
+    <!-- Dots -->
+    <div class="flex gap-2" id={`${id}-dots`}>
+      {images.map((_, i) => (
+        <button
+          data-dot={i}
+          aria-label={`Vai all'immagine ${i + 1}`}
+          class={`w-2 h-2 rounded-full transition-colors ${i === 0 ? 'bg-butik-red' : 'bg-gray-300'}`}
+        ></button>
+      ))}
+    </div>
+
+    <!-- Next -->
+    <button
+      id={`${id}-next`}
+      aria-label="Immagine successiva"
+      class="flex items-center gap-2 font-display text-xs font-bold tracking-widest uppercase text-butik-dark hover:text-butik-red transition-colors disabled:opacity-30"
+    >
+      Next
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script define:vars={{ id, total: images.length }}>
+  (function () {
+    const track = document.getElementById(`${id}-track`);
+    const prevBtn = document.getElementById(`${id}-prev`);
+    const nextBtn = document.getElementById(`${id}-next`);
+    const dotsContainer = document.getElementById(`${id}-dots`);
+
+    if (!track || !prevBtn || !nextBtn || !dotsContainer) return;
+
+    let current = 0;
+
+    function goTo(index) {
+      current = Math.max(0, Math.min(index, total - 1));
+      const slideWidth = track.clientWidth;
+      track.scrollTo({ left: current * slideWidth, behavior: 'smooth' });
+      updateDots();
+    }
+
+    function updateDots() {
+      const dots = dotsContainer.querySelectorAll('[data-dot]');
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('bg-butik-red', i === current);
+        dot.classList.toggle('bg-gray-300', i !== current);
+      });
+    }
+
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+
+    dotsContainer.querySelectorAll('[data-dot]').forEach((dot, i) => {
+      dot.addEventListener('click', () => goTo(i));
+    });
+
+    // Sync dots on scroll
+    track.addEventListener('scroll', () => {
+      const slideWidth = track.clientWidth;
+      if (slideWidth > 0) {
+        current = Math.round(track.scrollLeft / slideWidth);
+        updateDots();
+      }
+    });
+  })();
+</script>

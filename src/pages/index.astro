@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const servizi = (await getCollection('servizi', e => !e.data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const progetti = (await getCollection('progetti', e => !e.data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title="Butik — Music Tourism in Italy"
+  description="La prima impresa sociale italiana specializzata in progettazione culturale e sviluppo territoriale attraverso la musica."
+>
+  <!-- Hero -->
+  <section class="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0">
+      <img
+        src="https://picsum.photos/1600/900?random=10"
+        alt="Butik hero"
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+    <div class="relative z-10 text-center text-white max-w-3xl mx-auto px-6">
+      <h1 class="font-heading text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
+        La musica come strumento di sviluppo culturale
+      </h1>
+      <p class="font-sans text-xl text-white/80 mb-10">
+        Butik è un'impresa sociale che sviluppa progetti culturali ad impatto sociale,
+        utilizzando la musica come strumento per valorizzare territori e attivare comunità.
+      </p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a
+          href="/servizi"
+          class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 bg-butik-red text-white hover:bg-red-700 transition-colors"
+        >
+          I Nostri Servizi
+        </a>
+        <a
+          href="/progetti"
+          class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 border border-white text-white hover:bg-white hover:text-butik-dark transition-colors"
+        >
+          I Nostri Progetti
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Servizi preview -->
+  {servizi.length > 0 && (
+    <section class="py-24 bg-butik-light">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 text-center">
+          <h3 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Cosa facciamo</h3>
+          <h2 class="font-heading text-4xl font-bold text-butik-dark">I Nostri Servizi</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {servizi.map(s => (
+            <a href={`/servizi/${s.id}`} class="group block">
+              <div class="overflow-hidden mb-4">
+                <img
+                  src={s.data.heroImage}
+                  alt={s.data.heroAlt}
+                  class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <h3 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-2">{s.data.title}</h3>
+              <p class="font-sans text-sm text-butik-body">{s.data.subtitle}</p>
+            </a>
+          ))}
+        </div>
+        <div class="text-center mt-12">
+          <a
+            href="/servizi"
+            class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 bg-butik-red text-white hover:bg-red-700 transition-colors inline-block"
+          >
+            Tutti i Servizi
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Progetti preview -->
+  {progetti.length > 0 && (
+    <section class="py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 text-center">
+          <h3 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Portfolio</h3>
+          <h2 class="font-heading text-4xl font-bold text-butik-dark">I Nostri Progetti</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {progetti.map(p => (
+            <a href={`/progetti/${p.id}`} class="group block">
+              <div class="overflow-hidden mb-4">
+                <img
+                  src={p.data.heroImage}
+                  alt={p.data.heroAlt}
+                  class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              {p.data.category && (
+                <span class="font-display text-xs font-bold tracking-widest uppercase text-butik-red">{p.data.category}</span>
+              )}
+              <h3 class="font-heading text-xl font-bold text-butik-dark mt-1 mb-2">{p.data.title}</h3>
+              <p class="font-sans text-sm text-butik-body">{p.data.subtitle}</p>
+            </a>
+          ))}
+        </div>
+        <div class="text-center mt-12">
+          <a
+            href="/progetti"
+            class="font-display text-xs font-bold tracking-widest uppercase px-8 py-4 border-2 border-butik-red text-butik-red hover:bg-butik-red hover:text-white transition-colors inline-block"
+          >
+            Tutti i Progetti
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
