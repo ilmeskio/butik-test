@@ -22,6 +22,7 @@ const { Content } = await render(entry);
   metaTitle={entry.data.metaTitle}
   metaDescription={entry.data.metaDescription}
   ogImage={entry.data.ogImage?.src}
+  transitionName={`servizio-${entry.id}`}
 >
   <Content />
 </ContentLayout>

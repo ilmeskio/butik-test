@@ -30,6 +30,7 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               quality={72}
               class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+              transition:name={`progetto-${p.id}`}
             />
           </div>
           <div class="flex flex-wrap items-center gap-3 mb-2">
@@ -42,10 +43,10 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
               <span class="font-display text-xs text-butik-body">{p.data.year}</span>
             )}
           </div>
-          <h2 class="font-heading text-xl font-bold text-butik-dark mb-2 group-hover:text-butik-red transition-colors">
+          <h2 class="font-heading text-xl font-bold text-butik-dark mb-2 group-hover:text-butik-red transition-colors" transition:name={`progetto-${p.id}-title`}>
             {p.data.title}
           </h2>
-          <p class="font-sans text-sm text-butik-body leading-relaxed">
+          <p class="font-sans text-sm text-butik-body leading-relaxed" transition:name={`progetto-${p.id}-subtitle`}>
             {p.data.subtitle}
           </p>
           {p.data.client && (

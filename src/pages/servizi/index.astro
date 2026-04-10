@@ -30,12 +30,13 @@ const servizi = (await getCollection('servizi', e => !e.data.draft))
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               quality={72}
               class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+              transition:name={`servizio-${s.id}`}
             />
           </div>
-          <h2 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-2">
+          <h2 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-2" transition:name={`servizio-${s.id}-title`}>
             {s.data.title}
           </h2>
-          <p class="font-sans text-base text-butik-body leading-relaxed">
+          <p class="font-sans text-base text-butik-body leading-relaxed" transition:name={`servizio-${s.id}-subtitle`}>
             {s.data.subtitle}
           </p>
           <span class="mt-4 inline-block font-display text-xs font-bold tracking-widest uppercase text-butik-dark border-b-2 border-butik-red pb-0.5 group-hover:text-butik-red transition-colors">
