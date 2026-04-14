@@ -3,9 +3,9 @@ import { glob } from 'astro/loaders';
 
 const serviziCollection = defineCollection({
   loader: glob({
-    pattern: '**/index.{md,mdx}',
+    pattern: '*.{md,mdx}',
     base: './src/content/servizi',
-    generateId: ({ entry }) => entry.replace(/\/index\.(mdx?)$/, ''),
+    generateId: ({ entry }) => entry.replace(/\.(mdx?)$/, ''),
   }),
   schema: ({ image }) => z.object({
     title: z.string(),
@@ -22,9 +22,9 @@ const serviziCollection = defineCollection({
 
 const progettiCollection = defineCollection({
   loader: glob({
-    pattern: '**/index.{md,mdx}',
+    pattern: '*.{md,mdx}',
     base: './src/content/progetti',
-    generateId: ({ entry }) => entry.replace(/\/index\.(mdx?)$/, ''),
+    generateId: ({ entry }) => entry.replace(/\.(mdx?)$/, ''),
   }),
   schema: ({ image }) => z.object({
     title: z.string(),

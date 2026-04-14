@@ -11,6 +11,7 @@ interface Props {
   metaTitle?: string;
   metaDescription?: string;
   ogImage?: string;
+  transitionName?: string;
   // Extra info (used by projects)
   client?: string;
   year?: number;
@@ -25,6 +26,7 @@ const {
   metaTitle,
   metaDescription,
   ogImage,
+  transitionName,
   client,
   year,
   category,
@@ -36,7 +38,7 @@ const {
   description={metaDescription ?? subtitle}
   ogImage={ogImage ?? (typeof heroImage === 'string' ? heroImage : heroImage.src)}
 >
-  <HeroBanner title={title} subtitle={subtitle} image={heroImage} imageAlt={heroAlt} />
+  <HeroBanner title={title} subtitle={subtitle} image={heroImage} imageAlt={heroAlt} transitionName={transitionName} />
 
   <!-- Metadata bar (only for projects) -->
   {(client || year || category) && (

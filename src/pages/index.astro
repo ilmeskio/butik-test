@@ -70,10 +70,11 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
                   sizes="(max-width: 768px) 100vw, 33vw"
                   quality={72}
                   class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                  transition:name={`servizio-${s.id}`}
                 />
               </div>
-              <h3 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-2">{s.data.title}</h3>
-              <p class="font-sans text-sm text-butik-body">{s.data.subtitle}</p>
+              <h3 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-2" transition:name={`servizio-${s.id}-title`}>{s.data.title}</h3>
+              <p class="font-sans text-sm text-butik-body" transition:name={`servizio-${s.id}-subtitle`}>{s.data.subtitle}</p>
             </a>
           ))}
         </div>
@@ -105,13 +106,14 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
                   sizes="(max-width: 768px) 100vw, 33vw"
                   quality={72}
                   class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+                  transition:name={`progetto-${p.id}`}
                 />
               </div>
               {p.data.category && (
                 <span class="font-display text-xs font-bold tracking-widest uppercase text-butik-red">{p.data.category}</span>
               )}
-              <h3 class="font-heading text-xl font-bold text-butik-dark mt-1 mb-2">{p.data.title}</h3>
-              <p class="font-sans text-sm text-butik-body">{p.data.subtitle}</p>
+              <h3 class="font-heading text-xl font-bold text-butik-dark mt-1 mb-2" transition:name={`progetto-${p.id}-title`}>{p.data.title}</h3>
+              <p class="font-sans text-sm text-butik-body" transition:name={`progetto-${p.id}-subtitle`}>{p.data.subtitle}</p>
             </a>
           ))}
         </div>
