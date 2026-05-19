@@ -4,6 +4,7 @@ import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
+  ...(process.env.SITE ? { site: process.env.SITE } : {}),
   prefetch: {
     prefetchAll: true,
   },
