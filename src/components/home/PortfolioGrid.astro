@@ -1,0 +1,83 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  progetti: CollectionEntry<'progetti'>[];
+}
+
+const { progetti } = Astro.props;
+---
+
+{progetti.length > 0 && (
+  <section class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="mb-12">
+        <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Progetti</p>
+        <h2 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark">
+          Storie di trasformazione territoriale
+        </h2>
+        <p class="font-sans text-sm md:text-base text-butik-dark/70 max-w-2xl mt-4">
+          Quello che abbiamo costruito insieme ai nostri partner
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+        {progetti.map((p, i) => {
+          const isBig = i === 0;
+          const cardClasses = [
+            'group relative overflow-hidden block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-butik-red',
+            isBig
+              ? 'aspect-[4/3] md:aspect-auto md:h-full md:col-span-2 md:row-span-2'
+              : 'aspect-[4/3] md:aspect-square',
+          ].join(' ');
+
+          return (
+            <a
+              href={`/progetti/${p.id}`}
+              class={cardClasses}
+              aria-label={p.data.title}
+            >
+              <Image
+                src={p.data.heroImage}
+                alt={p.data.heroAlt}
+                widths={isBig ? [600, 900, 1200] : [400, 700]}
+                sizes={isBig
+                  ? '(max-width: 768px) 100vw, 66vw'
+                  : '(max-width: 768px) 100vw, 33vw'}
+                quality={72}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                transition:name={`progetto-${p.id}`}
+              />
+              <div class="absolute inset-x-0 bottom-0 p-5 md:p-6 bg-gradient-to-t from-butik-dark/90 via-butik-dark/60 to-transparent">
+                {p.data.category && (
+                  <span class="inline-block text-xs font-display tracking-widest uppercase bg-butik-light text-butik-dark px-3 py-1 mb-3">
+                    {p.data.category}
+                  </span>
+                )}
+                <h3
+                  class="font-heading text-xl md:text-2xl font-bold text-white leading-tight"
+                  transition:name={`progetto-${p.id}-title`}
+                >
+                  {p.data.title}
+                </h3>
+                <p class="font-sans text-sm text-white/80 mt-2 line-clamp-2">
+                  {p.data.subtitle}
+                </p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+
+      <div class="mt-12 text-center">
+        <a
+          href="/progetti"
+          class="block md:inline-block border-2 border-butik-red text-butik-red hover:bg-butik-red hover:text-white font-display text-xs font-bold tracking-widest uppercase px-8 py-4 transition-colors"
+        >
+          Vedi tutti i progetti
+        </a>
+      </div>
+    </div>
+  </section>
+)}
