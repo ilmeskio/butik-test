@@ -57,21 +57,20 @@ const year = new Date().getFullYear();
   <div class="max-w-7xl mx-auto px-6">
     <div class="border border-butik-dark/15 px-5 md:px-8 py-3 md:py-4">
 
-      <div class="grid grid-cols-1 md:grid-cols-[auto_1fr_auto_auto] gap-x-8 gap-y-6 items-start">
-        <!-- Col 1: Logo (dimensionato per stare a filo top/bottom della row) -->
-        <a href="/" class="flex items-center flex-shrink-0">
-          <Image src={logo} alt="Butik" width={340} height={224} class="h-48 md:h-56 w-auto" />
-        </a>
+      <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-x-8 gap-y-6 items-start">
+        <!-- Col 1: Logo grande + info aziendale (logo a 5px dall'address) -->
+        <div class="flex flex-col">
+          <a href="/" class="flex items-center flex-shrink-0">
+            <Image src={logo} alt="Butik" width={194} height={128} class="h-24 md:h-32 w-auto" />
+          </a>
 
-        <!-- Col 2: Info aziendale -->
-        <div class="flex flex-col gap-3">
-          <address class="not-italic font-sans text-sm text-butik-dark/70 leading-relaxed">
+          <address class="not-italic font-sans text-sm text-butik-dark/70 leading-relaxed mt-[5px]">
             <strong class="font-bold text-butik-dark">Butik s.r.l. Impresa Sociale</strong><br />
             Via Plinio 14, 20129 Milano — Italy<br />
             P. IVA 10429130965
           </address>
 
-          <div>
+          <div class="mt-4">
             <p class="font-display text-xs font-bold tracking-widest uppercase mb-1">
               PEC &amp; Email
             </p>
@@ -81,7 +80,7 @@ const year = new Date().getFullYear();
             </p>
           </div>
 
-          <ul class="flex items-center gap-4">
+          <ul class="flex items-center gap-4 mt-4">
             {socials.map(s => (
               <li>
                 <a
