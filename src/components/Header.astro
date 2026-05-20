@@ -14,6 +14,7 @@ const ctaHref = '/contatti';
 const ctaLabel = 'Lavoriamo insieme';
 
 const currentPath = Astro.url.pathname;
+const isHome = currentPath === '/';
 
 function isActive(href: string) {
   if (href === '/') return currentPath === '/';
@@ -21,19 +22,28 @@ function isActive(href: string) {
 }
 ---
 
-<header class="sticky top-0 z-50 bg-butik-light border-b border-butik-dark/10">
+<header
+  id="site-header"
+  data-overlay={isHome ? 'true' : 'false'}
+  class:list={[
+    'site-header sticky top-0 z-50 transition-colors duration-300',
+    isHome
+      ? 'bg-transparent md:bg-butik-light md:border-b md:border-butik-dark/10'
+      : 'bg-butik-light border-b border-butik-dark/10',
+  ]}
+>
   <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
 
     <!-- Left: Logo + Primary Nav -->
     <div class="flex items-center gap-10">
       <a href="/" class="flex-shrink-0">
-        <Image src={logo} alt="Butik" width={85} height={56} class="h-14 w-auto" />
+        <Image src={logo} alt="Butik" width={85} height={56} class="site-logo h-14 w-auto" />
       </a>
       <nav class="hidden md:flex items-center gap-8" aria-label="Navigazione principale">
         {navLinks.map(link => (
           <a
             href={link.href}
-            class={`font-display text-xs font-bold tracking-widest uppercase transition-colors ${
+            class={`nav-link font-display text-xs font-bold tracking-widest uppercase transition-colors ${
               isActive(link.href)
                 ? 'text-butik-red'
                 : 'text-butik-dark hover:text-butik-red'
@@ -56,7 +66,7 @@ function isActive(href: string) {
     <!-- Mobile hamburger -->
     <button
       id="mobile-menu-btn"
-      class="md:hidden p-3 text-butik-dark"
+      class="mobile-toggle md:hidden p-3 transition-colors"
       aria-label="Menu"
       aria-expanded="false"
       aria-controls="mobile-menu"
@@ -90,6 +100,35 @@ function isActive(href: string) {
   </div>
 </header>
 
+<style>
+  /* In modalità overlay (homepage) sopra l'hero su mobile:
+     header trasparente, logo e hamburger virati in bianco con drop-shadow. */
+  .site-header[data-overlay="true"]:not([data-scrolled="true"]) .mobile-toggle {
+    color: #ffffff;
+    filter: drop-shadow(0 1px 4px rgba(7, 17, 8, 0.45));
+  }
+  .site-header[data-overlay="true"]:not([data-scrolled="true"]) .site-logo {
+    filter: brightness(0) invert(1) drop-shadow(0 1px 4px rgba(7, 17, 8, 0.45));
+  }
+
+  /* Su desktop l'hero è chiaro come l'header: nessun override overlay. */
+  @media (min-width: 768px) {
+    .site-header[data-overlay="true"]:not([data-scrolled="true"]) .mobile-toggle {
+      color: var(--color-butik-dark);
+      filter: none;
+    }
+    .site-header[data-overlay="true"]:not([data-scrolled="true"]) .site-logo {
+      filter: none;
+    }
+  }
+
+  /* Transizione smooth quando il header passa da overlay a solido. */
+  .site-logo,
+  .mobile-toggle {
+    transition: filter 300ms ease, color 300ms ease;
+  }
+</style>
+
 <script>
   const btn = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
@@ -97,4 +136,33 @@ function isActive(href: string) {
     const open = menu?.classList.toggle('hidden') === false;
     btn.setAttribute('aria-expanded', String(open));
   });
+
+  // Toggle stato "scrolled" del header quando l'hero esce dal viewport
+  // (solo su homepage, dove l'header parte in modalità overlay).
+  const header = document.getElementById('site-header');
+  if (header && header.dataset.overlay === 'true') {
+    const heroSentinel = document.querySelector('[data-hero-section]');
+    if (heroSentinel) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            // Quando il fondo dell'hero esce dall'alto del viewport,
+            // entry.isIntersecting = false → siamo "scrolled past hero".
+            header.dataset.scrolled = entry.isIntersecting ? 'false' : 'true';
+            // Quando "scrolled", aggiungo classi solide per togliere trasparenza.
+            if (entry.isIntersecting) {
+              header.classList.remove('bg-butik-light', 'border-b', 'border-butik-dark/10');
+              header.classList.add('bg-transparent');
+            } else {
+              header.classList.add('bg-butik-light', 'border-b', 'border-butik-dark/10');
+              header.classList.remove('bg-transparent');
+            }
+          });
+        },
+        // Sentinel: trigger quando l'ultimo 80px dell'hero esce dall'alto.
+        { rootMargin: '-80px 0px 0px 0px', threshold: 0 }
+      );
+      observer.observe(heroSentinel);
+    }
+  }
 </script>
