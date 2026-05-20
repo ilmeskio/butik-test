@@ -55,16 +55,16 @@ const year = new Date().getFullYear();
 
 <footer class="bg-butik-light text-butik-dark py-6 md:py-8">
   <div class="max-w-7xl mx-auto px-6">
-    <div class="border border-butik-dark/15 px-5 md:px-8 py-5 md:py-6">
+    <div class="border border-butik-dark/15 px-5 md:px-8 py-3 md:py-4">
 
-      <div class="grid grid-cols-1 md:grid-cols-[auto_1fr_auto_auto] gap-x-8 gap-y-6 items-start">
-        <!-- Col 1: Logo (esce dal padding del box per stare a filo) -->
-        <a href="/" class="flex items-center -my-5 md:-my-6 flex-shrink-0">
+      <div class="grid grid-cols-1 md:grid-cols-[auto_1fr_auto_auto] gap-x-8 gap-y-6 items-center">
+        <!-- Col 1: Logo (centrato verticalmente nel box) -->
+        <a href="/" class="flex items-center flex-shrink-0">
           <Image src={logo} alt="Butik" width={420} height={276} class="h-56 md:h-72 w-auto" />
         </a>
 
         <!-- Col 2: Info aziendale -->
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-3">
           <address class="not-italic font-sans text-sm text-butik-dark/70 leading-relaxed">
             <strong class="font-bold text-butik-dark">Butik s.r.l. Impresa Sociale</strong><br />
             Via Plinio 14, 20129 Milano — Italy<br />
@@ -100,8 +100,8 @@ const year = new Date().getFullYear();
           </ul>
         </div>
 
-        <!-- Col 3: link 1 (allineata a destra su md+) -->
-        <nav aria-label="Sezioni sito" class="md:text-right">
+        <!-- Col 3: link 1 (la colonna stessa è a destra grazie al grid, testo sx) -->
+        <nav aria-label="Sezioni sito">
           <ul class="flex flex-col">
             {linksColumn1.map(link => (
               <li>
@@ -116,8 +116,8 @@ const year = new Date().getFullYear();
           </ul>
         </nav>
 
-        <!-- Col 4: link 2 (allineata a destra su md+) -->
-        <nav aria-label="Sezioni servizio" class="md:text-right">
+        <!-- Col 4: link 2 (la colonna stessa è a destra grazie al grid, testo sx) -->
+        <nav aria-label="Sezioni servizio">
           <ul class="flex flex-col">
             {linksColumn2.map(link => (
               <li>
