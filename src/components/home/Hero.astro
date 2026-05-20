@@ -139,7 +139,7 @@ const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
               i === servizi.length - 1 ? 'sm:col-span-2 lg:col-span-1' : '',
             ]}
           >
-            <h3 class="font-heading text-base md:text-lg font-bold text-butik-dark leading-tight">
+            <h3 class="hero-card-title font-heading text-base md:text-lg font-bold leading-tight">
               {s.title}
             </h3>
             <p class="font-sans text-sm text-butik-dark/70 leading-snug flex-1">
@@ -172,6 +172,12 @@ const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
   }
   .hero-subtitle {
     opacity: 0.95;
+  }
+  /* Override global h3 style (uppercase + tracking + red) per i titoli card. */
+  .hero-card-title {
+    color: var(--color-butik-dark);
+    text-transform: none;
+    letter-spacing: -0.005em;
   }
   .hero-tile {
     transition: transform 100ms linear;
