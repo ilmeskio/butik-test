@@ -53,14 +53,14 @@ const socials = [
 const year = new Date().getFullYear();
 ---
 
-<footer class="bg-butik-light text-butik-dark py-6 md:py-8">
+<footer class="bg-butik-light text-butik-dark py-3 md:py-4">
   <div class="max-w-7xl mx-auto px-6">
     <div class="border border-butik-dark/15 px-5 md:px-8 py-3 md:py-4">
 
-      <div class="grid grid-cols-1 md:grid-cols-[auto_1fr_auto_auto] gap-x-8 gap-y-6 items-center">
-        <!-- Col 1: Logo (centrato verticalmente nel box) -->
+      <div class="grid grid-cols-1 md:grid-cols-[auto_1fr_auto_auto] gap-x-8 gap-y-6 items-start">
+        <!-- Col 1: Logo (dimensionato per stare a filo top/bottom della row) -->
         <a href="/" class="flex items-center flex-shrink-0">
-          <Image src={logo} alt="Butik" width={420} height={276} class="h-56 md:h-72 w-auto" />
+          <Image src={logo} alt="Butik" width={340} height={224} class="h-48 md:h-56 w-auto" />
         </a>
 
         <!-- Col 2: Info aziendale -->
@@ -134,7 +134,7 @@ const year = new Date().getFullYear();
       </div>
 
       <!-- Bottom bar -->
-      <div class="border-t border-butik-dark/10 mt-5 pt-4 flex flex-col md:flex-row md:justify-between gap-3 text-xs text-butik-dark/50">
+      <div class="border-t border-butik-dark/10 mt-3 pt-3 flex flex-col md:flex-row md:justify-between gap-3 text-xs text-butik-dark/50">
         <p>&copy; {year} Butik. Tutti i diritti riservati.</p>
         <p class="flex flex-wrap gap-x-4 gap-y-2">
           <a href="/privacy" class="hover:text-butik-red transition-colors">Privacy policy</a>
