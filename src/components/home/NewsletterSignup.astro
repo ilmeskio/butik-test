@@ -1,0 +1,89 @@
+---
+
+---
+
+<section class="py-16 md:py-24 bg-butik-light">
+  <div class="max-w-2xl mx-auto px-6 text-center">
+    <h2
+      class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark mb-6"
+    >
+      Non perderti nessuna novità
+    </h2>
+
+    <p class="font-sans text-base text-butik-dark/70 mb-10">
+      Progetti, bandi, opportunità e approfondimenti sul turismo musicale e la
+      progettazione culturale: iscriviti per non perderti nulla
+    </p>
+
+    <div id="newsletter-container">
+      <form
+        id="newsletter-form"
+        action="#"
+        method="post"
+        class="flex flex-col md:flex-row gap-3"
+      >
+        <label class="sr-only" for="newsletter-email">Email</label>
+        <input
+          id="newsletter-email"
+          type="email"
+          name="email"
+          required
+          placeholder="La tua email"
+          autocomplete="email"
+          class="flex-1 px-5 py-3 md:py-4 border border-butik-dark/30 bg-white font-sans text-base focus:outline-none focus:border-butik-red"
+        />
+
+        <input
+          type="text"
+          name="website"
+          tabindex="-1"
+          autocomplete="off"
+          class="hidden"
+          aria-hidden="true"
+        />
+
+        <button
+          type="submit"
+          class="bg-butik-dark text-white px-8 py-3 md:py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-red transition-colors w-full md:w-auto"
+        >
+          Iscriviti
+        </button>
+      </form>
+
+      <p class="font-sans text-xs text-butik-dark/50 mt-4">
+        Iscrivendoti accetti la nostra <a
+          href="/privacy"
+          class="text-butik-red underline">privacy policy</a
+        >
+      </p>
+    </div>
+
+    <p
+      id="newsletter-status"
+      class="font-sans text-base text-butik-dark hidden"
+      role="status"
+      aria-live="polite"
+    ></p>
+  </div>
+</section>
+
+<script>
+  const container = document.getElementById('newsletter-container');
+  const status = document.getElementById('newsletter-status');
+  const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
+
+  if (container && status && form) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const honeypot = form.elements.namedItem('website') as HTMLInputElement | null;
+      if (honeypot && honeypot.value.trim() !== '') {
+        return;
+      }
+
+      container.classList.add('hidden');
+      status.textContent = 'Grazie, ti scriveremo a breve!';
+      status.classList.remove('hidden');
+    });
+  }
+</script>
