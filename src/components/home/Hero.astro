@@ -11,54 +11,81 @@ import imgF from '../../assets/servizi/template-servizio/gallery-3.jpg';
 import imgG from '../../assets/servizi/template-servizio/gallery-2.jpg';
 import imgH from '../../assets/hero-home.jpg';
 
-interface ScatterSlot {
-  /** Set di immagini che ruotano in questa cella. Almeno 1. */
-  images: { src: ImageMetadata; alt: string }[];
-  /** Classi Tailwind di posizionamento desktop su griglia 8×6. */
-  desktop: string;
-  /** Velocità parallasse (0 = fermo, >0 = scrolla più lento di pagina). */
-  parallax: number;
+// ── Background tiles ────────────────────────────────────────────────────
+// Mosaico di immagini absolute che coprono tutto lo sfondo dell'hero.
+// Posizione/dimensione in % della section, con sovrapposizioni volute.
+// Parallax: ogni tile ha vy (verticale) e vx (orizzontale) differenti.
+interface BgTile {
+  src: ImageMetadata;
+  alt: string;
+  /** Style inline per posizionamento iniziale (top/left/width/height in %). */
+  pos: string;
+  /** Velocità parallax: y per scroll verticale, x per drift orizzontale. */
+  vy: number;
+  vx: number;
 }
 
-// Composizione "scatter" desktop ispirata al wireframe Relume (col1-1).
-// Griglia 8 colonne × 6 righe, testo H1+CTA al centro (col 3-6, row 2-5).
-// 8 slot occupano gli angoli e i lati per riempire più area dello scatter.
-// Ogni slot ha 2 immagini che si alternano in fade ogni ~5s.
-const slots: ScatterSlot[] = [
-  // Top row
-  { images: [{ src: imgA, alt: 'Workshop di co-progettazione' },
-             { src: imgG, alt: 'Percorso di formazione' }],
-    desktop: 'md:col-start-1 md:col-span-2 md:row-start-1 md:row-span-2', parallax: 0.18 },
-  { images: [{ src: imgB, alt: 'Comunità coinvolta da un progetto' },
-             { src: imgH, alt: 'Evento culturale Butik' }],
-    desktop: 'md:col-start-7 md:col-span-2 md:row-start-1 md:row-span-2', parallax: 0.12 },
-
-  // Mid sides (colonne laterali piene)
-  { images: [{ src: imgC, alt: 'Itinerario turistico-musicale' },
-             { src: imgE, alt: 'Formazione e capacity building' }],
-    desktop: 'md:col-start-1 md:col-span-2 md:row-start-3 md:row-span-2', parallax: 0.28 },
-  { images: [{ src: imgD, alt: 'Concerto e attivazione territoriale' },
-             { src: imgF, alt: 'Mappa turistico-musicale' }],
-    desktop: 'md:col-start-7 md:col-span-2 md:row-start-3 md:row-span-2', parallax: 0.22 },
-
-  // Bottom row (più ampi, vicino al CTA)
-  { images: [{ src: imgE, alt: 'Formazione e capacity building' },
-             { src: imgA, alt: 'Workshop di co-progettazione' }],
-    desktop: 'md:col-start-1 md:col-span-3 md:row-start-5 md:row-span-2', parallax: 0.32 },
-  { images: [{ src: imgF, alt: 'Mappa turistico-musicale' },
-             { src: imgD, alt: 'Concerto e attivazione territoriale' }],
-    desktop: 'md:col-start-6 md:col-span-3 md:row-start-5 md:row-span-2', parallax: 0.26 },
+const bgTiles: BgTile[] = [
+  { src: imgC, alt: 'Itinerario turistico-musicale',     pos: 'top:-5%; left:-3%;  width:42%; height:55%;', vy: 0.22, vx:  0.04 },
+  { src: imgA, alt: 'Workshop di co-progettazione',      pos: 'top:-8%; left:32%;  width:36%; height:50%;', vy: 0.10, vx: -0.06 },
+  { src: imgB, alt: 'Comunità coinvolta',                pos: 'top:-3%; left:62%;  width:42%; height:48%;', vy: 0.28, vx:  0.05 },
+  { src: imgE, alt: 'Formazione e capacity building',    pos: 'top:38%; left:-4%;  width:38%; height:60%;', vy: 0.34, vx: -0.03 },
+  { src: imgH, alt: 'Evento culturale Butik',            pos: 'top:42%; left:28%;  width:42%; height:55%;', vy: 0.15, vx:  0.05 },
+  { src: imgD, alt: 'Concerto e attivazione',            pos: 'top:40%; left:62%;  width:40%; height:58%;', vy: 0.26, vx: -0.04 },
+  { src: imgG, alt: 'Percorso di formazione',            pos: 'top:62%; left:8%;   width:32%; height:42%;', vy: 0.40, vx:  0.08 },
+  { src: imgF, alt: 'Mappa turistico-musicale',          pos: 'top:65%; left:55%;  width:35%; height:40%;', vy: 0.18, vx: -0.07 },
 ];
 
-// Immagini mobile (slideshow di sfondo): riusiamo le prime di ogni slot per varietà.
-const mobileBackgrounds = slots.map((s) => s.images[0]);
+// ── Card servizi (5) ────────────────────────────────────────────────────
+interface ServizioCard {
+  title: string;
+  href: string;
+  description: string;
+}
+
+const servizi: ServizioCard[] = [
+  { title: 'Progettazione culturale', href: '/servizi/progettazione-culturale', description: 'Progetti che attivano territori e nuove generazioni.' },
+  { title: 'Consulenza strategica',   href: '/servizi/consulenza-strategica',   description: 'Patrimonio musicale come asset culturale e turistico.' },
+  { title: 'Formazione',              href: '/servizi/formazione',              description: 'Percorsi immersivi per operatori e giovani professionisti.' },
+  { title: 'Eventi e format',         href: '/servizi/eventi',                  description: 'Format musicali per attivare comunità e quartieri.' },
+  { title: 'Turismo musicale',        href: '/servizi/turismo-musicale',        description: 'Prodotti turistici, itinerari e materiali editoriali.' },
+];
+
+// Slideshow mobile: 4-5 immagini di sfondo che ruotano
+const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
 ---
 
-<section class="hero relative bg-butik-light overflow-hidden -mt-20 md:mt-0" data-hero-section>
+<section
+  class="hero relative bg-butik-dark overflow-hidden -mt-20 min-h-[100vh] md:min-h-[95vh]"
+  data-hero-section
+>
 
-  <!-- MOBILE: immagini di sfondo che ruotano. Nascoste da md: -->
+  <!-- ── DESKTOP: mosaico full-bleed di immagini con parallax ────────── -->
+  <div class="absolute inset-0 hidden md:block" aria-hidden="true">
+    {bgTiles.map((tile, i) => (
+      <div
+        class="hero-tile absolute will-change-transform overflow-hidden"
+        style={tile.pos}
+        data-tile-vy={tile.vy}
+        data-tile-vx={tile.vx}
+        data-tile-index={i}
+      >
+        <Image
+          src={tile.src}
+          alt=""
+          widths={[400, 700, 1000]}
+          sizes="(max-width: 768px) 0px, 40vw"
+          quality={72}
+          loading={i < 3 ? 'eager' : 'lazy'}
+          class="w-full h-full object-cover"
+        />
+      </div>
+    ))}
+  </div>
+
+  <!-- ── MOBILE: slideshow di sfondo single-image ────────────────────── -->
   <div class="absolute inset-0 md:hidden" aria-hidden="true">
-    {mobileBackgrounds.map((item, i) => (
+    {mobileBackgrounds.map((tile, i) => (
       <div
         class:list={[
           'hero-bg-mobile absolute inset-0 transition-opacity duration-1000 ease-in-out',
@@ -67,7 +94,7 @@ const mobileBackgrounds = slots.map((s) => s.images[0]);
         data-hero-bg-mobile={i}
       >
         <Image
-          src={item.src}
+          src={tile.src}
           alt=""
           widths={[480, 768]}
           sizes="100vw"
@@ -77,108 +104,86 @@ const mobileBackgrounds = slots.map((s) => s.images[0]);
         />
       </div>
     ))}
-    <!-- Overlay scuro per garantire leggibilità del testo bianco -->
-    <div class="absolute inset-0 bg-butik-dark/65"></div>
-    <div class="absolute inset-0 bg-gradient-to-b from-butik-dark/40 via-transparent to-butik-dark/50"></div>
   </div>
 
-  <div class="relative max-w-7xl mx-auto px-6 md:px-8 pt-32 pb-24 md:pt-12 md:pb-12 min-h-[88vh] md:min-h-0 flex md:block items-center">
+  <!-- ── Overlay scuro per leggibilità ───────────────────────────────── -->
+  <div class="absolute inset-0 bg-butik-dark/60 md:bg-butik-dark/55" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-butik-dark/40 via-transparent to-butik-dark/70" aria-hidden="true"></div>
 
-    <!-- Layout desktop: grid 8×6 con immagini ai lati e testo al centro -->
-    <div class="w-full md:grid md:grid-cols-8 md:grid-rows-6 md:gap-3 md:min-h-[680px] lg:min-h-[760px]">
+  <!-- ── Contenuto hero ──────────────────────────────────────────────── -->
+  <div class="relative h-full min-h-[100vh] md:min-h-[95vh] flex flex-col">
 
-      {slots.map((slot, slotIndex) => (
-        <div
-          class:list={[
-            'hidden md:block relative overflow-hidden will-change-transform',
-            slot.desktop,
-          ]}
-          data-hero-slot={slotIndex}
-          data-parallax={slot.parallax}
-        >
-          {slot.images.map((img, i) => (
-            <div
-              class:list={[
-                'hero-bg-desktop absolute inset-0 transition-opacity duration-[1200ms] ease-in-out',
-                i === 0 ? 'opacity-100' : 'opacity-0',
-              ]}
-              data-hero-bg-desktop={i}
-            >
-              <Image
-                src={img.src}
-                alt={i === 0 ? img.alt : ''}
-                widths={[300, 500, 700]}
-                sizes="(max-width: 768px) 0px, 25vw"
-                quality={72}
-                loading={slotIndex < 2 && i === 0 ? 'eager' : 'lazy'}
-                class="w-full h-full object-cover"
-              />
-            </div>
-          ))}
-        </div>
-      ))}
+    <div class="flex-1 flex flex-col justify-center max-w-7xl mx-auto px-6 md:px-8 pt-28 md:pt-32 pb-8 w-full">
 
-      <!-- Blocco centrale H1 + sottotitolo + CTA -->
-      <div
-        class="relative flex flex-col items-center text-center md:col-start-3 md:row-start-2 md:col-span-4 md:row-span-4 md:justify-center md:px-4"
-      >
-        <h1
-          class="hero-title font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05] max-w-3xl mx-auto"
-        >
+      <!-- Titolo + subtitle -->
+      <div class="text-center max-w-4xl mx-auto">
+        <h1 class="hero-title font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05]">
           Attiviamo territori, comunità e nuove generazioni attraverso la musica
         </h1>
-
-        <p
-          class="hero-subtitle font-sans text-base md:text-lg mt-6 max-w-2xl mx-auto"
-        >
+        <p class="hero-subtitle font-sans text-base md:text-lg mt-6 max-w-2xl mx-auto">
           Dal 2018 progettiamo cultura, formazione ed esperienze turistiche su base
           musicale, al fianco di Comuni, DMO e operatori culturali.
         </p>
+      </div>
+    </div>
 
-        <div class="mt-8 md:mt-10 w-full md:w-auto">
+    <!-- 5 card servizi in basso -->
+    <div class="relative max-w-7xl mx-auto px-6 md:px-8 pb-12 md:pb-16 w-full">
+      <div
+        class="flex md:grid overflow-x-auto snap-x snap-mandatory md:overflow-visible md:grid-cols-5 gap-3 md:gap-4 -mx-6 px-6 md:mx-0 md:px-0 pb-4 md:pb-0"
+      >
+        {servizi.map((s) => (
           <a
-            href="/contatti"
-            class="inline-flex items-center justify-center w-full md:w-auto bg-butik-red md:bg-butik-dark text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-dark md:hover:bg-butik-red transition-colors"
+            href={s.href}
+            class="hero-card group snap-start flex-shrink-0 w-[78%] sm:w-[55%] md:w-auto bg-white/95 hover:bg-white backdrop-blur-sm border border-white/20 p-5 md:p-5 transition-all hover:-translate-y-1 hover:shadow-xl flex flex-col gap-2"
           >
-            Inizia il tuo progetto con noi
+            <h3 class="font-heading text-base md:text-lg font-bold text-butik-dark leading-tight">
+              {s.title}
+            </h3>
+            <p class="font-sans text-sm text-butik-dark/70 leading-snug flex-1">
+              {s.description}
+            </p>
+            <span class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mt-2 inline-flex items-center gap-1">
+              Scopri <span aria-hidden="true">→</span>
+            </span>
           </a>
-        </div>
+        ))}
+      </div>
+
+      <div class="text-center mt-6 md:mt-8">
+        <a
+          href="/servizi"
+          class="font-display text-xs font-bold tracking-widest uppercase text-white/90 hover:text-white inline-flex items-center gap-2 underline underline-offset-4 decoration-white/30 hover:decoration-white"
+        >
+          Esplora tutti i servizi <span aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-  /* Colori e text-shadow gestiti qui per evitare conflitti di precedenza
-     tra utility Tailwind text-white / text-butik-dark al breakpoint md. */
   .hero-title,
   .hero-subtitle {
     color: #ffffff;
-    text-shadow: 0 2px 16px rgba(7, 17, 8, 0.6);
+    text-shadow: 0 2px 20px rgba(7, 17, 8, 0.6);
   }
   .hero-subtitle {
     opacity: 0.95;
   }
-  @media (min-width: 768px) {
-    .hero-title {
-      color: var(--color-butik-dark);
-      text-shadow: none;
-    }
-    .hero-subtitle {
-      color: var(--color-butik-dark);
-      opacity: 0.7;
-      text-shadow: none;
-    }
+  .hero-tile {
+    transition: transform 100ms linear;
   }
 </style>
 
 <script>
-  // ── 1. Slideshow mobile (immagini di sfondo) ───────────────────────────
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const desktopMQ = window.matchMedia('(min-width: 768px)');
+
+  // ── 1. Mobile slideshow (cross-fade ogni 5s) ───────────────────────────
   const mobileBgs = Array.from(
     document.querySelectorAll<HTMLElement>('.hero-bg-mobile[data-hero-bg-mobile]')
   );
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   if (mobileBgs.length > 1 && !reducedMotion) {
     let current = 0;
     setInterval(() => {
@@ -188,51 +193,31 @@ const mobileBackgrounds = slots.map((s) => s.images[0]);
     }, 5000);
   }
 
-  // ── 2. Rotazione fade per ogni slot desktop ────────────────────────────
-  const slots = Array.from(
-    document.querySelectorAll<HTMLElement>('[data-hero-slot]')
+  // ── 2. Parallax desktop (translate X+Y per ogni tile) ──────────────────
+  const tiles = Array.from(
+    document.querySelectorAll<HTMLElement>('.hero-tile[data-tile-index]')
   );
-  if (slots.length && !reducedMotion) {
-    slots.forEach((slot, i) => {
-      const imgs = Array.from(
-        slot.querySelectorAll<HTMLElement>('.hero-bg-desktop[data-hero-bg-desktop]')
-      );
-      if (imgs.length < 2) return;
-      let cur = 0;
-      // Sfasiamo l'inizio di ogni slot per evitare flash sincroni.
-      setTimeout(() => {
-        setInterval(() => {
-          imgs[cur].classList.replace('opacity-100', 'opacity-0');
-          cur = (cur + 1) % imgs.length;
-          imgs[cur].classList.replace('opacity-0', 'opacity-100');
-        }, 6000);
-      }, i * 900);
-    });
-  }
-
-  // ── 3. Parallasse su scroll per gli slot desktop ───────────────────────
-  const desktopMQ = window.matchMedia('(min-width: 768px)');
-  let ticking = false;
-  let heroRect: DOMRect | null = null;
   const heroSection = document.querySelector<HTMLElement>('[data-hero-section]');
 
+  let ticking = false;
   const updateParallax = () => {
     if (!heroSection || !desktopMQ.matches || reducedMotion) {
-      slots.forEach((s) => { s.style.transform = ''; });
+      tiles.forEach((t) => { t.style.transform = ''; });
       ticking = false;
       return;
     }
-    heroRect = heroSection.getBoundingClientRect();
-    // Solo se la hero è (parzialmente) visibile
-    if (heroRect.bottom < 0 || heroRect.top > window.innerHeight) {
+    const rect = heroSection.getBoundingClientRect();
+    if (rect.bottom < -50 || rect.top > window.innerHeight + 50) {
       ticking = false;
       return;
     }
-    const progress = -heroRect.top; // pixel scrollati dentro la hero
-    slots.forEach((slot) => {
-      const speed = parseFloat(slot.dataset.parallax || '0');
-      const translateY = progress * speed;
-      slot.style.transform = `translate3d(0, ${translateY.toFixed(2)}px, 0)`;
+    const progress = -rect.top; // px scrollati dentro l'hero
+    tiles.forEach((tile) => {
+      const vy = parseFloat(tile.dataset.tileVy || '0');
+      const vx = parseFloat(tile.dataset.tileVx || '0');
+      const ty = (progress * vy).toFixed(2);
+      const tx = (progress * vx).toFixed(2);
+      tile.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
     });
     ticking = false;
   };
@@ -244,7 +229,7 @@ const mobileBackgrounds = slots.map((s) => s.images[0]);
     }
   };
 
-  if (heroSection) {
+  if (heroSection && tiles.length) {
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     updateParallax();

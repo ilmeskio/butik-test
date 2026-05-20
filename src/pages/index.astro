@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import Hero from '../components/home/Hero.astro';
-import Servizi from '../components/home/Servizi.astro';
 import PartnerLogos from '../components/home/PartnerLogos.astro';
 import Numbers from '../components/home/Numbers.astro';
 import Testimonials from '../components/home/Testimonials.astro';
@@ -21,7 +20,6 @@ const topProgetti = (await getCollection('progetti', e => !e.data.draft))
   description="La prima impresa sociale italiana specializzata in progettazione culturale e sviluppo territoriale attraverso la musica."
 >
   <Hero />
-  <Servizi />
   <PartnerLogos />
   <Numbers />
   <Testimonials />
