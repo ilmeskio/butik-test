@@ -1,0 +1,63 @@
+---
+type Metric = {
+  value: string;
+  label: string;
+};
+
+const butikMetrics: Metric[] = [
+  { value: '30+', label: 'progetti realizzati' },
+  { value: '15+', label: 'territori coinvolti' },
+  { value: '10+', label: 'finanziamenti intercettati' },
+  { value: '5+', label: 'percorsi formativi' },
+  { value: '1000+', label: 'giovani formati' },
+];
+
+const mmwMetrics: Metric[] = [
+  { value: '2', label: 'edizioni' },
+  { value: '70K+', label: 'persone raggiunte' },
+];
+---
+
+<section class="bg-butik-dark text-white py-12 md:py-16 lg:py-20" aria-label="Numeri e impatto">
+  <dl class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-4 max-w-7xl mx-auto px-6">
+    {
+      butikMetrics.map((metric) => (
+        <div>
+          <dt class="sr-only">{metric.label}</dt>
+          <dd>
+            <span class="block font-heading text-4xl lg:text-5xl font-black text-butik-green leading-none">
+              {metric.value}
+            </span>
+            <span class="block font-sans text-xs lg:text-sm text-white/70 mt-2 leading-snug" aria-hidden="true">
+              {metric.label}
+            </span>
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  <div class="mt-10 lg:mt-16 pt-10 lg:pt-12 border-t border-white/15 max-w-7xl mx-auto px-6">
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-green mb-8 text-center">
+      Milano Music Week
+    </p>
+
+    <dl class="grid grid-cols-2 gap-6 lg:gap-12 max-w-xl mx-auto text-center">
+      {
+        mmwMetrics.map((metric) => (
+          <div>
+            <dt class="sr-only">{metric.label}</dt>
+            <dd>
+              <span class="block font-heading text-4xl lg:text-5xl font-black text-butik-green leading-none">
+                {metric.value}
+              </span>
+              <span class="block font-sans text-xs lg:text-sm text-white/70 mt-2 leading-snug" aria-hidden="true">
+                {metric.label}
+              </span>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
