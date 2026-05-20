@@ -107,8 +107,8 @@ const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
   </div>
 
   <!-- ── Overlay scuro per leggibilità ───────────────────────────────── -->
-  <div class="absolute inset-0 bg-butik-dark/60 md:bg-butik-dark/55" aria-hidden="true"></div>
-  <div class="absolute inset-0 bg-gradient-to-b from-butik-dark/40 via-transparent to-butik-dark/70" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-butik-dark/55 md:bg-butik-dark/35" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-butik-dark/30 via-transparent to-butik-dark/60" aria-hidden="true"></div>
 
   <!-- ── Contenuto hero ──────────────────────────────────────────────── -->
   <div class="relative h-full md:min-h-[82vh] flex flex-col">
@@ -181,24 +181,25 @@ const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
   }
   .hero-tile {
     transition: transform 100ms linear;
-    opacity: 0.85;
-    /* Mask radiale "blob" molto morbido: il fade comincia praticamente subito
-       dal centro e si estende fino al bordo con più stop intermedi. È il mask
-       a fare tutto il lavoro di fusione, niente border-radius. */
+    opacity: 0.92;
+    /* Mask radiale ampio e molto progressivo: la zona opaca è ampia (immagini
+       ben visibili al centro di ciascuna tile) e il fade ai bordi attraversa
+       5 stop in maniera "atmosferica" senza salti di luminanza percepibili.
+       Niente blur né border-radius: il mask basta a evitare bordi netti. */
     -webkit-mask-image: radial-gradient(
-      ellipse 110% 110% at center,
-      #000 0%,
-      rgba(0, 0, 0, 0.85) 25%,
-      rgba(0, 0, 0, 0.5) 50%,
-      rgba(0, 0, 0, 0.2) 75%,
+      ellipse 95% 95% at center,
+      #000 5%,
+      rgba(0, 0, 0, 0.92) 30%,
+      rgba(0, 0, 0, 0.6) 55%,
+      rgba(0, 0, 0, 0.25) 78%,
       transparent 100%
     );
     mask-image: radial-gradient(
-      ellipse 110% 110% at center,
-      #000 0%,
-      rgba(0, 0, 0, 0.85) 25%,
-      rgba(0, 0, 0, 0.5) 50%,
-      rgba(0, 0, 0, 0.2) 75%,
+      ellipse 95% 95% at center,
+      #000 5%,
+      rgba(0, 0, 0, 0.92) 30%,
+      rgba(0, 0, 0, 0.6) 55%,
+      rgba(0, 0, 0, 0.25) 78%,
       transparent 100%
     );
   }
