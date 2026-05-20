@@ -2,82 +2,98 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
-import heroHome from '../../assets/hero-home.jpg';
-import bento1 from '../../assets/servizi/template-servizio/hero.jpg';
-import bento2 from '../../assets/servizi/template-servizio/gallery-1.jpg';
-import bento3 from '../../assets/servizi/template-servizio/img-block.jpg';
-import bento4 from '../../assets/servizi/template-servizio/gallery-2.jpg';
-import bento5 from '../../assets/servizi/template-servizio/img-left.jpg';
-import bento6 from '../../assets/servizi/template-servizio/img-right.jpg';
-import bento7 from '../../assets/servizi/template-servizio/gallery-3.jpg';
+import imgTopLeft from '../../assets/servizi/template-servizio/gallery-1.jpg';
+import imgTopRight from '../../assets/servizi/template-servizio/img-right.jpg';
+import imgMidLeft from '../../assets/servizi/template-servizio/hero.jpg';
+import imgMidRight from '../../assets/servizi/template-servizio/img-block.jpg';
+import imgBottomLeft from '../../assets/servizi/template-servizio/img-left.jpg';
+import imgBottomRight from '../../assets/servizi/template-servizio/gallery-3.jpg';
 
-interface BentoItem {
+interface ScatterItem {
   src: ImageMetadata;
   alt: string;
-  /** Classi Tailwind per span su griglia desktop (md+). Su mobile sempre 1x1. */
+  /** Posizionamento desktop: classi col-start/row-start su griglia 6×6. */
   desktop: string;
 }
 
-// Bento desktop su griglia 4 colonne × 2 righe.
-// Riga 1: img1 (2col) | img2 (1col) | img3 (1col, span 2 row)
-// Riga 2: img4 (1col) | img5 (1col) | img6 (1col)  + img7 (1col)
-const bento: BentoItem[] = [
-  { src: heroHome, alt: 'Progetto culturale Butik', desktop: 'md:col-span-2 md:row-span-1' },
-  { src: bento1, alt: 'Evento musicale sul territorio', desktop: 'md:col-span-1 md:row-span-1' },
-  { src: bento2, alt: 'Workshop di co-progettazione', desktop: 'md:col-span-1 md:row-span-2' },
-  { src: bento3, alt: 'Itinerario turistico-musicale', desktop: 'md:col-span-1 md:row-span-1' },
-  { src: bento4, alt: 'Formazione e capacity building', desktop: 'md:col-span-1 md:row-span-1' },
-  { src: bento5, alt: 'Comunità coinvolta da un progetto Butik', desktop: 'md:col-span-1 md:row-span-1' },
-  { src: bento6, alt: 'Mappa turistico-musicale', desktop: 'md:col-span-1 md:row-span-1' },
-  { src: bento7, alt: 'Concerto e attivazione territoriale', desktop: 'md:col-span-1 md:row-span-1' },
+// Composizione "scatter" come da wireframe Relume (col1-1):
+// griglia 6 colonne × 6 righe, testo H1+CTA occupa l'area centrale
+// (col 2-5, row 2-5), le immagini sono sparse agli angoli e ai lati.
+const scatter: ScatterItem[] = [
+  { src: imgTopLeft,     alt: 'Workshop di co-progettazione',           desktop: 'md:col-start-1 md:row-start-1 md:col-span-1 md:row-span-1' },
+  { src: imgTopRight,    alt: 'Comunità coinvolta da un progetto Butik', desktop: 'md:col-start-6 md:row-start-1 md:col-span-1 md:row-span-1' },
+  { src: imgMidLeft,     alt: 'Itinerario turistico-musicale',          desktop: 'md:col-start-1 md:row-start-2 md:col-span-1 md:row-span-3' },
+  { src: imgMidRight,    alt: 'Concerto e attivazione territoriale',    desktop: 'md:col-start-6 md:row-start-2 md:col-span-1 md:row-span-3' },
+  { src: imgBottomLeft,  alt: 'Formazione e capacity building',         desktop: 'md:col-start-2 md:row-start-5 md:col-span-1 md:row-span-1' },
+  { src: imgBottomRight, alt: 'Mappa turistico-musicale',               desktop: 'md:col-start-5 md:row-start-5 md:col-span-1 md:row-span-1' },
 ];
 ---
 
-<section class="bg-butik-light pt-12 pb-20 md:pt-20 md:pb-32">
+<section class="bg-butik-light pt-12 pb-20 md:pt-10 md:pb-16 overflow-hidden">
   <div class="max-w-7xl mx-auto px-6 md:px-8">
-    <div class="flex flex-col items-center text-center">
-      <h1
-        class="font-heading text-4xl md:text-6xl lg:text-7xl font-bold text-butik-dark leading-tight max-w-4xl mx-auto"
-      >
-        Attiviamo territori, comunità e nuove generazioni attraverso la musica
-      </h1>
 
-      <p
-        class="font-sans text-base md:text-xl text-butik-dark/70 mt-6 max-w-2xl mx-auto"
-      >
-        Dal 2018 progettiamo cultura, formazione ed esperienze turistiche su base
-        musicale, al fianco di Comuni, DMO e operatori culturali.
-      </p>
+    <!-- Layout desktop: grid 6×5 con immagini agli angoli e testo al centro -->
+    <div class="md:grid md:grid-cols-6 md:grid-rows-5 md:gap-3 md:min-h-[640px] lg:min-h-[720px]">
 
-      <div class="mt-10 w-full md:w-auto">
-        <a
-          href="/contatti"
-          class="inline-flex items-center justify-center w-full md:w-auto bg-butik-dark text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-red transition-colors"
-        >
-          Inizia il tuo progetto con noi
-        </a>
-      </div>
-    </div>
-
-    <!-- Bento grid: mobile 2×N (opzione A), desktop griglia asimmetrica 4 colonne × 2 righe -->
-    <div
-      class="mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 md:grid-rows-2 gap-3 md:gap-4"
-    >
-      {bento.map((item, i) => (
+      {scatter.map((item, i) => (
         <div
           class:list={[
-            'group relative overflow-hidden aspect-square md:aspect-auto',
+            'hidden md:block relative overflow-hidden',
             item.desktop,
           ]}
         >
           <Image
             src={item.src}
             alt={item.alt}
-            widths={[400, 700, 1000]}
-            sizes="(max-width: 768px) 50vw, 25vw"
+            widths={[200, 320, 480]}
+            sizes="(max-width: 768px) 0px, 18vw"
             quality={72}
-            loading={i === 0 ? 'eager' : 'lazy'}
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading={i < 2 ? 'eager' : 'lazy'}
+            class="w-full h-full object-cover"
+          />
+        </div>
+      ))}
+
+      <!-- Blocco centrale H1 + sottotitolo + CTA -->
+      <div
+        class="relative flex flex-col items-center text-center md:col-start-2 md:row-start-1 md:col-span-4 md:row-span-5 md:justify-center md:px-6"
+      >
+        <h1
+          class="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-butik-dark leading-[1.05] max-w-3xl mx-auto"
+        >
+          Attiviamo territori, comunità e nuove generazioni attraverso la musica
+        </h1>
+
+        <p
+          class="font-sans text-base md:text-lg text-butik-dark/70 mt-6 max-w-2xl mx-auto"
+        >
+          Dal 2018 progettiamo cultura, formazione ed esperienze turistiche su base
+          musicale, al fianco di Comuni, DMO e operatori culturali.
+        </p>
+
+        <div class="mt-8 md:mt-10 w-full md:w-auto">
+          <a
+            href="/contatti"
+            class="inline-flex items-center justify-center w-full md:w-auto bg-butik-dark text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-red transition-colors"
+          >
+            Inizia il tuo progetto con noi
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile: dopo testo+CTA, una piccola scatter 2 colonne con 4 immagini -->
+    <div class="mt-12 grid grid-cols-2 gap-3 md:hidden">
+      {scatter.slice(0, 4).map((item) => (
+        <div class="relative overflow-hidden aspect-square">
+          <Image
+            src={item.src}
+            alt={item.alt}
+            widths={[300, 500]}
+            sizes="50vw"
+            quality={72}
+            loading="lazy"
+            class="w-full h-full object-cover"
           />
         </div>
       ))}
