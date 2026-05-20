@@ -181,23 +181,24 @@ const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
   }
   .hero-tile {
     transition: transform 100ms linear;
-    border-radius: 28px;
-    opacity: 0.88;
-    /* Mask radiale "blob": centro opaco, bordi sfumati molto graduali a 0.
-       Combinato con border-radius e opacity, le tile si fondono in modo morbido
-       e organico, senza angoli netti né stacchi visibili. */
+    opacity: 0.85;
+    /* Mask radiale "blob" molto morbido: il fade comincia praticamente subito
+       dal centro e si estende fino al bordo con più stop intermedi. È il mask
+       a fare tutto il lavoro di fusione, niente border-radius. */
     -webkit-mask-image: radial-gradient(
-      ellipse 80% 80% at center,
-      #000 20%,
-      rgba(0, 0, 0, 0.7) 45%,
-      rgba(0, 0, 0, 0.25) 75%,
+      ellipse 110% 110% at center,
+      #000 0%,
+      rgba(0, 0, 0, 0.85) 25%,
+      rgba(0, 0, 0, 0.5) 50%,
+      rgba(0, 0, 0, 0.2) 75%,
       transparent 100%
     );
     mask-image: radial-gradient(
-      ellipse 80% 80% at center,
-      #000 20%,
-      rgba(0, 0, 0, 0.7) 45%,
-      rgba(0, 0, 0, 0.25) 75%,
+      ellipse 110% 110% at center,
+      #000 0%,
+      rgba(0, 0, 0, 0.85) 25%,
+      rgba(0, 0, 0, 0.5) 50%,
+      rgba(0, 0, 0, 0.2) 75%,
       transparent 100%
     );
   }
