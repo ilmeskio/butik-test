@@ -1,0 +1,152 @@
+---
+type Testimonial = {
+  rating: number;
+  quote: string;
+  name: string;
+  role: string;
+};
+
+const testimonials: Testimonial[] = [
+  {
+    rating: 5,
+    quote:
+      'Butik ha trasformato il nostro modo di pensare al patrimonio musicale come asset turistico. Un percorso strutturato, fatto di ascolto vero.',
+    name: 'Maria Rossi',
+    role: 'Direttrice DMO Visit Cremona',
+  },
+  {
+    rating: 5,
+    quote:
+      'Il loro approccio integra formazione, progettazione e impatto sociale. Ha generato risultati misurabili e duraturi sul territorio.',
+    name: 'Luca Bianchi',
+    role: 'Assessore alla Cultura, Comune di Napoli',
+  },
+  {
+    rating: 5,
+    quote:
+      "Lavorare con Butik significa avere al fianco un partner strategico e non un fornitore. Co-progettazione vera, dall'idea alla rendicontazione.",
+    name: 'Sara Verdi',
+    role: 'Project Manager Cariplo',
+  },
+];
+---
+
+<section class="bg-butik-light py-16 md:py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4 text-center">
+      Testimonianze
+    </p>
+    <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark text-center mb-12">
+      Cosa dicono di noi
+    </h2>
+
+    <div
+      id="testimonials-track"
+      class="flex overflow-x-auto snap-x snap-mandatory gap-4 -mx-6 px-6 pb-2 scroll-pl-6 md:grid md:grid-cols-3 md:gap-6 md:mx-0 md:px-0 md:pb-0 md:overflow-visible md:scroll-pl-0"
+    >
+      {
+        testimonials.map((t, i) => (
+          <article
+            class="snap-start flex-shrink-0 w-[85%] md:w-auto md:flex-shrink border border-butik-dark/15 p-6 md:p-8 bg-white flex flex-col gap-6"
+            data-testimonial-index={i}
+          >
+            <div class="flex gap-1" aria-label={`Valutazione: ${t.rating} su 5`}>
+              {
+                Array.from({ length: t.rating }).map(() => (
+                  <svg
+                    class="text-butik-red w-4 h-4"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.367 2.446a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118L10.587 15.6a1 1 0 00-1.175 0l-3.366 2.446c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
+                  </svg>
+                ))
+              }
+            </div>
+
+            <figure class="flex flex-col gap-6 m-0">
+              <blockquote class="font-sans text-base text-butik-dark leading-relaxed m-0">
+                <p>&ldquo;{t.quote}&rdquo;</p>
+              </blockquote>
+              <figcaption class="mt-auto">
+                <p class="font-sans text-sm font-bold text-butik-dark">{t.name}</p>
+                <p class="font-sans text-sm text-butik-dark/60">{t.role}</p>
+              </figcaption>
+            </figure>
+          </article>
+        ))
+      }
+    </div>
+
+    <div
+      id="testimonials-dots"
+      class="flex justify-center gap-2 mt-6 md:hidden"
+      role="tablist"
+      aria-label="Navigazione testimonianze"
+    >
+      {
+        testimonials.map((_, i) => (
+          <button
+            type="button"
+            class="testimonial-dot w-2 h-2 rounded-full bg-butik-dark/20 transition-colors"
+            data-dot-index={i}
+            aria-label={`Vai alla testimonianza ${i + 1}`}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const track = document.getElementById('testimonials-track');
+  const dots = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('#testimonials-dots .testimonial-dot')
+  );
+
+  if (track && dots.length) {
+    const cards = Array.from(
+      track.querySelectorAll<HTMLElement>('[data-testimonial-index]')
+    );
+
+    const setActive = (index: number) => {
+      dots.forEach((dot, i) => {
+        const active = i === index;
+        dot.classList.toggle('bg-butik-red', active);
+        dot.classList.toggle('bg-butik-dark/20', !active);
+      });
+    };
+
+    setActive(0);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+            const idx = Number(
+              (entry.target as HTMLElement).dataset.testimonialIndex
+            );
+            if (!Number.isNaN(idx)) setActive(idx);
+          }
+        });
+      },
+      { root: track, threshold: [0.6] }
+    );
+
+    cards.forEach((card) => observer.observe(card));
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        const card = cards[i];
+        if (card) {
+          card.scrollIntoView({
+            behavior: 'smooth',
+            inline: 'start',
+            block: 'nearest',
+          });
+        }
+      });
+    });
+  }
+</script>

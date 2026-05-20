@@ -1,0 +1,108 @@
+---
+import { Image } from 'astro:assets';
+import heroImg from '../../assets/servizi/template-servizio/hero.jpg';
+import gallery1 from '../../assets/servizi/template-servizio/gallery-1.jpg';
+import gallery2 from '../../assets/servizi/template-servizio/gallery-2.jpg';
+import gallery3 from '../../assets/servizi/template-servizio/gallery-3.jpg';
+import imgBlock from '../../assets/servizi/template-servizio/img-block.jpg';
+
+interface ServizioCard {
+  title: string;
+  href: string;
+  description: string;
+  image: ImageMetadata;
+  imageAlt: string;
+}
+
+const servizi: ServizioCard[] = [
+  {
+    title: 'Progettazione culturale',
+    href: '/servizi/progettazione-culturale',
+    description: 'Ideiamo progetti culturali per attivare territori e nuove generazioni.',
+    image: heroImg,
+    imageAlt: 'Progettazione culturale su base musicale',
+  },
+  {
+    title: 'Consulenza strategica',
+    href: '/servizi/consulenza-strategica',
+    description: 'Trasformiamo il patrimonio musicale locale in asset culturale e turistico.',
+    image: gallery1,
+    imageAlt: 'Consulenza strategica per Comuni e DMO',
+  },
+  {
+    title: 'Formazione',
+    href: '/servizi/formazione',
+    description: 'Percorsi formativi immersivi per operatori e giovani professionisti.',
+    image: gallery2,
+    imageAlt: 'Percorso di formazione e capacity building',
+  },
+  {
+    title: 'Eventi e format',
+    href: '/servizi/eventi',
+    description: 'Eventi e format che usano la musica come strumento di attivazione territoriale.',
+    image: gallery3,
+    imageAlt: 'Ideazione e realizzazione di eventi musicali',
+  },
+  {
+    title: 'Turismo musicale',
+    href: '/servizi/turismo-musicale',
+    description: 'Prodotti turistici, itinerari e materiali editoriali su base musicale.',
+    image: imgBlock,
+    imageAlt: 'Prodotti e itinerari di turismo musicale',
+  },
+];
+---
+
+<section class="bg-gradient-to-b from-butik-light via-white to-butik-light">
+  <div class="max-w-7xl mx-auto px-6 py-16 md:py-24">
+    <div class="text-center mb-10 md:mb-12">
+      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
+        Servizi
+      </p>
+      <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark max-w-3xl mx-auto">
+        Cosa facciamo
+      </h2>
+    </div>
+
+    <div class="grid gap-3 md:gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-5">
+      {servizi.map((servizio, index) => (
+        <a
+          href={servizio.href}
+          class:list={[
+            'group relative bg-white border border-butik-dark/10 transition hover:border-butik-dark/30 hover:shadow-md',
+            'p-5 md:p-7 lg:p-5',
+            'flex flex-col gap-3 md:flex-row md:items-center md:gap-6 lg:flex-col lg:gap-3',
+            index === 0 && 'md:col-span-2 lg:col-span-1',
+          ]}
+        >
+          <div
+            class:list={[
+              'overflow-hidden bg-butik-light',
+              'aspect-[16/9] w-full',
+              'md:w-32 md:h-32 md:aspect-square md:flex-shrink-0',
+              'lg:w-full lg:h-auto lg:aspect-square',
+            ]}
+          >
+            <Image
+              src={servizio.image}
+              alt={servizio.imageAlt}
+              class="w-full h-full object-cover"
+              widths={[200, 320, 480]}
+              sizes="(min-width: 1024px) 230px, (min-width: 768px) 128px, 100vw"
+              quality={70}
+            />
+          </div>
+
+          <div class="flex flex-col gap-2 md:flex-1 lg:flex-none">
+            <h3 class="font-heading text-base md:text-xl lg:text-lg font-bold text-butik-dark leading-snug">
+              {servizio.title}
+            </h3>
+            <p class="font-sans text-sm md:text-base lg:text-sm text-butik-dark/70 leading-snug">
+              {servizio.description}
+            </p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

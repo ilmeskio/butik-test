@@ -1,0 +1,274 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+import imgA from '../../assets/servizi/template-servizio/gallery-1.jpg';
+import imgB from '../../assets/servizi/template-servizio/img-right.jpg';
+import imgC from '../../assets/servizi/template-servizio/hero.jpg';
+import imgD from '../../assets/servizi/template-servizio/img-block.jpg';
+import imgE from '../../assets/servizi/template-servizio/img-left.jpg';
+import imgF from '../../assets/servizi/template-servizio/gallery-3.jpg';
+import imgG from '../../assets/servizi/template-servizio/gallery-2.jpg';
+import imgH from '../../assets/hero-home.jpg';
+
+// ── Background tiles ────────────────────────────────────────────────────
+// Mosaico di immagini absolute che coprono tutto lo sfondo dell'hero.
+// Posizione/dimensione in % della section, con sovrapposizioni volute.
+// Parallax: ogni tile ha vy (verticale) e vx (orizzontale) differenti.
+interface BgTile {
+  src: ImageMetadata;
+  alt: string;
+  /** Style inline per posizionamento iniziale (top/left/width/height in %). */
+  pos: string;
+  /** Velocità parallax: y per scroll verticale, x per drift orizzontale. */
+  vy: number;
+  vx: number;
+}
+
+const bgTiles: BgTile[] = [
+  { src: imgC, alt: 'Itinerario turistico-musicale',     pos: 'top:-5%; left:-3%;  width:42%; height:55%;', vy: 0.22, vx:  0.04 },
+  { src: imgA, alt: 'Workshop di co-progettazione',      pos: 'top:-8%; left:32%;  width:36%; height:50%;', vy: 0.10, vx: -0.06 },
+  { src: imgB, alt: 'Comunità coinvolta',                pos: 'top:-3%; left:62%;  width:42%; height:48%;', vy: 0.28, vx:  0.05 },
+  { src: imgE, alt: 'Formazione e capacity building',    pos: 'top:38%; left:-4%;  width:38%; height:60%;', vy: 0.34, vx: -0.03 },
+  { src: imgH, alt: 'Evento culturale Butik',            pos: 'top:42%; left:28%;  width:42%; height:55%;', vy: 0.15, vx:  0.05 },
+  { src: imgD, alt: 'Concerto e attivazione',            pos: 'top:40%; left:62%;  width:40%; height:58%;', vy: 0.26, vx: -0.04 },
+  { src: imgG, alt: 'Percorso di formazione',            pos: 'top:62%; left:8%;   width:32%; height:42%;', vy: 0.40, vx:  0.08 },
+  { src: imgF, alt: 'Mappa turistico-musicale',          pos: 'top:65%; left:55%;  width:35%; height:40%;', vy: 0.18, vx: -0.07 },
+];
+
+// ── Card servizi (5) ────────────────────────────────────────────────────
+interface ServizioCard {
+  title: string;
+  href: string;
+  description: string;
+}
+
+const servizi: ServizioCard[] = [
+  { title: 'Progettazione culturale', href: '/servizi/progettazione-culturale', description: 'Progetti che attivano territori e nuove generazioni.' },
+  { title: 'Consulenza strategica',   href: '/servizi/consulenza-strategica',   description: 'Patrimonio musicale come asset culturale e turistico.' },
+  { title: 'Formazione',              href: '/servizi/formazione',              description: 'Percorsi immersivi per operatori e giovani professionisti.' },
+  { title: 'Eventi e format',         href: '/servizi/eventi',                  description: 'Format musicali per attivare comunità e quartieri.' },
+  { title: 'Turismo musicale',        href: '/servizi/turismo-musicale',        description: 'Prodotti turistici, itinerari e materiali editoriali.' },
+];
+
+// Slideshow mobile: 4-5 immagini di sfondo che ruotano
+const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
+---
+
+<section
+  class="hero relative bg-butik-dark overflow-hidden -mt-20 md:min-h-[82vh]"
+  data-hero-section
+>
+
+  <!-- ── DESKTOP: mosaico full-bleed di immagini con parallax ────────── -->
+  <div class="absolute inset-0 hidden md:block" aria-hidden="true">
+    {bgTiles.map((tile, i) => (
+      <div
+        class="hero-tile absolute will-change-transform overflow-hidden"
+        style={tile.pos}
+        data-tile-vy={tile.vy}
+        data-tile-vx={tile.vx}
+        data-tile-index={i}
+      >
+        <Image
+          src={tile.src}
+          alt=""
+          widths={[400, 700, 1000]}
+          sizes="(max-width: 768px) 0px, 40vw"
+          quality={72}
+          loading={i < 3 ? 'eager' : 'lazy'}
+          class="w-full h-full object-cover"
+        />
+      </div>
+    ))}
+  </div>
+
+  <!-- ── MOBILE: slideshow di sfondo single-image ────────────────────── -->
+  <div class="absolute inset-0 md:hidden" aria-hidden="true">
+    {mobileBackgrounds.map((tile, i) => (
+      <div
+        class:list={[
+          'hero-bg-mobile absolute inset-0 transition-opacity duration-1000 ease-in-out',
+          i === 0 ? 'opacity-100' : 'opacity-0',
+        ]}
+        data-hero-bg-mobile={i}
+      >
+        <Image
+          src={tile.src}
+          alt=""
+          widths={[480, 768]}
+          sizes="100vw"
+          quality={70}
+          loading={i === 0 ? 'eager' : 'lazy'}
+          class="w-full h-full object-cover"
+        />
+      </div>
+    ))}
+  </div>
+
+  <!-- ── Overlay scuro per leggibilità ───────────────────────────────── -->
+  <div class="absolute inset-0 bg-butik-dark/55 md:bg-butik-dark/35" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-butik-dark/30 via-transparent to-butik-dark/60" aria-hidden="true"></div>
+
+  <!-- ── Contenuto hero ──────────────────────────────────────────────── -->
+  <div class="relative h-full md:min-h-[82vh] flex flex-col">
+
+    <div class="flex-1 flex flex-col justify-center max-w-7xl mx-auto px-6 md:px-8 pt-28 md:pt-28 pb-4 md:pb-6 w-full">
+
+      <!-- Titolo + subtitle + CTA primario -->
+      <div class="text-center max-w-4xl mx-auto">
+        <h1 class="hero-title font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05]">
+          Attiviamo territori, comunità e nuove generazioni attraverso la musica
+        </h1>
+        <p class="hero-subtitle font-sans text-base md:text-lg mt-5 max-w-2xl mx-auto">
+          Dal 2018 progettiamo cultura, formazione ed esperienze turistiche su base
+          musicale, al fianco di Comuni, DMO e operatori culturali.
+        </p>
+        <div class="mt-8">
+          <a
+            href="/contatti"
+            class="inline-flex items-center justify-center bg-butik-red text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-butik-dark transition-colors"
+          >
+            Inizia un progetto con noi
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 card servizi in basso (1 col mobile, 2 col tablet, 5 col desktop) -->
+    <div class="relative max-w-7xl mx-auto px-6 md:px-8 pb-6 md:pb-8 w-full">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
+        {servizi.map((s, i) => (
+          <a
+            href={s.href}
+            class:list={[
+              'hero-card group bg-white/95 hover:bg-white backdrop-blur-sm border border-white/20 p-4 md:p-5 transition-all hover:-translate-y-1 hover:shadow-xl flex flex-col gap-2',
+              // 5° card: full-width nella terza riga tablet (2 col)
+              i === servizi.length - 1 ? 'sm:col-span-2 lg:col-span-1' : '',
+            ]}
+          >
+            <h3 class="hero-card-title font-heading text-base md:text-lg font-bold leading-tight">
+              {s.title}
+            </h3>
+            <p class="font-sans text-sm text-butik-dark/70 leading-snug flex-1">
+              {s.description}
+            </p>
+            <span class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mt-2 inline-flex items-center gap-1">
+              Scopri <span aria-hidden="true">→</span>
+            </span>
+          </a>
+        ))}
+      </div>
+
+      <div class="text-center mt-4 md:mt-5">
+        <a
+          href="/servizi"
+          class="font-display text-xs font-bold tracking-widest uppercase text-white/90 hover:text-white inline-flex items-center gap-2 underline underline-offset-4 decoration-white/30 hover:decoration-white"
+        >
+          Esplora tutti i servizi <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-title,
+  .hero-subtitle {
+    color: #ffffff;
+    text-shadow: 0 2px 20px rgba(7, 17, 8, 0.6);
+  }
+  .hero-subtitle {
+    opacity: 0.95;
+  }
+  /* Override global h3 style (uppercase + tracking + red) per i titoli card. */
+  .hero-card-title {
+    color: var(--color-butik-dark);
+    text-transform: none;
+    letter-spacing: -0.005em;
+  }
+  .hero-tile {
+    transition: transform 100ms linear;
+    opacity: 0.92;
+    /* Mask radiale ampio e molto progressivo: la zona opaca è ampia (immagini
+       ben visibili al centro di ciascuna tile) e il fade ai bordi attraversa
+       5 stop in maniera "atmosferica" senza salti di luminanza percepibili.
+       Niente blur né border-radius: il mask basta a evitare bordi netti. */
+    -webkit-mask-image: radial-gradient(
+      ellipse 95% 95% at center,
+      #000 5%,
+      rgba(0, 0, 0, 0.92) 30%,
+      rgba(0, 0, 0, 0.6) 55%,
+      rgba(0, 0, 0, 0.25) 78%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 95% 95% at center,
+      #000 5%,
+      rgba(0, 0, 0, 0.92) 30%,
+      rgba(0, 0, 0, 0.6) 55%,
+      rgba(0, 0, 0, 0.25) 78%,
+      transparent 100%
+    );
+  }
+</style>
+
+<script>
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const desktopMQ = window.matchMedia('(min-width: 768px)');
+
+  // ── 1. Mobile slideshow (cross-fade ogni 5s) ───────────────────────────
+  const mobileBgs = Array.from(
+    document.querySelectorAll<HTMLElement>('.hero-bg-mobile[data-hero-bg-mobile]')
+  );
+  if (mobileBgs.length > 1 && !reducedMotion) {
+    let current = 0;
+    setInterval(() => {
+      mobileBgs[current].classList.replace('opacity-100', 'opacity-0');
+      current = (current + 1) % mobileBgs.length;
+      mobileBgs[current].classList.replace('opacity-0', 'opacity-100');
+    }, 5000);
+  }
+
+  // ── 2. Parallax desktop (translate X+Y per ogni tile) ──────────────────
+  const tiles = Array.from(
+    document.querySelectorAll<HTMLElement>('.hero-tile[data-tile-index]')
+  );
+  const heroSection = document.querySelector<HTMLElement>('[data-hero-section]');
+
+  let ticking = false;
+  const updateParallax = () => {
+    if (!heroSection || !desktopMQ.matches || reducedMotion) {
+      tiles.forEach((t) => { t.style.transform = ''; });
+      ticking = false;
+      return;
+    }
+    const rect = heroSection.getBoundingClientRect();
+    if (rect.bottom < -50 || rect.top > window.innerHeight + 50) {
+      ticking = false;
+      return;
+    }
+    const progress = -rect.top; // px scrollati dentro l'hero
+    tiles.forEach((tile) => {
+      const vy = parseFloat(tile.dataset.tileVy || '0');
+      const vx = parseFloat(tile.dataset.tileVx || '0');
+      const ty = (progress * vy).toFixed(2);
+      const tx = (progress * vx).toFixed(2);
+      tile.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+    });
+    ticking = false;
+  };
+
+  const onScroll = () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(updateParallax);
+    }
+  };
+
+  if (heroSection && tiles.length) {
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    updateParallax();
+  }
+</script>
