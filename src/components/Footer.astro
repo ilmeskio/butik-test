@@ -57,7 +57,7 @@ const year = new Date().getFullYear();
   <div class="max-w-7xl mx-auto px-6">
     <div class="border border-butik-dark/15 px-5 md:px-8 py-3 md:py-4">
 
-      <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-x-12 md:gap-x-16 gap-y-6 items-start">
+      <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-x-12 md:gap-x-24 gap-y-6 items-start">
         <!-- Col 1: Logo grande + info aziendale (logo a 5px dall'address) -->
         <div class="flex flex-col">
           <a href="/" class="flex items-center flex-shrink-0">
@@ -116,7 +116,7 @@ const year = new Date().getFullYear();
         </nav>
 
         <!-- Col 4: link 2 (la colonna stessa è a destra grazie al grid, testo sx) -->
-        <nav aria-label="Sezioni servizio" class="md:mr-12 lg:mr-16">
+        <nav aria-label="Sezioni servizio" class="md:mr-16">
           <ul class="flex flex-col">
             {linksColumn2.map(link => (
               <li>
