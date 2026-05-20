@@ -56,7 +56,7 @@ const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
 ---
 
 <section
-  class="hero relative bg-butik-dark overflow-hidden -mt-20 min-h-[100vh] md:min-h-[95vh]"
+  class="hero relative bg-butik-dark overflow-hidden -mt-20 min-h-[88vh] md:min-h-[82vh]"
   data-hero-section
 >
 
@@ -111,16 +111,16 @@ const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
   <div class="absolute inset-0 bg-gradient-to-b from-butik-dark/40 via-transparent to-butik-dark/70" aria-hidden="true"></div>
 
   <!-- ── Contenuto hero ──────────────────────────────────────────────── -->
-  <div class="relative h-full min-h-[100vh] md:min-h-[95vh] flex flex-col">
+  <div class="relative h-full min-h-[88vh] md:min-h-[82vh] flex flex-col">
 
-    <div class="flex-1 flex flex-col justify-center max-w-7xl mx-auto px-6 md:px-8 pt-28 md:pt-32 pb-8 w-full">
+    <div class="flex-1 flex flex-col justify-center max-w-7xl mx-auto px-6 md:px-8 pt-24 md:pt-24 pb-4 md:pb-6 w-full">
 
       <!-- Titolo + subtitle -->
       <div class="text-center max-w-4xl mx-auto">
         <h1 class="hero-title font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05]">
           Attiviamo territori, comunità e nuove generazioni attraverso la musica
         </h1>
-        <p class="hero-subtitle font-sans text-base md:text-lg mt-6 max-w-2xl mx-auto">
+        <p class="hero-subtitle font-sans text-base md:text-lg mt-5 max-w-2xl mx-auto">
           Dal 2018 progettiamo cultura, formazione ed esperienze turistiche su base
           musicale, al fianco di Comuni, DMO e operatori culturali.
         </p>
@@ -128,7 +128,7 @@ const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
     </div>
 
     <!-- 5 card servizi in basso -->
-    <div class="relative max-w-7xl mx-auto px-6 md:px-8 pb-12 md:pb-16 w-full">
+    <div class="relative max-w-7xl mx-auto px-6 md:px-8 pb-6 md:pb-8 w-full">
       <div
         class="flex md:grid overflow-x-auto snap-x snap-mandatory md:overflow-visible md:grid-cols-5 gap-3 md:gap-4 -mx-6 px-6 md:mx-0 md:px-0 pb-4 md:pb-0"
       >
@@ -150,7 +150,7 @@ const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
         ))}
       </div>
 
-      <div class="text-center mt-6 md:mt-8">
+      <div class="text-center mt-4 md:mt-5">
         <a
           href="/servizi"
           class="font-display text-xs font-bold tracking-widest uppercase text-white/90 hover:text-white inline-flex items-center gap-2 underline underline-offset-4 decoration-white/30 hover:decoration-white"
@@ -173,6 +173,20 @@ const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
   }
   .hero-tile {
     transition: transform 100ms linear;
+    /* Mask radiale: il centro della tile è opaco, i bordi sfumano a 0.
+       Ammorbidisce le sovrapposizioni tra tile e nasconde i 4 angoli netti. */
+    -webkit-mask-image: radial-gradient(
+      ellipse 90% 90% at center,
+      #000 35%,
+      rgba(0, 0, 0, 0.5) 65%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 90% 90% at center,
+      #000 35%,
+      rgba(0, 0, 0, 0.5) 65%,
+      transparent 100%
+    );
   }
 </style>
 
