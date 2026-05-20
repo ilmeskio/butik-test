@@ -12,13 +12,13 @@ import imgBottomRight from '../../assets/servizi/template-servizio/gallery-3.jpg
 interface ScatterItem {
   src: ImageMetadata;
   alt: string;
-  /** Posizionamento desktop: classi col-start/row-start su griglia 6×6. */
+  /** Posizionamento desktop: classi col-start/row-start su griglia 6×5. */
   desktop: string;
 }
 
-// Composizione "scatter" come da wireframe Relume (col1-1):
-// griglia 6 colonne × 6 righe, testo H1+CTA occupa l'area centrale
-// (col 2-5, row 2-5), le immagini sono sparse agli angoli e ai lati.
+// Composizione "scatter" desktop come da wireframe Relume (col1-1):
+// griglia 6 colonne × 5 righe, testo H1+CTA al centro (col 2-5, row 1-5),
+// immagini agli angoli e ai lati medi (span 3 row).
 const scatter: ScatterItem[] = [
   { src: imgTopLeft,     alt: 'Workshop di co-progettazione',           desktop: 'md:col-start-1 md:row-start-1 md:col-span-1 md:row-span-1' },
   { src: imgTopRight,    alt: 'Comunità coinvolta da un progetto Butik', desktop: 'md:col-start-6 md:row-start-1 md:col-span-1 md:row-span-1' },
@@ -29,11 +29,36 @@ const scatter: ScatterItem[] = [
 ];
 ---
 
-<section class="bg-butik-light pt-12 pb-20 md:pt-10 md:pb-16 overflow-hidden">
-  <div class="max-w-7xl mx-auto px-6 md:px-8">
+<section class="relative bg-butik-light overflow-hidden">
+
+  <!-- MOBILE: immagini di sfondo che ruotano. Nascoste da md: -->
+  <div class="absolute inset-0 md:hidden" aria-hidden="true">
+    {scatter.map((item, i) => (
+      <div
+        class:list={[
+          'hero-bg absolute inset-0 transition-opacity duration-1000 ease-in-out',
+          i === 0 ? 'opacity-100' : 'opacity-0',
+        ]}
+        data-hero-bg-index={i}
+      >
+        <Image
+          src={item.src}
+          alt=""
+          widths={[480, 768]}
+          sizes="100vw"
+          quality={70}
+          loading={i === 0 ? 'eager' : 'lazy'}
+          class="w-full h-full object-cover"
+        />
+      </div>
+    ))}
+    <div class="absolute inset-0 bg-butik-dark/55"></div>
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6 md:px-8 pt-24 pb-24 md:pt-10 md:pb-16 min-h-[80vh] md:min-h-0 flex md:block items-center">
 
     <!-- Layout desktop: grid 6×5 con immagini agli angoli e testo al centro -->
-    <div class="md:grid md:grid-cols-6 md:grid-rows-5 md:gap-3 md:min-h-[640px] lg:min-h-[720px]">
+    <div class="w-full md:grid md:grid-cols-6 md:grid-rows-5 md:gap-3 md:min-h-[640px] lg:min-h-[720px]">
 
       {scatter.map((item, i) => (
         <div
@@ -59,13 +84,13 @@ const scatter: ScatterItem[] = [
         class="relative flex flex-col items-center text-center md:col-start-2 md:row-start-1 md:col-span-4 md:row-span-5 md:justify-center md:px-6"
       >
         <h1
-          class="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-butik-dark leading-[1.05] max-w-3xl mx-auto"
+          class="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-white md:text-butik-dark leading-[1.05] max-w-3xl mx-auto"
         >
           Attiviamo territori, comunità e nuove generazioni attraverso la musica
         </h1>
 
         <p
-          class="font-sans text-base md:text-lg text-butik-dark/70 mt-6 max-w-2xl mx-auto"
+          class="font-sans text-base md:text-lg text-white/90 md:text-butik-dark/70 mt-6 max-w-2xl mx-auto"
         >
           Dal 2018 progettiamo cultura, formazione ed esperienze turistiche su base
           musicale, al fianco di Comuni, DMO e operatori culturali.
@@ -74,29 +99,27 @@ const scatter: ScatterItem[] = [
         <div class="mt-8 md:mt-10 w-full md:w-auto">
           <a
             href="/contatti"
-            class="inline-flex items-center justify-center w-full md:w-auto bg-butik-dark text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-red transition-colors"
+            class="inline-flex items-center justify-center w-full md:w-auto bg-butik-red md:bg-butik-dark text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-dark md:hover:bg-butik-red transition-colors"
           >
             Inizia il tuo progetto con noi
           </a>
         </div>
       </div>
     </div>
-
-    <!-- Mobile: dopo testo+CTA, una piccola scatter 2 colonne con 4 immagini -->
-    <div class="mt-12 grid grid-cols-2 gap-3 md:hidden">
-      {scatter.slice(0, 4).map((item) => (
-        <div class="relative overflow-hidden aspect-square">
-          <Image
-            src={item.src}
-            alt={item.alt}
-            widths={[300, 500]}
-            sizes="50vw"
-            quality={72}
-            loading="lazy"
-            class="w-full h-full object-cover"
-          />
-        </div>
-      ))}
-    </div>
   </div>
 </section>
+
+<script>
+  const backgrounds = Array.from(
+    document.querySelectorAll<HTMLElement>('.hero-bg[data-hero-bg-index]')
+  );
+
+  if (backgrounds.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let current = 0;
+    setInterval(() => {
+      backgrounds[current].classList.replace('opacity-100', 'opacity-0');
+      current = (current + 1) % backgrounds.length;
+      backgrounds[current].classList.replace('opacity-0', 'opacity-100');
+    }, 5000);
+  }
+</script>
