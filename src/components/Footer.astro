@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import logo from '../assets/logos/scritta-rossa.svg';
+import logo from '../assets/logos/bollo-rosso.svg';
 
 const linksColumn1 = [
   { href: '/chi-siamo', label: 'Chi siamo' },
@@ -61,7 +61,7 @@ const year = new Date().getFullYear();
         <!-- Col 1: Logo + info aziendale -->
         <div class="flex flex-col">
           <a href="/" class="flex items-center flex-shrink-0">
-            <Image src={logo} alt="Butik" width={109} height={72} class="h-[4.5rem] w-auto" />
+            <Image src={logo} alt="Butik" width={72} height={72} class="h-[4.5rem] w-auto" />
           </a>
 
           <address class="not-italic font-sans text-sm text-butik-dark/70 leading-relaxed mt-4">

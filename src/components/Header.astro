@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import logo from '../assets/logos/scritta-rossa.svg';
+import logo from '../assets/logos/bollo-rosso.svg';
 
 const navLinks = [
   { href: '/chi-siamo', label: 'Chi siamo' },
@@ -37,7 +37,7 @@ function isActive(href: string) {
     <!-- Left: Logo + Primary Nav -->
     <div class="flex items-center gap-10">
       <a href="/" class="flex-shrink-0 relative z-10">
-        <Image src={logo} alt="Butik" width={68} height={45} class="site-logo h-[2.8125rem] w-auto" />
+        <Image src={logo} alt="Butik" width={45} height={45} class="site-logo h-[2.8125rem] w-auto" />
       </a>
       <nav class="hidden md:flex items-center gap-8" aria-label="Navigazione principale">
         {navLinks.map(link => (
@@ -108,7 +108,7 @@ function isActive(href: string) {
     filter: drop-shadow(0 1px 4px rgba(7, 17, 8, 0.45));
   }
   .site-header[data-overlay="true"]:not([data-scrolled="true"]) .site-logo {
-    filter: brightness(0) invert(1) drop-shadow(0 1px 4px rgba(7, 17, 8, 0.45));
+    filter: drop-shadow(0 1px 4px rgba(7, 17, 8, 0.45));
   }
   .site-header[data-overlay="true"]:not([data-scrolled="true"]) .nav-link {
     color: #ffffff;
