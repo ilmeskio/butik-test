@@ -3,13 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { socials } from '../data/socials';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ⚠️ PLACEHOLDER — Web3Forms access key
-// Sostituire la stringa qui sotto con la ACCESS KEY reale dell'account
-// Web3Forms configurato per recapitare a info@wearebutik.com.
-// La key è pubblica (viene inviata dal browser): non è un segreto, ma senza
-// quella reale il form NON invierà nulla.
-// Dashboard: https://web3forms.com  →  crea access key  →  incolla qui.
-const WEB3FORMS_ACCESS_KEY = 'REPLACE_WITH_REAL_WEB3FORMS_ACCESS_KEY';
+// Web3Forms access key — letta da variabile d'ambiente, NON committata.
+// La key è pubblica (viene inviata dal browser e finisce nel bundle statico):
+// non è un segreto, ma la teniamo fuori dal sorgente per non averla nella
+// history di git. Il prefisso PUBLIC_ è richiesto da Astro per esporla al client.
+//   • Locale → file .env (gitignored):  PUBLIC_WEB3FORMS_ACCESS_KEY=la-tua-key
+//   • Deploy → GitHub Secret WEB3FORMS_ACCESS_KEY, iniettato nel build in CI.
+// Senza la variabile il form non invia e mostra un messaggio inline.
+const WEB3FORMS_ACCESS_KEY = import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY ?? '';
 // ─────────────────────────────────────────────────────────────────────────────
 
 const inputClass =
@@ -154,7 +155,7 @@ const inputClass =
         result.classList.toggle('text-butik-dark', ok);
       };
 
-      if (!accessKey || accessKey.startsWith('REPLACE_WITH_REAL')) {
+      if (!accessKey) {
         showMessage('Form non ancora configurato: manca la access key di Web3Forms. Scrivici intanto a info@wearebutik.com.', false);
         return;
       }

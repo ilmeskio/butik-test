@@ -30,6 +30,7 @@ jobs:
       - name: Build
         env:
           SITE: https://wearebutik.github.io
+          PUBLIC_WEB3FORMS_ACCESS_KEY: ${{ secrets.WEB3FORMS_ACCESS_KEY }}
         run: npm run build
 
       - uses: actions/configure-pages@v5
