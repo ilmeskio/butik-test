@@ -1,0 +1,23 @@
+---
+// Lista puntata "Di cosa ci occupiamo".
+interface Props {
+  items: string[];
+  eyebrow?: string;
+}
+
+const { items, eyebrow = 'Di cosa ci occupiamo' } = Astro.props;
+---
+
+<section class="not-prose my-10">
+  <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
+    {eyebrow}
+  </p>
+  <ul class="space-y-3">
+    {items.map((item) => (
+      <li class="flex gap-3 font-sans text-base text-butik-body leading-relaxed">
+        <span class="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-butik-red"></span>
+        <span>{item}</span>
+      </li>
+    ))}
+  </ul>
+</section>

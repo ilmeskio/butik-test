@@ -1,0 +1,17 @@
+---
+// Blocco introduttivo "Cosa facciamo" di una pagina servizio.
+// Il body (paragrafi, eventuali liste di format, link) arriva via slot MDX e
+// viene reso con la tipografia prose della pagina.
+interface Props {
+  eyebrow?: string;
+}
+
+const { eyebrow = 'Cosa facciamo' } = Astro.props;
+---
+
+<section class="mt-10 mb-8 first:mt-0">
+  <p class="not-prose font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
+    {eyebrow}
+  </p>
+  <slot />
+</section>

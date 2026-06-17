@@ -1,0 +1,34 @@
+---
+// CTA "Scopri i nostri progetti": rimanda al portfolio. Le schede dei singoli
+// progetti citate nel copy non esistono ancora come pagine: finché non ci
+// saranno, il link punta a /progetti e i titoli restano come anteprima testuale.
+interface Props {
+  title: string;
+  schede?: string;
+  href?: string;
+  label?: string;
+}
+
+const { title, schede, href = '/progetti', label = 'Vedi tutti i progetti' } = Astro.props;
+---
+
+<section class="not-prose my-12 border border-butik-dark/15 bg-white p-6 md:p-8">
+  <p class="title font-heading text-xl md:text-2xl font-bold text-butik-dark leading-tight">
+    {title}
+  </p>
+  {schede && <p class="font-sans text-sm text-butik-dark/60 mt-3">{schede}</p>}
+  <a
+    href={href}
+    class="mt-5 inline-block border-2 border-butik-red text-butik-red hover:bg-butik-red hover:text-white font-display text-xs font-bold tracking-widest uppercase px-6 py-3 transition-colors"
+  >
+    {label}
+  </a>
+</section>
+
+<style>
+  .title {
+    text-transform: none;
+    letter-spacing: -0.01em;
+    color: var(--color-butik-dark);
+  }
+</style>
