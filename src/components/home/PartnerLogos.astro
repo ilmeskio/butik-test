@@ -8,43 +8,114 @@ interface Props {
 
 const { partners = defaultPartners } = Astro.props;
 
-// Duplichiamo la lista nel markup per consentire il loop continuo con translateX(-50%).
-const track = [...partners, ...partners];
+// Desktop: una sola riga, lista duplicata per il loop continuo (translateX -50%).
+const desktopTrack = [...partners, ...partners];
+
+// Mobile: due righe. Spezziamo i partner a metà e duplichiamo ciascuna riga.
+const half = Math.ceil(partners.length / 2);
+const mobileRowA = partners.slice(0, half);
+const mobileRowB = partners.slice(half);
+const trackA = [...mobileRowA, ...mobileRowA];
+const trackB = [...mobileRowB, ...mobileRowB];
 ---
 
 <section
   class="partner-strip relative bg-butik-light pt-10 md:pt-12 pb-14 md:pb-16 overflow-hidden"
   data-partner-strip
 >
-  <div
-    class="flex w-max items-center gap-6 md:gap-8 animate-butik-marquee will-change-transform"
-  >
-    {
-      track.map((partner) => (
-        <div
-          class="shrink-0 flex items-center justify-center bg-white rounded-xl ring-1 ring-butik-dark/5 px-6 md:px-8 h-16 md:h-20"
-          data-name={partner.name}
-        >
-          <Image
-            src={partner.logo}
-            alt=""
-            height={40}
-            densities={[1, 2]}
-            loading="eager"
-            decoding="async"
-            class="max-h-8 md:max-h-10 w-auto"
-          />
-        </div>
-      ))
-    }
+  {/* ---------- Desktop: marquee a riga singola ---------- */}
+  <div class="hidden md:block">
+    <div
+      class="partner-track is-autoscroll flex w-max items-center gap-8 will-change-transform cursor-grab select-none"
+      data-partner-track
+    >
+      {
+        desktopTrack.map((partner) => (
+          <div
+            class="shrink-0 flex items-center justify-center bg-white rounded-xl ring-1 ring-butik-dark/5 px-8 h-20"
+            data-name={partner.name}
+          >
+            <Image
+              src={partner.logo}
+              alt=""
+              height={40}
+              densities={[1, 2]}
+              loading="eager"
+              decoding="async"
+              draggable={false}
+              class="max-h-10 w-auto pointer-events-none"
+            />
+          </div>
+        ))
+      }
+    </div>
+
+    <p
+      class="pointer-events-none absolute inset-x-0 bottom-4 text-center font-display text-xs font-bold tracking-widest uppercase text-butik-dark/60 opacity-0 transition-opacity duration-200"
+      data-partner-label
+      aria-hidden="true"
+    >
+    </p>
   </div>
 
-  <p
-    class="pointer-events-none absolute inset-x-0 bottom-4 text-center font-display text-xs font-bold tracking-widest uppercase text-butik-dark/60 opacity-0 transition-opacity duration-200"
-    data-partner-label
-    aria-hidden="true"
-  >
-  </p>
+  {/* ---------- Mobile: due righe trascinabili, nome sotto il logo ---------- */}
+  <div class="md:hidden flex flex-col gap-5">
+    <div
+      class="partner-track is-autoscroll flex w-max items-start gap-5 will-change-transform cursor-grab select-none"
+      data-partner-track
+      style="--marquee-dur: 40s"
+    >
+      {
+        trackA.map((partner) => (
+          <div class="shrink-0 flex flex-col items-center gap-2 w-28">
+            <div class="flex w-full items-center justify-center bg-white rounded-xl ring-1 ring-butik-dark/5 px-5 h-16">
+              <Image
+                src={partner.logo}
+                alt=""
+                height={36}
+                densities={[1, 2]}
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+                class="max-h-8 w-auto pointer-events-none"
+              />
+            </div>
+            <span class="text-center font-display text-[10px] font-bold leading-tight tracking-wide uppercase text-butik-dark/55">
+              {partner.name}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+
+    <div
+      class="partner-track is-autoscroll is-reverse flex w-max items-start gap-5 will-change-transform cursor-grab select-none"
+      data-partner-track
+      style="--marquee-dur: 48s"
+    >
+      {
+        trackB.map((partner) => (
+          <div class="shrink-0 flex flex-col items-center gap-2 w-28">
+            <div class="flex w-full items-center justify-center bg-white rounded-xl ring-1 ring-butik-dark/5 px-5 h-16">
+              <Image
+                src={partner.logo}
+                alt=""
+                height={36}
+                densities={[1, 2]}
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+                class="max-h-8 w-auto pointer-events-none"
+              />
+            </div>
+            <span class="text-center font-display text-[10px] font-bold leading-tight tracking-wide uppercase text-butik-dark/55">
+              {partner.name}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
 </section>
 
 <style is:global>
@@ -57,39 +128,232 @@ const track = [...partners, ...partners];
     }
   }
 
-  .animate-butik-marquee {
-    animation: butik-marquee 45s linear infinite;
+  /* Stessa cosa al contrario, per la seconda riga mobile. */
+  @keyframes butik-marquee-rev {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
   }
 
-  /* On hover della strip: il marquee si ferma. */
-  .partner-strip:hover .animate-butik-marquee {
+  /* Scorrimento automatico di default: pura animazione CSS. */
+  .partner-track.is-autoscroll {
+    animation: butik-marquee var(--marquee-dur, 45s) linear infinite;
+  }
+
+  .partner-track.is-autoscroll.is-reverse {
+    animation-name: butik-marquee-rev;
+  }
+
+  /* On hover della strip (solo desktop, dove l'hover esiste): il marquee si ferma. */
+  .partner-strip:hover .partner-track.is-autoscroll {
     animation-play-state: paused;
   }
 
+  .partner-track.is-dragging {
+    cursor: grabbing;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .animate-butik-marquee {
+    .partner-track.is-autoscroll {
       animation: none;
     }
   }
 </style>
 
 <script>
+  // Soglia in px oltre la quale il movimento è considerato un drag (non un click).
+  const DRAG_THRESHOLD = 4;
+
+  const prefersReducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
+
+  // Configura una singola traccia trascinabile (riga marquee).
+  function setupTrack(track: HTMLElement) {
+    // La track contiene la lista duplicata: metà della sua larghezza è il
+    // punto in cui il contenuto si ripete (= il -50% del keyframe CSS).
+    let halfWidth = track.scrollWidth / 2;
+    const measure = () => {
+      halfWidth = track.scrollWidth / 2;
+    };
+    window.addEventListener('resize', measure);
+
+    // Direzione e durata dell'animazione = stessa fonte di verità del CSS.
+    const isReverse = track.classList.contains('is-reverse');
+    const durationSec = () => {
+      const d = parseFloat(getComputedStyle(track).animationDuration);
+      return Number.isFinite(d) && d > 0 ? d : 45;
+    };
+
+    let offset = 0;
+    let interactive = false; // true = controllo JS, false = animazione CSS
+    let rafId = 0;
+    let isPointerDown = false;
+    let isDragging = false;
+    let startX = 0;
+    let startOffset = 0;
+    let lastX = 0;
+    let lastT = 0;
+    let velocity = 0; // px/secondo, per l'inerzia a fine drag.
+    let lastFrame = 0;
+
+    // Mantiene l'offset nell'intervallo (-halfWidth, 0] per il loop infinito.
+    const wrap = (value: number) => {
+      if (halfWidth <= 0) return value;
+      let v = value % halfWidth;
+      if (v > 0) v -= halfWidth;
+      return v;
+    };
+
+    // Legge la translateX corrente applicata dall'animazione CSS.
+    const currentTranslateX = () => {
+      const t = getComputedStyle(track).transform;
+      if (!t || t === 'none') return 0;
+      try {
+        return new DOMMatrixReadOnly(t).m41;
+      } catch {
+        return 0;
+      }
+    };
+
+    const apply = () => {
+      track.style.transform = `translate3d(${offset}px, 0, 0)`;
+    };
+
+    // CSS → JS: congela la posizione dell'animazione e passa al controllo JS.
+    const enterInteractive = () => {
+      if (interactive) return;
+      interactive = true;
+      measure(); // la riga potrebbe essere appena diventata visibile (breakpoint)
+      offset = wrap(currentTranslateX());
+      track.classList.remove('is-autoscroll');
+      track.style.animationDelay = '';
+      apply();
+      lastFrame = 0;
+      rafId = requestAnimationFrame(tick);
+    };
+
+    // JS → CSS: riallinea l'animazione alla posizione corrente e la riattiva.
+    const exitInteractive = () => {
+      interactive = false;
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+      offset = wrap(offset);
+
+      // Con reduced-motion non c'è animazione: resta fermi dove siamo.
+      if (prefersReducedMotion) {
+        apply();
+        return;
+      }
+
+      // Fase 0..1 dell'animazione corrispondente all'offset corrente.
+      // Forward (0 → -50%):  p = -offset / halfWidth
+      // Reverse (-50% → 0):  p = 1 + offset / halfWidth
+      const p =
+        halfWidth > 0
+          ? isReverse
+            ? 1 + offset / halfWidth
+            : -offset / halfWidth
+          : 0;
+      track.style.transform = '';
+      track.style.animationDelay = `${-(p * durationSec())}s`;
+      track.classList.add('is-autoscroll');
+    };
+
+    function tick(now: number) {
+      if (!interactive) return;
+      const dt = lastFrame ? (now - lastFrame) / 1000 : 0;
+      lastFrame = now;
+
+      if (!isPointerDown) {
+        if (Math.abs(velocity) > 20) {
+          // Inerzia dopo il rilascio.
+          offset = wrap(offset + velocity * dt);
+          velocity *= 0.92;
+          apply();
+        } else {
+          // Movimento esaurito: restituisce il controllo all'animazione CSS.
+          exitInteractive();
+          return;
+        }
+      }
+
+      rafId = requestAnimationFrame(tick);
+    }
+
+    // --- Drag ---
+    track.addEventListener('pointerdown', (e: PointerEvent) => {
+      enterInteractive();
+      isPointerDown = true;
+      isDragging = false;
+      startX = lastX = e.clientX;
+      startOffset = offset;
+      lastT = e.timeStamp;
+      velocity = 0;
+      track.setPointerCapture(e.pointerId);
+    });
+
+    track.addEventListener('pointermove', (e: PointerEvent) => {
+      if (!isPointerDown) return;
+      const dx = e.clientX - startX;
+      if (!isDragging && Math.abs(dx) > DRAG_THRESHOLD) {
+        isDragging = true;
+        track.classList.add('is-dragging');
+      }
+      if (!isDragging) return;
+
+      offset = wrap(startOffset + dx);
+      apply();
+
+      // Stima della velocità istantanea per l'inerzia.
+      const dt = (e.timeStamp - lastT) / 1000;
+      if (dt > 0) velocity = (e.clientX - lastX) / dt;
+      lastX = e.clientX;
+      lastT = e.timeStamp;
+    });
+
+    const onPointerUp = (e: PointerEvent) => {
+      if (!isPointerDown) return;
+      isPointerDown = false;
+      track.classList.remove('is-dragging');
+      if (track.hasPointerCapture(e.pointerId)) {
+        track.releasePointerCapture(e.pointerId);
+      }
+      // Limita l'inerzia per evitare scatti troppo lunghi.
+      velocity = Math.max(-1800, Math.min(1800, velocity));
+      // Se non c'è stato drag reale, restituisce subito il controllo al CSS.
+      if (!isDragging) exitInteractive();
+    };
+
+    track.addEventListener('pointerup', onPointerUp);
+    track.addEventListener('pointercancel', onPointerUp);
+    // Evita un eventuale click/navigazione se l'utente ha trascinato.
+    track.addEventListener('click', (e) => {
+      if (isDragging) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    });
+  }
+
+  document
+    .querySelectorAll<HTMLElement>('[data-partner-track]')
+    .forEach(setupTrack);
+
+  // --- Desktop: nome del partner in basso, su hover della singola card ---
   document.querySelectorAll<HTMLElement>('[data-partner-strip]').forEach((strip) => {
     const label = strip.querySelector<HTMLElement>('[data-partner-label]');
-    const track = strip.querySelector<HTMLElement>('.animate-butik-marquee');
-
-    // Pausa del marquee su hover della strip (oltre alla regola CSS :hover).
-    strip.addEventListener('mouseenter', () => {
-      if (track) track.style.animationPlayState = 'paused';
-    });
-    strip.addEventListener('mouseleave', () => {
-      if (track) track.style.animationPlayState = 'running';
-      if (label) label.style.opacity = '0';
-    });
-
     if (!label) return;
 
-    // Nome del partner in basso alla strip, su hover della singola card.
+    strip.addEventListener('mouseleave', () => {
+      label.style.opacity = '0';
+    });
+
     strip.querySelectorAll<HTMLElement>('[data-name]').forEach((card) => {
       const name = card.dataset.name ?? '';
       card.addEventListener('mouseenter', () => {
