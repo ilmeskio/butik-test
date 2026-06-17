@@ -1,0 +1,56 @@
+---
+// ── Lab — Varianti della sezione "Metodo" ─────────────────────────────────
+// Pagina di confronto NON linkata in nav: raggiungibile solo via URL diretto
+// (/lab/metodo). Tenuta come riferimento per ripercorrere le varianti grafiche
+// del percorso-metodo. La variante 3 (Archi) è quella attualmente in home.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MetodoCatena from '../../components/home/metodo-variants/MetodoCatena.astro';
+import MetodoLineaCentrale from '../../components/home/metodo-variants/MetodoLineaCentrale.astro';
+import MetodoArchi from '../../components/home/metodo-variants/MetodoArchi.astro';
+import MetodoSerpentina from '../../components/home/metodo-variants/MetodoSerpentina.astro';
+
+const varianti = [
+  { n: 1, label: 'Catena cerchi zig-zag', Comp: MetodoCatena, attiva: false },
+  { n: 2, label: 'Linea centrale + card alternate', Comp: MetodoLineaCentrale, attiva: false },
+  { n: 3, label: 'Cerchi grandi con archi', Comp: MetodoArchi, attiva: true },
+  { n: 4, label: 'Serpentina raffinata', Comp: MetodoSerpentina, attiva: false },
+];
+---
+
+<BaseLayout
+  title="Lab — Varianti Metodo"
+  description="Pagina interna di confronto tra varianti grafiche della sezione Metodo."
+>
+  <div class="pt-20 pb-8 text-center">
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
+      Pagina interna · lab
+    </p>
+    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark">
+      Varianti — Sezione Metodo
+    </h1>
+    <p class="font-sans text-sm text-butik-dark/60 mt-4 max-w-xl mx-auto px-6">
+      Quattro proposte a confronto. La variante attualmente in home è
+      contrassegnata da “in home”.
+    </p>
+  </div>
+
+  {
+    varianti.map(({ n, label, Comp, attiva }) => (
+      <>
+        <div class="border-t border-butik-dark/10">
+          <div class="max-w-7xl mx-auto px-6 pt-10 flex items-center gap-3">
+            <span class="inline-block font-display text-xs font-bold tracking-widest uppercase text-white bg-butik-red rounded-full px-4 py-1.5">
+              Variante {n} — {label}
+            </span>
+            {attiva && (
+              <span class="inline-block font-display text-xs font-bold tracking-widest uppercase text-butik-red ring-1 ring-butik-red rounded-full px-3 py-1.5">
+                in home
+              </span>
+            )}
+          </div>
+        </div>
+        <Comp />
+      </>
+    ))
+  }
+</BaseLayout>

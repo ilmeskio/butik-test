@@ -1,0 +1,51 @@
+---
+// ── Set icone line-style per le tappe del Metodo ──────────────────────────
+// stroke = currentColor → l'icona eredita il colore del contesto (bianca dentro
+// un nodo rosso, rossa su sfondo bianco). viewBox 24, stroke-width sottile.
+import type { MetodoIconName } from '../../data/metodo';
+
+interface Props {
+  name: MetodoIconName;
+  /** Lato del quadrato in px (default 24). */
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 24, class: className } = Astro.props;
+
+// Path line-style (stroke). Ogni voce è uno o più <path>/<line> elements.
+const icons: Record<MetodoIconName, string> = {
+  // Ascolto attivo → onde sonore / ascolto
+  ascolto:
+    '<path d="M4 13a8 8 0 0 1 16 0"/><path d="M8.5 13a3.5 3.5 0 0 1 7 0v4.5a2 2 0 0 1-2 2h-.5"/><path d="M8.5 13v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1a2 2 0 0 1 2-2h2.5"/><path d="M15.5 13H18a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-.5"/>',
+  // Co-progettazione → mani che si stringono / collaborazione
+  'co-progettazione':
+    '<path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3-2.81 2.81"/><path d="M3 4h8"/><path d="m3 9 4 4a1 1 0 1 0 3-3"/>',
+  // Protagonismo giovanile → gruppo di persone
+  protagonismo:
+    '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  // Formazione → lampadina (idea / apprendimento)
+  formazione:
+    '<path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>',
+  // Eventi → megafono (attivazione territori)
+  eventi:
+    '<path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>',
+};
+
+const body = icons[name];
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={className}
+  aria-hidden="true"
+  set:html={body}
+/>

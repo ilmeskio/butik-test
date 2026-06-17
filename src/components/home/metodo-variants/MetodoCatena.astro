@@ -1,0 +1,176 @@
+---
+// ── Variante 1 — Catena di cerchi zig-zag (rif. 3 / 4 / 5) ────────────────
+// Cerchi numerati grandi con icona, concatenati e alternati su/giù lungo una
+// riga; connettore tratteggiato rosso che serpeggia tra i nodi. Su mobile la
+// catena si verticalizza (rail a sinistra + tappe incolonnate).
+import { tappe } from '../../../data/metodo';
+import MetodoIcon from '../MetodoIcon.astro';
+---
+
+<section class="bg-white py-12 md:py-20 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-12 md:mb-16">
+      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
+        Come lavoriamo
+      </p>
+      <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark">
+        Il nostro metodo
+      </h2>
+    </div>
+
+    <ol class="catena">
+      {
+        tappe.map((tappa, i) => (
+          <li class="catena-step" data-pos={i % 2 === 0 ? 'up' : 'down'}>
+            <div class="catena-node">
+              <MetodoIcon name={tappa.icon} size={26} class="catena-icon" />
+              <span class="catena-num">{String(i + 1).padStart(2, '0')}</span>
+            </div>
+            <div class="catena-content">
+              <h3 class="catena-title font-heading text-lg md:text-xl font-bold text-butik-dark">
+                {tappa.title}
+              </h3>
+              <p class="font-sans text-sm text-butik-dark/70 leading-relaxed mt-1">
+                {tappa.description}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .catena {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .catena-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 9999px;
+    background: var(--color-butik-red);
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 6px #fff, 0 10px 24px -8px rgba(226, 25, 41, 0.55);
+  }
+  .catena-num {
+    font-family: var(--font-display, inherit);
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1;
+  }
+  .catena-title {
+    text-transform: none !important;
+    letter-spacing: -0.005em !important;
+    color: var(--color-butik-dark) !important;
+  }
+
+  /* ── Mobile: catena verticale (rail tratteggiato a sinistra) ──────────── */
+  @media (max-width: 767px) {
+    .catena {
+      position: relative;
+    }
+    .catena::before {
+      content: '';
+      position: absolute;
+      top: 1.5rem;
+      bottom: 1.5rem;
+      left: 3rem;
+      border-left: 2px dashed
+        color-mix(in srgb, var(--color-butik-red) 45%, transparent);
+    }
+    .catena-step {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      padding-bottom: 2.5rem;
+    }
+    .catena-step:last-child {
+      padding-bottom: 0;
+    }
+    .catena-node {
+      width: 5rem;
+      height: 5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .catena-content {
+      padding-top: 0.5rem;
+    }
+  }
+
+  /* ── Desktop: riga di cerchi alternati su/giù + connettore serpentina ── */
+  @media (min-width: 768px) {
+    .catena {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(0.5rem, 2vw, 2rem);
+      padding: 6.5rem 0;
+    }
+    .catena-step {
+      position: relative;
+      flex: 1 1 0;
+      display: flex;
+      justify-content: center;
+    }
+    .catena-step[data-pos='up'] {
+      transform: translateY(-2.75rem);
+    }
+    .catena-step[data-pos='down'] {
+      transform: translateY(2.75rem);
+    }
+    .catena-node {
+      width: clamp(5rem, 8vw, 6.5rem);
+      height: clamp(5rem, 8vw, 6.5rem);
+      position: relative;
+      z-index: 2;
+    }
+    .catena-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 5.5rem;
+      border-top: 2px dashed
+        color-mix(in srgb, var(--color-butik-red) 60%, transparent);
+      border-right: 2px dashed
+        color-mix(in srgb, var(--color-butik-red) 60%, transparent);
+      border-top-right-radius: 3rem;
+      z-index: 0;
+    }
+    .catena-step[data-pos='down']:not(:last-child)::after {
+      transform: scaleY(-1);
+      transform-origin: top;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 3rem;
+      border-top: none;
+      border-bottom: 2px dashed
+        color-mix(in srgb, var(--color-butik-red) 60%, transparent);
+    }
+    .catena-content {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(15rem, 90%);
+      text-align: center;
+    }
+    .catena-step[data-pos='up'] .catena-content {
+      top: calc(100% + 1.25rem);
+    }
+    .catena-step[data-pos='down'] .catena-content {
+      bottom: calc(100% + 1.25rem);
+    }
+  }
+</style>
