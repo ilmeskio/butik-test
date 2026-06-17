@@ -1,0 +1,206 @@
+---
+// Launcher compatto dei servizi per l'HERO (dove lo spazio è prezioso, mobile
+// soprattutto). Due modalità:
+//   list  → una riga per servizio (nome + dato + freccia), tutti scansionabili
+//   strip → fascia orizzontale scorrevole, mantiene il "feel card" senza impilare
+// `tone` adatta i colori a sfondo chiaro o scuro (hero home = scuro).
+import { serviziCards } from '../../data/serviziCards';
+
+interface Props {
+  mode: 'list' | 'strip';
+  tone?: 'onLight' | 'onDark';
+}
+const { mode, tone = 'onLight' } = Astro.props;
+---
+
+{mode === 'list' && (
+  <ul class:list={['launcher-list', tone]}>
+    {serviziCards.map((c) => (
+      <li>
+        <a href={c.href} class="row">
+          <span class="row-title">{c.title}</span>
+          <span class="row-stat">{`${c.statValue} ${c.statLabel}`}</span>
+          <span class="row-chev" aria-hidden="true">›</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+
+{mode === 'strip' && (
+  <ul class:list={['launcher-strip', tone]}>
+    {serviziCards.map((c) => (
+      <li>
+        <a href={c.href} class="chip-card">
+          <span class="chip-card__title">{c.title}</span>
+          <span class="chip-card__stat">{`${c.statValue} ${c.statLabel}`}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  /* ── LIST ──────────────────────────────────────────────────────────── */
+  .launcher-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .launcher-list li {
+    border-bottom: 1px solid var(--rule);
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0.6rem;
+    margin: 0 -0.6rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: var(--ink);
+    transition: background-color 140ms ease;
+  }
+  .row:hover,
+  .row:active,
+  .row:focus-visible {
+    background: var(--row-hover);
+  }
+  .row-title {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    line-height: 1.15;
+    flex: 1;
+    min-width: 0;
+  }
+  .row-stat {
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  /* Chevron di disclosure: segnala che la riga è toccabile (visibile sempre,
+     non solo all'hover, così funziona anche su mobile). */
+  .row-chev {
+    flex-shrink: 0;
+    font-size: 1.35rem;
+    line-height: 1;
+    color: var(--accent);
+    opacity: 0.55;
+    transition: opacity 140ms ease, transform 140ms ease;
+  }
+  .row:hover .row-chev,
+  .row:focus-visible .row-chev {
+    opacity: 1;
+    transform: translateX(2px);
+  }
+  .row:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .row:hover .row-title {
+    color: var(--accent);
+  }
+
+  /* ── STRIP ─────────────────────────────────────────────────────────── */
+  .launcher-strip {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0.5rem;
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .launcher-strip::-webkit-scrollbar {
+    display: none;
+  }
+  .launcher-strip li {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+  .chip-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    width: 12rem;
+    height: 100%;
+    padding: 0.9rem 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--rule);
+    text-decoration: none;
+    transition: transform 150ms ease, box-shadow 150ms ease;
+  }
+  .chip-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 26px rgba(7, 17, 8, 0.16);
+  }
+  .chip-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .chip-card__title {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    line-height: 1.15;
+    color: var(--ink-card);
+  }
+  .chip-card__stat {
+    font-family: var(--font-display);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-card);
+  }
+  .chip-card__arrow {
+    margin-top: auto;
+    font-size: 1.1rem;
+    line-height: 1;
+    color: var(--accent);
+    transition: transform 150ms ease;
+  }
+  .chip-card:hover .chip-card__arrow {
+    transform: translateX(5px);
+  }
+
+  /* ── Tone tokens ───────────────────────────────────────────────────── */
+  .onLight {
+    --ink: var(--color-butik-dark);
+    --muted: color-mix(in srgb, var(--color-butik-dark) 55%, transparent);
+    --rule: color-mix(in srgb, var(--color-butik-dark) 15%, transparent);
+    --accent: var(--color-butik-red);
+    --row-hover: color-mix(in srgb, var(--color-butik-dark) 6%, transparent);
+    --card-bg: #fff;
+    --ink-card: var(--color-butik-dark);
+    --muted-card: color-mix(in srgb, var(--color-butik-dark) 55%, transparent);
+  }
+  .onDark {
+    --ink: #fff;
+    --muted: rgba(255, 255, 255, 0.65);
+    --rule: rgba(255, 255, 255, 0.2);
+    --accent: var(--color-butik-green);
+    --row-hover: rgba(255, 255, 255, 0.1);
+    --card-bg: rgba(255, 255, 255, 0.96);
+    --ink-card: var(--color-butik-dark);
+    --muted-card: color-mix(in srgb, var(--color-butik-dark) 55%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .row,
+    .row-chev,
+    .chip-card {
+      transition: none;
+    }
+  }
+</style>

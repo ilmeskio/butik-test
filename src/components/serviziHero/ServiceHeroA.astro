@@ -1,0 +1,101 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import type { ServiceHeroContent } from '../../data/serviziHero';
+
+interface Props {
+  content: ServiceHeroContent;
+  image: ImageMetadata | string;
+  imageAlt?: string;
+}
+const { content, image, imageAlt = '' } = Astro.props;
+const isLocalImage = typeof image !== 'string';
+---
+
+<section class="grid grid-cols-1 lg:grid-cols-2 lg:min-h-[70vh]">
+  <!-- IMMAGINE — mobile sopra, desktop a destra -->
+  <div class="relative order-1 lg:order-2 h-56 sm:h-64 lg:h-auto">
+    {isLocalImage ? (
+      <Image
+        src={image as ImageMetadata}
+        alt={imageAlt}
+        widths={[800, 1200, 1600]}
+        sizes="100vw"
+        quality={72}
+        loading="eager"
+        fetchpriority="high"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+    ) : (
+      <img
+        src={image as string}
+        alt={imageAlt}
+        loading="eager"
+        fetchpriority="high"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+    )}
+    <!-- blend morbido verso il pannello scuro: dal basso su mobile, da sinistra su desktop -->
+    <div
+      class="pointer-events-none absolute inset-0 bg-gradient-to-t from-butik-dark/80 via-butik-dark/20 to-transparent lg:bg-gradient-to-l lg:from-transparent lg:via-transparent lg:to-butik-dark"
+      aria-hidden="true"
+    ></div>
+  </div>
+
+  <!-- PANNELLO SCURO — contenuto -->
+  <div class="order-2 lg:order-1 bg-butik-dark flex flex-col justify-center px-6 py-12 sm:px-10 lg:px-16 lg:py-20">
+    <div class="max-w-xl">
+      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red">
+        {content.eyebrow}
+      </p>
+
+      <h1 class="hero-headline mt-5 font-display font-bold leading-[1.05] text-4xl md:text-5xl lg:text-6xl">
+        {content.headline}
+      </h1>
+
+      <p class="mt-5 max-w-md font-sans text-base sm:text-lg text-white/80">
+        {content.sub}
+      </p>
+
+      <!-- PROOF CHIP -->
+      <ul class="mt-8 flex flex-wrap gap-3" role="list">
+        {content.proof.map((p) => (
+          <li class="flex flex-col rounded-md border border-white/10 bg-white/5 px-4 py-2">
+            <span class="font-display text-lg font-bold leading-none text-butik-green">
+              {p.value}
+            </span>
+            <span class="mt-1 font-sans text-xs leading-tight text-white/70">
+              {p.label}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <!-- CTA -->
+      <div class="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
+        <a
+          href={content.ctaPrimary.href}
+          class="inline-flex items-center justify-center bg-butik-red text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-butik-dark transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        >
+          {content.ctaPrimary.label}
+        </a>
+
+        {content.ctaSecondary && (
+          <a
+            href={content.ctaSecondary.href}
+            class="inline-flex items-center justify-center border border-white/40 text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-butik-dark transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            {content.ctaSecondary.label}
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* lo stile globale di h1 forza color butik-dark: qui serve bianco su scuro */
+  .hero-headline {
+    color: #fff;
+  }
+</style>

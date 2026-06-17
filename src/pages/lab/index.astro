@@ -1,0 +1,78 @@
+---
+// LAB — indice interno dei prototipi e delle varianti non raggiungibili dal
+// menu principale. Serve al team Butik per valutare tutto in un posto solo.
+import BaseLayout from '#layouts/BaseLayout.astro';
+
+interface LabLink {
+  href: string;
+  title: string;
+  desc: string;
+}
+interface LabGroup {
+  eyebrow: string;
+  titolo: string;
+  intro: string;
+  links: LabLink[];
+}
+
+const gruppi: LabGroup[] = [
+  {
+    eyebrow: 'Homepage',
+    titolo: 'Above-the-fold della home',
+    intro:
+      'La home reale ha uno switcher flottante a due assi: Hero (Attuale / A numeri / B loghi) × Servizi (Cards / Chip / Numero / Tag / Icona / Lista / Strip). Si compongono liberamente, default = aspetto attuale.',
+    links: [
+      { href: '/', title: 'Home reale + switcher componibile', desc: 'Componi Hero × Servizi dallo switcher flottante in basso a destra.' },
+    ],
+  },
+  {
+    eyebrow: 'Pagina servizio',
+    titolo: 'Hero del singolo servizio',
+    intro: 'Tre direzioni di hero per la scheda servizio, su tutti e 5 i servizi, con switcher Attuale/A/B/C.',
+    links: [
+      { href: '/servizi-hero', title: 'Hub schede servizio (A/B/C)', desc: 'Matrice 3 direzioni × 5 servizi + suggerimento CTA form/call.' },
+    ],
+  },
+  {
+    eyebrow: 'Card e launcher',
+    titolo: 'Come presentare i servizi',
+    intro: 'Catalogo delle varianti card (per /servizi) e dei launcher compatti (per l’hero).',
+    links: [
+      { href: '/card-varianti', title: 'Catalogo varianti', desc: 'Chip · Numero · Tag · Icona · Lista compatta · Strip, con barra di navigazione.' },
+      { href: '/servizi-compact', title: 'Lista vs strip + anteprima telefono', desc: 'Densità above-the-fold con riquadro a ~390px.' },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Lab — Butik" description="Indice interno dei prototipi e delle varianti in valutazione.">
+  <section class="max-w-5xl mx-auto px-6 pt-24 pb-10">
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-3">Interno · non indicizzato dal menu</p>
+    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark mb-4">Lab — varianti in valutazione</h1>
+    <p class="font-sans text-base md:text-lg text-butik-body max-w-2xl leading-relaxed">
+      Tutte le varianti non raggiungibili dalle pagine principali, in un posto solo. Da condividere col team
+      per decidere. Niente di tutto questo è ancora in produzione.
+    </p>
+  </section>
+
+  {gruppi.map((g) => (
+    <section class="max-w-5xl mx-auto px-6 py-8 border-t border-butik-dark/10">
+      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-2">{g.eyebrow}</p>
+      <h2 class="font-heading text-2xl md:text-3xl font-bold text-butik-dark mb-2">{g.titolo}</h2>
+      <p class="font-sans text-sm text-butik-dark/60 max-w-2xl leading-relaxed mb-6">{g.intro}</p>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {g.links.map((l) => (
+          <li>
+            <a href={l.href} class="group block border border-butik-dark/15 bg-white p-5 hover:border-butik-red transition-colors">
+              <span class="block font-heading text-base font-bold text-butik-dark group-hover:text-butik-red transition-colors">
+                {l.title}
+              </span>
+              <span class="block font-sans text-sm text-butik-dark/60 mt-1 leading-relaxed">{l.desc}</span>
+              <span class="block font-display text-xs font-bold tracking-widest uppercase text-butik-red mt-3">{l.href}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</BaseLayout>

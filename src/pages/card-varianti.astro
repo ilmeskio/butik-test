@@ -1,0 +1,133 @@
+---
+// PROTOTIPO — catalogo di TUTTE le varianti per presentare i servizi:
+// card ricche (chip/numero/tag/icona) + launcher compatti (lista/strip).
+// Barra di navigazione in alto per saltare a ogni tipo di variante.
+import BaseLayout from '#layouts/BaseLayout.astro';
+import ServiceCard from '#components/serviziCards/ServiceCard.astro';
+import ServiceLauncher from '#components/serviziCards/ServiceLauncher.astro';
+import { serviziCards } from '../data/serviziCards';
+
+const cardVariants: Array<{
+  id: string;
+  variant: 'chip' | 'number' | 'tag' | 'icon';
+  nome: string;
+  desc: string;
+}> = [
+  { id: 'chip', variant: 'chip', nome: 'Card · Chip', desc: 'Dato reale come sigillo in basso. Niente icone, massima credibilità.' },
+  { id: 'numero', variant: 'number', nome: 'Card · Numero protagonista', desc: 'Il dato fa da aggancio in alto e grande. Prova-first.' },
+  { id: 'tag', variant: 'tag', nome: 'Card · Tag pubblico', desc: 'Etichetta «per chi» + dato. Collega card e target.' },
+  { id: 'icona', variant: 'icon', nome: 'Card · Icona', desc: 'Glifo monolinea + dato. Più visivo; le icone vanno tenute d’occhio.' },
+];
+
+const nav = [
+  ...cardVariants.map((c) => ({ id: c.id, label: c.nome.replace('Card · ', '') })),
+  { id: 'lista', label: 'Lista compatta' },
+  { id: 'strip', label: 'Strip orizzontale' },
+];
+---
+
+<BaseLayout title="Varianti servizi — catalogo — Butik" description="Prototipo interno: tutte le varianti per presentare i servizi.">
+  <section class="max-w-7xl mx-auto px-6 pt-24 pb-6">
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-3">Prototipo interno</p>
+    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark mb-4">Servizi — catalogo varianti</h1>
+    <p class="font-sans text-base md:text-lg text-butik-body max-w-3xl leading-relaxed">
+      Tutti i modi di presentare i 5 servizi: <strong>card ricche</strong> (per la pagina /servizi, dove c’è spazio)
+      e <strong>launcher compatti</strong> (per l’hero, dove conta la densità e il mobile). Usa la barra qui sotto
+      per saltare a ogni tipo.
+    </p>
+  </section>
+
+  <!-- Barra di navigazione varianti ─────────────────────────────────── -->
+  <nav class="variant-nav" aria-label="Naviga le varianti">
+    <div class="max-w-7xl mx-auto px-6 flex flex-wrap gap-2 py-3">
+      {nav.map((n) => (
+        <a href={`#${n.id}`} class="variant-nav__link">{n.label}</a>
+      ))}
+    </div>
+  </nav>
+
+  <!-- Card ricche ───────────────────────────────────────────────────── -->
+  {cardVariants.map((s) => (
+    <section id={s.id} class="variant-section max-w-7xl mx-auto px-6 py-10 border-t border-butik-dark/10">
+      <div class="mb-6">
+        <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-1">Variante</p>
+        <h2 class="font-heading text-2xl md:text-3xl font-bold text-butik-dark">{s.nome}</h2>
+        <p class="font-sans text-sm text-butik-dark/60 mt-1 max-w-2xl">{s.desc}</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {serviziCards.map((c) => (
+          <ServiceCard data={c} variant={s.variant} />
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <!-- Lista compatta ────────────────────────────────────────────────── -->
+  <section id="lista" class="variant-section max-w-7xl mx-auto px-6 py-10 border-t border-butik-dark/10">
+    <div class="mb-6">
+      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-1">Launcher compatto</p>
+      <h2 class="font-heading text-2xl md:text-3xl font-bold text-butik-dark">Lista compatta</h2>
+      <p class="font-sans text-sm text-butik-dark/60 mt-1 max-w-2xl">Una riga per servizio: tutti e 5 scansionabili sopra la piega, anche da telefono.</p>
+    </div>
+    <div class="grid lg:grid-cols-2 gap-10 items-start">
+      <ServiceLauncher mode="list" tone="onLight" />
+      <div class="bg-butik-dark p-6 rounded-xl">
+        <p class="font-display text-[0.625rem] font-bold tracking-widest uppercase text-butik-green mb-4">Su sfondo scuro (hero)</p>
+        <ServiceLauncher mode="list" tone="onDark" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Strip orizzontale ─────────────────────────────────────────────── -->
+  <section id="strip" class="variant-section max-w-7xl mx-auto px-6 py-10 border-t border-butik-dark/10">
+    <div class="mb-6">
+      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-1">Launcher compatto</p>
+      <h2 class="font-heading text-2xl md:text-3xl font-bold text-butik-dark">Strip orizzontale</h2>
+      <p class="font-sans text-sm text-butik-dark/60 mt-1 max-w-2xl">Fascia che si scorre col dito: mantiene il «feel card» occupando una sola riga. ↔</p>
+    </div>
+    <div class="mb-8">
+      <ServiceLauncher mode="strip" tone="onLight" />
+    </div>
+    <div class="bg-butik-dark p-6 rounded-xl">
+      <p class="font-display text-[0.625rem] font-bold tracking-widest uppercase text-butik-green mb-4">Su sfondo scuro (hero)</p>
+      <ServiceLauncher mode="strip" tone="onDark" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .variant-nav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: color-mix(in srgb, var(--color-butik-light) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid color-mix(in srgb, var(--color-butik-dark) 12%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-butik-dark) 12%, transparent);
+  }
+  .variant-nav__link {
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-butik-dark);
+    text-decoration: none;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid color-mix(in srgb, var(--color-butik-dark) 18%, transparent);
+    transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+  }
+  .variant-nav__link:hover {
+    background: var(--color-butik-red);
+    color: #fff;
+    border-color: var(--color-butik-red);
+  }
+  .variant-nav__link:focus-visible {
+    outline: 2px solid var(--color-butik-red);
+    outline-offset: 2px;
+  }
+  /* Le ancore non finiscono sotto la barra sticky. */
+  .variant-section {
+    scroll-margin-top: 4rem;
+  }
+</style>

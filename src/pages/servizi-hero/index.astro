@@ -1,0 +1,118 @@
+---
+// HUB DI CONFRONTO — matrice 3 direzioni × 5 servizi.
+// Pagina interna di prototipazione: serve a confrontare gli hero dal vivo.
+import { getCollection } from 'astro:content';
+import BaseLayout from '#layouts/BaseLayout.astro';
+import { serviziHero } from '../../data/serviziHero';
+
+const servizi = (await getCollection('servizi', (e) => !e.data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const direzioni = [
+  { id: 'a', nome: 'A · Split parlante al target', desc: 'Pannello scuro (eyebrow + proof chip + CTA) accanto all’immagine.' },
+  { id: 'b', nome: 'B · Claim tipografico + barra prova', desc: 'Niente immagine: claim gigante e barra prova specifica.' },
+  { id: 'c', nome: 'C · Hero a scheda-offerta', desc: 'Card offerta sovrapposta all’immagine: tag, esiti, doppia CTA.' },
+];
+---
+
+<BaseLayout title="Confronto hero servizi — Butik" description="Prototipo interno: confronto delle direzioni hero per la pagina del singolo servizio.">
+  <section class="max-w-7xl mx-auto px-6 pt-24 pb-16">
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-3">Prototipo interno</p>
+    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark mb-4">Hero servizio — 3 direzioni × 5 servizi</h1>
+    <p class="font-sans text-base md:text-lg text-butik-body max-w-3xl leading-relaxed">
+      Stesso copy, target e prova reali per ogni servizio: l’unica variabile è il design dell’hero.
+      Apri la stessa riga in colonne diverse per confrontare le direzioni sullo stesso servizio.
+    </p>
+
+    <div class="mt-12 overflow-x-auto">
+      <table class="w-full border-collapse min-w-[640px]">
+        <thead>
+          <tr>
+            <th class="text-left align-bottom p-4 border-b border-butik-dark/15">
+              <span class="font-display text-xs font-bold tracking-widest uppercase text-butik-dark/50">Servizio</span>
+            </th>
+            {direzioni.map((d) => (
+              <th class="text-left align-bottom p-4 border-b border-butik-dark/15">
+                <span class="block font-heading text-base font-bold text-butik-dark leading-tight">{d.nome}</span>
+                <span class="block font-sans text-xs text-butik-dark/60 mt-1 font-normal normal-case tracking-normal">{d.desc}</span>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {servizi.map((s) => (
+            <tr class="align-top">
+              <td class="p-4 border-b border-butik-dark/10">
+                <span class="block font-heading text-base font-bold text-butik-dark leading-snug">{s.data.title}</span>
+                <span class="block font-sans text-xs text-butik-dark/60 mt-1">{serviziHero[s.id]?.eyebrow}</span>
+              </td>
+              {direzioni.map((d) => (
+                <td class="p-4 border-b border-butik-dark/10">
+                  <a
+                    href={`/servizi-hero-${d.id}/${s.id}`}
+                    class="inline-flex items-center gap-1 font-display text-xs font-bold tracking-widest uppercase text-butik-red border-b-2 border-butik-red pb-0.5 hover:text-butik-dark hover:border-butik-dark transition-colors"
+                  >
+                    Apri {d.id.toUpperCase()} <span aria-hidden="true">→</span>
+                  </a>
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="font-sans text-sm text-butik-dark/60 mt-8">
+      Riferimento: <a class="text-butik-red underline" href="/servizi">pagina servizi attuale</a> ·
+      hero attuale del singolo servizio = solo immagine + titolo.
+    </p>
+
+    <!-- Suggerimento aperto: strategia CTA form vs call ───────────────── -->
+    <aside class="mt-12 border border-butik-dark/15 bg-white p-6 md:p-8">
+      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-3">
+        Suggerimento da discutere
+      </p>
+      <h2 class="font-heading text-2xl md:text-3xl font-bold text-butik-dark mb-4 normal-case tracking-normal">
+        CTA: form o «prenota una call»?
+      </h2>
+      <p class="font-sans text-base text-butik-body leading-relaxed max-w-3xl">
+        Vendete a Comuni, DMO ed enti: scelgono un partner, non comprano d'impulso.
+        Una call conoscitiva abbassa la barriera del form e porta lead più caldi e
+        qualificati — ma richiede qualcuno che risponda in fretta e uno strumento di
+        prenotazione (es. <strong class="font-bold text-butik-dark">Cal.com</strong>,
+        open-source e gratuito, o il piano free di Calendly).
+      </p>
+
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl">
+        <div class="border-l-4 border-butik-red bg-butik-light/70 px-5 py-4">
+          <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-2">
+            Proposta: call
+          </p>
+          <p class="font-sans text-sm text-butik-dark leading-relaxed">
+            <strong class="font-bold">Consulenza strategica</strong> e
+            <strong class="font-bold">Turismo musicale</strong> — servizi ad alto valore
+            e molto relazionali.
+          </p>
+        </div>
+        <div class="border-l-4 border-butik-dark/30 bg-butik-light/70 px-5 py-4">
+          <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-dark/60 mb-2">
+            Proposta: form
+          </p>
+          <p class="font-sans text-sm text-butik-dark leading-relaxed">
+            <strong class="font-bold">Progettazione</strong>,
+            <strong class="font-bold">Formazione</strong> ed
+            <strong class="font-bold">Eventi</strong> — con la call sempre come
+            seconda opzione affiancata.
+          </p>
+        </div>
+      </div>
+
+      <p class="font-sans text-sm text-butik-dark/60 leading-relaxed mt-5 max-w-3xl">
+        Nota: è un'ipotesi di buon senso, non una ricerca con fonti. Oggi le etichette
+        «prenota una call» portano comunque al form: vanno collegate a un calendario
+        vero prima di usarle, altrimenti promettono qualcosa che non c'è.
+      </p>
+    </aside>
+  </section>
+</BaseLayout>
