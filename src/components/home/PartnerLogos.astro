@@ -1,25 +1,10 @@
 ---
-type Partner = {
-  name: string;
-  logo?: string;
-};
+import { Image } from 'astro:assets';
+import { partners as defaultPartners, type Partner } from '../../data/partners';
 
 interface Props {
   partners?: Partner[];
 }
-
-const defaultPartners: Partner[] = [
-  { name: 'Comune di Milano' },
-  { name: 'Milano Music Week' },
-  { name: 'Visit Cremona' },
-  { name: 'DMO Cremona' },
-  { name: 'GAL Terre di Murgia' },
-  { name: 'Comune di Napoli' },
-  { name: 'Scuola Open Source' },
-  { name: 'Mundi Festival' },
-  { name: 'Cariplo' },
-  { name: 'Italia Music Export' },
-];
 
 const { partners = defaultPartners } = Astro.props;
 
@@ -27,19 +12,39 @@ const { partners = defaultPartners } = Astro.props;
 const track = [...partners, ...partners];
 ---
 
-<section class="bg-butik-light py-10 md:py-12 overflow-hidden">
+<section
+  class="partner-strip relative bg-butik-light pt-10 md:pt-12 pb-14 md:pb-16 overflow-hidden"
+  data-partner-strip
+>
   <div
-    class="flex w-max gap-10 md:gap-16 animate-butik-marquee will-change-transform"
-    aria-hidden="true"
+    class="flex w-max items-center gap-6 md:gap-8 animate-butik-marquee will-change-transform"
   >
     {
-      track.map((partner) => (
-        <div class="shrink-0 border border-butik-dark/20 px-6 py-3 text-xs font-display tracking-widest uppercase text-butik-dark/40">
-          {partner.name}
+      track.map((partner, i) => (
+        <div
+          class="shrink-0 flex items-center justify-center bg-white rounded-xl ring-1 ring-butik-dark/5 px-6 md:px-8 h-16 md:h-20"
+          data-name={partner.name}
+        >
+          <Image
+            src={partner.logo}
+            alt=""
+            height={40}
+            densities={[1, 2]}
+            loading={i < 8 ? 'eager' : 'lazy'}
+            decoding="async"
+            class="max-h-8 md:max-h-10 w-auto"
+          />
         </div>
       ))
     }
   </div>
+
+  <p
+    class="pointer-events-none absolute inset-x-0 bottom-4 text-center font-display text-xs font-bold tracking-widest uppercase text-butik-dark/60 opacity-0 transition-opacity duration-200"
+    data-partner-label
+    aria-hidden="true"
+  >
+  </p>
 </section>
 
 <style is:global>
@@ -53,7 +58,12 @@ const track = [...partners, ...partners];
   }
 
   .animate-butik-marquee {
-    animation: butik-marquee 35s linear infinite;
+    animation: butik-marquee 45s linear infinite;
+  }
+
+  /* On hover della strip: il marquee si ferma. */
+  .partner-strip:hover .animate-butik-marquee {
+    animation-play-state: paused;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -62,3 +72,30 @@ const track = [...partners, ...partners];
     }
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-partner-strip]').forEach((strip) => {
+    const label = strip.querySelector<HTMLElement>('[data-partner-label]');
+    const track = strip.querySelector<HTMLElement>('.animate-butik-marquee');
+
+    // Pausa del marquee su hover della strip (oltre alla regola CSS :hover).
+    strip.addEventListener('mouseenter', () => {
+      if (track) track.style.animationPlayState = 'paused';
+    });
+    strip.addEventListener('mouseleave', () => {
+      if (track) track.style.animationPlayState = 'running';
+      if (label) label.style.opacity = '0';
+    });
+
+    if (!label) return;
+
+    // Nome del partner in basso alla strip, su hover della singola card.
+    strip.querySelectorAll<HTMLElement>('[data-name]').forEach((card) => {
+      const name = card.dataset.name ?? '';
+      card.addEventListener('mouseenter', () => {
+        label.textContent = name;
+        label.style.opacity = '1';
+      });
+    });
+  });
+</script>
