@@ -46,7 +46,7 @@ const { progetti } = Astro.props;
                 </span>
               )}
               <h3
-                class="font-heading text-xl md:text-2xl font-bold text-white leading-tight"
+                class="portfolio-card-title font-heading text-xl md:text-2xl font-bold leading-tight"
                 transition:name={`progetto-${p.id}-title`}
               >
                 {p.data.title}
@@ -70,3 +70,13 @@ const { progetti } = Astro.props;
     </div>
   </section>
 )}
+
+<style>
+  /* Override dello stile globale h3 (uppercase + tracking + rosso): i titoli
+     progetto sono bianchi e in sentence-case sopra il gradiente scuro. */
+  .portfolio-card-title {
+    color: #ffffff;
+    text-transform: none;
+    letter-spacing: -0.005em;
+  }
+</style>
