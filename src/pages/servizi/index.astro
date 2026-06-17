@@ -20,7 +20,7 @@ const servizi = (await getCollection('servizi', e => !e.data.draft))
   <!-- Grid -->
   <section class="max-w-7xl mx-auto px-6 pb-24">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-      {servizi.map(s => (
+      {servizi.map((s, i) => (
         <a href={`/servizi/${s.id}`} class="group block">
           <div class="overflow-hidden mb-5">
             <Image
@@ -29,6 +29,7 @@ const servizi = (await getCollection('servizi', e => !e.data.draft))
               widths={[400, 700]}
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               quality={72}
+              loading={i < 3 ? 'eager' : 'lazy'}
               class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
               transition:name={`servizio-${s.id}`}
             />

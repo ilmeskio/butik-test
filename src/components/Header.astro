@@ -37,7 +37,7 @@ function isActive(href: string) {
     <!-- Left: Logo + Primary Nav -->
     <div class="flex items-center gap-10">
       <a href="/" class="flex-shrink-0 relative z-10">
-        <Image src={logo} alt="Butik" width={45} height={45} class="site-logo h-[2.8125rem] w-auto" />
+        <Image src={logo} alt="Butik" width={45} height={45} loading="eager" class="site-logo h-[2.8125rem] w-auto" />
       </a>
       <nav class="hidden md:flex items-center gap-8" aria-label="Navigazione principale">
         {navLinks.map(link => (

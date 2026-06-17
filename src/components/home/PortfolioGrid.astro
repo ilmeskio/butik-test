@@ -10,9 +10,9 @@ const { progetti } = Astro.props;
 ---
 
 {progetti.length > 0 && (
-  <section class="py-16 md:py-24">
+  <section class="py-12 md:py-16">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="mb-12">
+      <div class="mb-8 md:mb-10">
         <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Progetti</p>
         <h2 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark">
           Storie di trasformazione territoriale
@@ -46,6 +46,7 @@ const { progetti } = Astro.props;
                   ? '(max-width: 768px) 100vw, 66vw'
                   : '(max-width: 768px) 100vw, 33vw'}
                 quality={72}
+                loading="lazy"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 transition:name={`progetto-${p.id}`}
               />
