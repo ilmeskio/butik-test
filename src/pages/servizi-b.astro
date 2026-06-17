@@ -1,0 +1,40 @@
+---
+// PROTOTIPO — /servizi direzione B: sezioni espanse alternate (lettura profonda).
+import BaseLayout from '#layouts/BaseLayout.astro';
+import ServiceExpanded from '#components/serviziCards/ServiceExpanded.astro';
+import Metodo from '#components/home/Metodo.astro';
+import ServiziPageSwitcher from '#components/serviziCards/ServiziPageSwitcher.astro';
+import CtaBanner from '#components/CtaBanner.astro';
+import { serviziCards } from '../data/serviziCards';
+---
+
+<BaseLayout title="Servizi — Butik" description="I servizi di Butik per Comuni, DMO e operatori culturali: progettazione, consulenza, formazione, eventi e turismo musicale.">
+  <section class="max-w-4xl mx-auto px-6 pt-20 md:pt-24 pb-10 text-center">
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Cosa facciamo</p>
+    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark leading-[1.05] mb-5">
+      Cosa facciamo, nel dettaglio
+    </h1>
+    <p class="font-sans text-base md:text-lg text-butik-body leading-relaxed max-w-2xl mx-auto">
+      Cinque servizi, ognuno con il suo pubblico e i suoi risultati. Qui trovi il tempo e lo spazio per
+      capire davvero cosa possiamo fare per il tuo territorio.
+    </p>
+  </section>
+
+  {serviziCards.map((c, i) => (
+    <section class:list={['py-12 md:py-16', i % 2 === 1 ? 'bg-white' : '']}>
+      <div class="max-w-5xl mx-auto px-6">
+        <ServiceExpanded slug={c.slug} />
+      </div>
+    </section>
+  ))}
+
+  <Metodo />
+
+  <CtaBanner
+    title="Vuoi vedere i nostri servizi in azione?"
+    primaryCta={{ label: 'Visiona il nostro portfolio', href: '/progetti' }}
+    secondaryCta={{ label: 'Parliamone', href: '/contatti' }}
+  />
+
+  <ServiziPageSwitcher current="b" />
+</BaseLayout>

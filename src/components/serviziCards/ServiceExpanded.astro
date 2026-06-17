@@ -1,0 +1,224 @@
+---
+// Blocco servizio "espanso" con trattamento grafico: badge-icona, numero
+// indice fantasma, mini-equalizer (firma musicale) all'hover e reveal allo
+// scroll. Dati reali da serviziHero (target, sub, outcomes) + serviziCards.
+import { serviziHero } from '../../data/serviziHero';
+import { serviziCards } from '../../data/serviziCards';
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const hero = serviziHero[slug];
+const card = serviziCards.find((c) => c.slug === slug);
+const title = card?.title ?? slug;
+const href = card?.href ?? `/servizi/${slug}`;
+
+const index = serviziCards.findIndex((c) => c.slug === slug) + 1;
+const idx = String(index).padStart(2, '0');
+
+// Accento cromatico a rotazione (contrasto sicuro su sfondo chiaro).
+const accents = [
+  'var(--color-butik-red)',
+  'var(--color-butik-dark)',
+  'var(--color-butik-purple)',
+  'var(--color-butik-red)',
+  'var(--color-butik-dark)',
+];
+const accent = accents[(index - 1) % accents.length];
+
+// Icone monolinea per servizio (geometriche, niente clip-art).
+const icons: Record<string, string> = {
+  'progettazione-culturale': '<path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/>',
+  'consulenza-strategica': '<circle cx="12" cy="12" r="9"/><path d="M9.5 14.5 11 9l4.5-1.5L14 13z"/>',
+  'formazione-capacity-building': '<path d="M12 4 2 9l10 5 10-5z"/><path d="M6 11v4c0 1.1 2.7 3 6 3s6-1.9 6-3v-4"/>',
+  'eventi-culturali-musicali': '<path d="M4 12v1.5M8 8.5v7M12 5v14M16 9v6M20 11v2.5"/>',
+  'prodotti-turistico-musicali': '<path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+};
+---
+
+<article class="svc-exp" id={slug} data-reveal style={`--accent:${accent}`}>
+  <div class="svc-exp__head">
+    <span class="svc-exp__badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icons[slug]} />
+      <span class="svc-exp__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    </span>
+    <span class="svc-exp__index" aria-hidden="true">{idx}</span>
+  </div>
+
+  <p class="svc-exp__eyebrow font-display text-xs font-bold tracking-widest uppercase">
+    {hero.eyebrow}
+  </p>
+  <h3 class="svc-exp__title font-heading text-2xl md:text-3xl font-bold leading-tight mt-2">
+    {title}
+  </h3>
+  <p class="svc-exp__desc font-sans text-base md:text-lg text-butik-dark/75 leading-relaxed mt-3 max-w-2xl">
+    {hero.sub}
+  </p>
+
+  <ul class="svc-exp__outcomes mt-5 grid sm:grid-cols-2 gap-x-6 gap-y-2 max-w-2xl">
+    {hero.outcomes.map((o) => (
+      <li class="flex gap-2 font-sans text-sm md:text-base text-butik-dark leading-snug">
+        <span class="svc-exp__check font-bold" aria-hidden="true">✓</span>
+        <span>{o}</span>
+      </li>
+    ))}
+  </ul>
+
+  <a
+    href={href}
+    class="svc-exp__cta group inline-flex items-center gap-2 mt-6 font-display text-xs font-bold tracking-widest uppercase text-butik-dark border-b-2 pb-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+  >
+    Scopri {title}
+    <span class="svc-exp__arrow transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+  </a>
+</article>
+
+<style>
+  .svc-exp {
+    scroll-margin-top: 6rem;
+    position: relative;
+  }
+  /* Reveal allo scroll. */
+  .svc-exp[data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 600ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .svc-exp[data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .svc-exp__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Badge-icona col tint dell'accento. */
+  .svc-exp__badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 0.85rem;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 11%, transparent);
+  }
+  .svc-exp__badge svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  /* Mini-equalizer: la firma musicale, ferma a riposo, "suona" all'hover. */
+  .svc-exp__eq {
+    position: absolute;
+    right: -0.5rem;
+    bottom: -0.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 1rem;
+    padding: 0.2rem;
+    border-radius: 0.4rem;
+    background: var(--color-butik-dark);
+  }
+  .svc-exp__eq i {
+    width: 2.5px;
+    height: 30%;
+    border-radius: 1px;
+    background: var(--color-butik-green);
+    transition: height 200ms ease;
+  }
+  .svc-exp:hover .svc-exp__eq i {
+    animation: svc-eq 750ms ease-in-out infinite;
+  }
+  .svc-exp:hover .svc-exp__eq i:nth-child(2) { animation-delay: 120ms; }
+  .svc-exp:hover .svc-exp__eq i:nth-child(3) { animation-delay: 240ms; }
+  .svc-exp:hover .svc-exp__eq i:nth-child(4) { animation-delay: 360ms; }
+  @keyframes svc-eq {
+    0%, 100% { height: 25%; }
+    50% { height: 95%; }
+  }
+
+  /* Numero indice fantasma. */
+  .svc-exp__index {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 3.5rem;
+    line-height: 0.8;
+    color: var(--accent);
+    opacity: 0.14;
+    letter-spacing: -0.03em;
+  }
+
+  .svc-exp__eyebrow {
+    color: var(--accent);
+  }
+  .svc-exp__check {
+    color: var(--accent);
+  }
+  .svc-exp__cta {
+    border-color: var(--accent);
+  }
+  .svc-exp__cta:hover {
+    color: var(--accent);
+  }
+  .svc-exp__cta:focus-visible {
+    outline-color: var(--accent);
+  }
+
+  /* Neutralizza lo stile globale di h3 (uppercase/rosso/tracking). */
+  .svc-exp__title {
+    text-transform: none !important;
+    letter-spacing: -0.005em !important;
+    color: var(--color-butik-dark) !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc-exp[data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .svc-exp__arrow {
+      transition: none;
+    }
+    .svc-exp:hover .svc-exp__eq i {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  // Reveal allo scroll, idempotente e re-init su navigazione client-side.
+  function initSvcReveal() {
+    const els = Array.from(document.querySelectorAll<HTMLElement>('.svc-exp[data-reveal]'));
+    if (!els.length) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) {
+      els.forEach((e) => e.classList.add('is-visible'));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -8% 0px' }
+    );
+    els.forEach((e) => {
+      if (!e.classList.contains('is-visible')) io.observe(e);
+    });
+  }
+  initSvcReveal();
+  document.addEventListener('astro:page-load', initSvcReveal);
+</script>

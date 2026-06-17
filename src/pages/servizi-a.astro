@@ -1,0 +1,120 @@
+---
+// PROTOTIPO — /servizi direzione A: router per pubblico (filtro + servizi espansi).
+import BaseLayout from '#layouts/BaseLayout.astro';
+import ServiceExpanded from '#components/serviziCards/ServiceExpanded.astro';
+import Metodo from '#components/home/Metodo.astro';
+import ServiziPageSwitcher from '#components/serviziCards/ServiziPageSwitcher.astro';
+import CtaBanner from '#components/CtaBanner.astro';
+import { serviziCards } from '../data/serviziCards';
+
+// Pubblico di riferimento per il filtro (da "Adatto a" di ogni servizio).
+const audience: Record<string, string[]> = {
+  'progettazione-culturale': ['comuni'],
+  'consulenza-strategica': ['comuni', 'dmo'],
+  'formazione-capacity-building': ['operatori'],
+  'eventi-culturali-musicali': ['comuni', 'operatori'],
+  'prodotti-turistico-musicali': ['dmo', 'comuni'],
+};
+
+const filtri = [
+  { id: 'tutti', label: 'Tutti' },
+  { id: 'comuni', label: 'Comuni e PA' },
+  { id: 'dmo', label: 'DMO e turismo' },
+  { id: 'operatori', label: 'Operatori e industry' },
+];
+---
+
+<BaseLayout title="Servizi — Butik" description="I servizi di Butik per Comuni, DMO e operatori culturali: progettazione, consulenza, formazione, eventi e turismo musicale.">
+  <section class="max-w-5xl mx-auto px-6 pt-20 md:pt-24 pb-8 text-center">
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Cosa facciamo</p>
+    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark mb-5">I nostri servizi, per il tuo ruolo</h1>
+    <p class="font-sans text-base md:text-lg text-butik-body leading-relaxed max-w-2xl mx-auto">
+      Lavoriamo con Pubbliche Amministrazioni, enti territoriali e operatori per attivare il patrimonio
+      musicale: dalla progettazione alla formazione, dagli eventi al turismo. Scegli chi sei.
+    </p>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-6 pb-20">
+    <div class="flex flex-wrap justify-center gap-2 mb-10" data-svc-filters role="tablist" aria-label="Filtra per pubblico">
+      {filtri.map((f, i) => (
+        <button
+          type="button"
+          class:list={['svc-filter', i === 0 && 'is-active']}
+          data-filter={f.id}
+          aria-pressed={i === 0 ? 'true' : 'false'}
+        >
+          {f.label}
+        </button>
+      ))}
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5" data-svc-grid>
+      {serviziCards.map((c) => (
+        <div data-audience={audience[c.slug]?.join(' ')} class="border border-butik-dark/12 p-6 md:p-8">
+          <ServiceExpanded slug={c.slug} />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <Metodo />
+
+  <CtaBanner
+    title="Vuoi vedere i nostri servizi in azione?"
+    primaryCta={{ label: 'Visiona il nostro portfolio', href: '/progetti' }}
+    secondaryCta={{ label: 'Parliamone', href: '/contatti' }}
+  />
+
+  <ServiziPageSwitcher current="a" />
+</BaseLayout>
+
+<style>
+  .svc-filter {
+    padding: 0.5rem 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--color-butik-dark) 18%, transparent);
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-butik-dark);
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+  }
+  .svc-filter:hover {
+    border-color: var(--color-butik-red);
+    color: var(--color-butik-red);
+  }
+  .svc-filter.is-active {
+    background: var(--color-butik-red);
+    border-color: var(--color-butik-red);
+    color: #fff;
+  }
+  .svc-filter:focus-visible {
+    outline: 2px solid var(--color-butik-red);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  function initServiziFilter() {
+    const filters = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-svc-filters] .svc-filter'));
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-svc-grid] [data-audience]'));
+    if (!filters.length) return;
+    const apply = (val: string) => {
+      cards.forEach((c) => {
+        const aud = (c.dataset.audience || '').split(' ');
+        c.hidden = val !== 'tutti' && !aud.includes(val);
+      });
+      filters.forEach((f) => {
+        const active = f.dataset.filter === val;
+        f.classList.toggle('is-active', active);
+        f.setAttribute('aria-pressed', String(active));
+      });
+    };
+    filters.forEach((f) => f.addEventListener('click', () => apply(f.dataset.filter || 'tutti')));
+  }
+  document.addEventListener('astro:page-load', initServiziFilter);
+  initServiziFilter();
+</script>

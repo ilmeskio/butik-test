@@ -1,0 +1,95 @@
+---
+// Numero che "sale" da 0 al valore quando entra in vista. Per i numeri
+// d'impatto (progetti, persone, bandi). IntersectionObserver, reduced-motion
+// e ClientRouter-safe.
+interface Props {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  label?: string;
+  tone?: 'onLight' | 'onDark';
+  class?: string;
+}
+const { value, prefix = '', suffix = '', label, tone = 'onDark', class: cls = '' } = Astro.props;
+---
+
+<div class:list={['cu', `cu--${tone}`, cls]}>
+  <span
+    class="cu__num font-heading"
+    data-countup
+    data-to={value}
+    data-prefix={prefix}
+    data-suffix={suffix}
+  >{prefix}0{suffix}</span>
+  {label && <span class="cu__label font-sans">{label}</span>}
+</div>
+
+<style>
+  .cu__num {
+    display: block;
+    font-weight: 900;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    line-height: 0.9;
+    color: var(--color-butik-green);
+  }
+  .cu--onLight .cu__num {
+    color: var(--color-butik-red);
+  }
+  .cu__label {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.875rem;
+    color: var(--cu-label, rgba(255, 255, 255, 0.7));
+  }
+  .cu--onLight .cu__label {
+    color: color-mix(in srgb, var(--color-butik-dark) 65%, transparent);
+  }
+</style>
+
+<script>
+  function initCountUp() {
+    const els = Array.from(document.querySelectorAll<HTMLElement>('[data-countup]'));
+    if (!els.length) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const render = (el: HTMLElement, n: number) => {
+      el.textContent = `${el.dataset.prefix ?? ''}${Math.round(n)}${el.dataset.suffix ?? ''}`;
+    };
+    const run = (el: HTMLElement) => {
+      if (el.dataset.cuDone) return;
+      el.dataset.cuDone = '1';
+      const to = parseFloat(el.dataset.to || '0');
+      if (reduce) { render(el, to); return; }
+      const dur = 1400;
+      let start = 0;
+      const step = (t: number) => {
+        if (!start) start = t;
+        const p = Math.min((t - start) / dur, 1);
+        // easeOutCubic
+        const eased = 1 - Math.pow(1 - p, 3);
+        render(el, to * eased);
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      els.forEach((el) => run(el));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            run(e.target as HTMLElement);
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    els.forEach((el) => { if (!el.dataset.cuDone) io.observe(el); });
+  }
+  initCountUp();
+  document.addEventListener('astro:page-load', initCountUp);
+</script>

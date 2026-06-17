@@ -173,6 +173,11 @@ const trackB = [...mobileRowB, ...mobileRowB];
 
   // Configura una singola traccia trascinabile (riga marquee).
   function setupTrack(track: HTMLElement) {
+    // Idempotente: con ClientRouter initPartners() può rieseguire; non
+    // riagganciare due volte gli handler sullo stesso elemento.
+    if (track.dataset.partnerReady) return;
+    track.dataset.partnerReady = '1';
+
     // La track contiene la lista duplicata: metà della sua larghezza è il
     // punto in cui il contenuto si ripete (= il -50% del keyframe CSS).
     let halfWidth = track.scrollWidth / 2;
@@ -341,25 +346,34 @@ const trackB = [...mobileRowB, ...mobileRowB];
     });
   }
 
-  document
-    .querySelectorAll<HTMLElement>('[data-partner-track]')
-    .forEach(setupTrack);
+  function initPartners() {
+    document
+      .querySelectorAll<HTMLElement>('[data-partner-track]')
+      .forEach(setupTrack);
 
-  // --- Desktop: nome del partner in basso, su hover della singola card ---
-  document.querySelectorAll<HTMLElement>('[data-partner-strip]').forEach((strip) => {
-    const label = strip.querySelector<HTMLElement>('[data-partner-label]');
-    if (!label) return;
+    // --- Desktop: nome del partner in basso, su hover della singola card ---
+    document.querySelectorAll<HTMLElement>('[data-partner-strip]').forEach((strip) => {
+      if (strip.dataset.partnerLabelReady) return;
+      strip.dataset.partnerLabelReady = '1';
 
-    strip.addEventListener('mouseleave', () => {
-      label.style.opacity = '0';
-    });
+      const label = strip.querySelector<HTMLElement>('[data-partner-label]');
+      if (!label) return;
 
-    strip.querySelectorAll<HTMLElement>('[data-name]').forEach((card) => {
-      const name = card.dataset.name ?? '';
-      card.addEventListener('mouseenter', () => {
-        label.textContent = name;
-        label.style.opacity = '1';
+      strip.addEventListener('mouseleave', () => {
+        label.style.opacity = '0';
+      });
+
+      strip.querySelectorAll<HTMLElement>('[data-name]').forEach((card) => {
+        const name = card.dataset.name ?? '';
+        card.addEventListener('mouseenter', () => {
+          label.textContent = name;
+          label.style.opacity = '1';
+        });
       });
     });
-  });
+  }
+
+  // Init al primo caricamento e a ogni navigazione client-side (view transitions).
+  initPartners();
+  document.addEventListener('astro:page-load', initPartners);
 </script>

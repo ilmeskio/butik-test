@@ -9,15 +9,18 @@ import { serviziCards } from '../../data/serviziCards';
 interface Props {
   mode: 'list' | 'strip';
   tone?: 'onLight' | 'onDark';
+  /** Se true, ogni voce punta all'ancora #slug nella stessa pagina. */
+  useAnchors?: boolean;
 }
-const { mode, tone = 'onLight' } = Astro.props;
+const { mode, tone = 'onLight', useAnchors = false } = Astro.props;
+const linkFor = (slug: string, href: string) => (useAnchors ? `#${slug}` : href);
 ---
 
 {mode === 'list' && (
   <ul class:list={['launcher-list', tone]}>
     {serviziCards.map((c) => (
       <li>
-        <a href={c.href} class="row">
+        <a href={linkFor(c.slug, c.href)} class="row">
           <span class="row-title">{c.title}</span>
           <span class="row-stat">{`${c.statValue} ${c.statLabel}`}</span>
           <span class="row-chev" aria-hidden="true">›</span>
@@ -31,7 +34,7 @@ const { mode, tone = 'onLight' } = Astro.props;
   <ul class:list={['launcher-strip', tone]}>
     {serviziCards.map((c) => (
       <li>
-        <a href={c.href} class="chip-card">
+        <a href={linkFor(c.slug, c.href)} class="chip-card">
           <span class="chip-card__title">{c.title}</span>
           <span class="chip-card__stat">{`${c.statValue} ${c.statLabel}`}</span>
         </a>
