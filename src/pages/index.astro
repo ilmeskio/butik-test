@@ -8,6 +8,7 @@ import Testimonials from '../components/home/Testimonials.astro';
 import PortfolioGrid from '../components/home/PortfolioGrid.astro';
 import CtaBanner from '../components/CtaBanner.astro';
 import AboutInline from '../components/home/AboutInline.astro';
+import Metodo from '../components/home/Metodo.astro';
 import NewsletterSignup from '../components/home/NewsletterSignup.astro';
 
 const topProgetti = (await getCollection('progetti', e => !e.data.draft))
@@ -22,6 +23,7 @@ const topProgetti = (await getCollection('progetti', e => !e.data.draft))
   <Hero />
   <PartnerLogos />
   <Numbers />
+  <Metodo />
   <Testimonials />
   <PortfolioGrid progetti={topProgetti} />
   <CtaBanner

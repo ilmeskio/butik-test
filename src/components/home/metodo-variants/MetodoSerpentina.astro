@@ -1,0 +1,201 @@
+---
+// ── Variante 4 — Serpentina raffinata (rif. Dribbble roadmap) ─────────────
+// Evoluzione della vecchia Metodo.astro: logica Bézier a maniglie verticali con
+// ritmo più ampio (nodi più distanziati, curve più morbide) e nodi con icona +
+// numero. Su mobile: rail verticale tratteggiato a sinistra.
+import { tappe } from '../../../data/metodo';
+import MetodoIcon from '../MetodoIcon.astro';
+
+const punti = [
+  { x: 28, y: 4 },
+  { x: 72, y: 9 },
+  { x: 28, y: 15 },
+  { x: 72, y: 21 },
+  { x: 30, y: 28 },
+];
+
+const TOTAL_H = punti[punti.length - 1].y + 7;
+const HANDLE = 0.62;
+
+let curvePath = `M${punti[0].x},${punti[0].y}`;
+for (let i = 1; i < punti.length; i++) {
+  const prev = punti[i - 1];
+  const cur = punti[i];
+  const dy = cur.y - prev.y;
+  const c1y = (prev.y + HANDLE * dy).toFixed(2);
+  const c2y = (cur.y - HANDLE * dy).toFixed(2);
+  curvePath += ` C${prev.x},${c1y} ${cur.x},${c2y} ${cur.x},${cur.y}`;
+}
+---
+
+<section class="bg-butik-light py-12 md:py-20 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-12 md:mb-16">
+      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
+        Come lavoriamo
+      </p>
+      <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark">
+        Il nostro metodo
+      </h2>
+    </div>
+
+    <div class="serp">
+      <svg
+        class="serp-curve"
+        viewBox={`0 0 100 ${TOTAL_H}`}
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          d={curvePath}
+          fill="none"
+          stroke="var(--color-butik-red)"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-dasharray="3 9"
+          vector-effect="non-scaling-stroke"
+        />
+      </svg>
+
+      <ol class="serp-steps" style={`--serp-h:${TOTAL_H}rem`}>
+        {
+          tappe.map((tappa, i) => (
+            <li
+              class="serp-step"
+              data-side={punti[i].x > 50 ? 'right' : 'left'}
+              style={`--node-x:${punti[i].x}%; --node-y:${punti[i].y}rem`}
+            >
+              <div class="serp-node">
+                <MetodoIcon name={tappa.icon} size={22} />
+                <span class="serp-num font-display">{i + 1}</span>
+              </div>
+              <div class="serp-content">
+                <h3 class="serp-title font-heading text-xl md:text-2xl font-bold text-butik-dark">
+                  {tappa.title}
+                </h3>
+                <p class="font-sans text-sm md:text-base text-butik-dark/70 leading-relaxed mt-2">
+                  {tappa.description}
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .serp {
+    position: relative;
+  }
+  .serp-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  .serp-curve {
+    display: none;
+  }
+
+  .serp-node {
+    position: relative;
+    width: 3.75rem;
+    height: 3.75rem;
+    border-radius: 9999px;
+    background: var(--color-butik-red);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 6px var(--color-butik-light);
+  }
+  .serp-num {
+    position: absolute;
+    right: -0.4rem;
+    bottom: -0.4rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    background: var(--color-butik-dark);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 0 0 3px var(--color-butik-light);
+  }
+  .serp-title {
+    text-transform: none !important;
+    letter-spacing: -0.005em !important;
+    color: var(--color-butik-dark) !important;
+  }
+
+  /* ── Mobile: rail verticale tratteggiato a sinistra ───────────────────── */
+  @media (max-width: 767px) {
+    .serp-steps::before {
+      content: '';
+      position: absolute;
+      top: 0.9rem;
+      bottom: 0.9rem;
+      left: 1.875rem;
+      border-left: 2px dashed
+        color-mix(in srgb, var(--color-butik-red) 45%, transparent);
+    }
+    .serp-step {
+      position: relative;
+      padding-left: 5.25rem;
+      padding-bottom: 2.5rem;
+    }
+    .serp-step:last-child {
+      padding-bottom: 0;
+    }
+    .serp-node {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+
+  /* ── Desktop: serpentina + nodi a coordinate libere ───────────────────── */
+  @media (min-width: 768px) {
+    .serp-curve {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .serp-steps {
+      height: var(--serp-h);
+    }
+    .serp-step {
+      position: absolute;
+      inset: 0;
+    }
+    .serp-node {
+      position: absolute;
+      top: var(--node-y);
+      left: var(--node-x);
+      transform: translate(-50%, -50%);
+    }
+    .serp-content {
+      position: absolute;
+      top: var(--node-y);
+      transform: translateY(-50%);
+      width: min(34%, 19rem);
+    }
+    .serp-step[data-side='right'] .serp-content {
+      left: calc(var(--node-x) + 4%);
+      text-align: left;
+    }
+    .serp-step[data-side='left'] .serp-content {
+      right: calc(100% - var(--node-x) + 4%);
+      text-align: right;
+    }
+  }
+</style>
