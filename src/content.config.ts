@@ -38,6 +38,8 @@ const progettiCollection = defineCollection({
     metaDescription: z.string().optional(),
     ogImage: image().optional(),
     order: z.number().optional().default(0),
+    featured: z.boolean().optional().default(false),
+    featuredOrder: z.number().optional().default(0),
     draft: z.boolean().optional().default(false),
   }),
 });
