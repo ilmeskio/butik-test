@@ -1,0 +1,252 @@
+---
+// ── Studio musica 4 — Connettori = battito ────────────────────────────────
+// Nodi cerchio-con-arco (come la home) con un anello che pulsa come la membrana
+// di un altoparlante; tra le tappe un filo a trattini che scorre con un bollo
+// che viaggia "a tempo". Connettore = un solo elemento centrato → allineato.
+import { tappe } from '../../../../data/metodo';
+import MetodoIcon from '../../MetodoIcon.astro';
+---
+
+<section class="bg-white py-12 md:py-20 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-12 md:mb-16">
+      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
+        Come lavoriamo
+      </p>
+      <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark">
+        Il nostro metodo
+      </h2>
+    </div>
+
+    <ol class="bt">
+      {
+        tappe.map((tappa, i) => (
+          <li class="bt-step">
+            <div class="bt-node">
+              <span class="bt-ring" aria-hidden="true"></span>
+              <span class="bt-ring bt-ring--2" aria-hidden="true"></span>
+              <svg class="bt-arc" viewBox="0 0 100 100" aria-hidden="true">
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="46"
+                  fill="none"
+                  stroke="var(--color-butik-red)"
+                  stroke-width="5"
+                  stroke-linecap="round"
+                  stroke-dasharray="230 60"
+                  transform="rotate(135 50 50)"
+                />
+              </svg>
+              <span class="bt-num font-display">{String(i + 1).padStart(2, '0')}</span>
+              <MetodoIcon name={tappa.icon} size={30} class="bt-icon" />
+            </div>
+            {i < tappe.length - 1 && (
+              <span class="bt-link" aria-hidden="true">
+                <span class="bt-bollo"></span>
+              </span>
+            )}
+            <div class="bt-content">
+              <h3 class="bt-title font-heading text-lg font-bold text-butik-dark">
+                {tappa.title}
+              </h3>
+              <p class="font-sans text-sm text-butik-dark/70 leading-relaxed mt-1">
+                {tappa.description}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .bt {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .bt-node {
+    position: relative;
+    width: 6.5rem;
+    height: 6.5rem;
+    border-radius: 9999px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+    flex-shrink: 0;
+    color: var(--color-butik-red);
+    box-shadow: 0 14px 30px -16px rgba(7, 17, 8, 0.35);
+  }
+  .bt-arc {
+    position: absolute;
+    inset: -3px;
+    width: calc(100% + 6px);
+    height: calc(100% + 6px);
+    overflow: visible;
+  }
+  /* anelli che pulsano dietro il nodo */
+  .bt-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    border: 2px solid color-mix(in srgb, var(--color-butik-red) 55%, transparent);
+    opacity: 0;
+    animation: bt-pulse 2.4s ease-out infinite;
+  }
+  .bt-ring--2 { animation-delay: 1.2s; }
+  .bt-num {
+    position: absolute;
+    top: -0.6rem;
+    left: -0.6rem;
+    z-index: 1;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 9999px;
+    background: var(--color-butik-red);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: 0 0 0 4px #fff;
+  }
+  .bt-title {
+    text-transform: none !important;
+    letter-spacing: -0.005em !important;
+    color: var(--color-butik-dark) !important;
+  }
+
+  /* filo a trattini che scorre + bollo viaggiante */
+  .bt-link {
+    position: absolute;
+    height: 2px;
+    background: repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-butik-red) 55%, transparent) 0 8px,
+      transparent 8px 16px
+    );
+    background-size: 16px 2px;
+    animation: bt-move 1.6s linear infinite;
+  }
+  .bt-bollo {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    margin-top: -4.5px;
+    border-radius: 50%;
+    background: var(--color-butik-red);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-butik-red) 22%, transparent);
+    animation: bt-travel 2.4s ease-in-out infinite;
+  }
+  @keyframes bt-move {
+    to { background-position-x: 16px; }
+  }
+  @keyframes bt-travel {
+    0% { left: 0; opacity: 0; }
+    12% { opacity: 1; }
+    88% { opacity: 1; }
+    100% { left: 100%; opacity: 0; }
+  }
+  @keyframes bt-pulse {
+    0% { transform: scale(1); opacity: 0.55; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+
+  /* ── Mobile: colonna, filo verticale ──────────────────────────────────── */
+  @media (max-width: 767px) {
+    .bt-step {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding-bottom: 2.5rem;
+    }
+    .bt-step:last-child { padding-bottom: 0; }
+    .bt-node {
+      width: 5.5rem;
+      height: 5.5rem;
+      z-index: 1;
+    }
+    .bt-content { padding-top: 0.75rem; }
+    .bt-link {
+      top: 5.5rem;
+      left: 2.75rem;
+      width: 2px;
+      height: 2.5rem;
+      background: repeating-linear-gradient(
+        0deg,
+        color-mix(in srgb, var(--color-butik-red) 55%, transparent) 0 8px,
+        transparent 8px 16px
+      );
+      background-size: 2px 16px;
+      transform: translateX(-50%);
+      animation: bt-move-v 1.6s linear infinite;
+    }
+    .bt-bollo {
+      top: 0;
+      left: 50%;
+      margin-top: 0;
+      margin-left: -4.5px;
+      animation: bt-travel-v 2.4s ease-in-out infinite;
+    }
+    @keyframes bt-move-v {
+      to { background-position-y: 16px; }
+    }
+    @keyframes bt-travel-v {
+      0% { top: 0; opacity: 0; }
+      12% { opacity: 1; }
+      88% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+  }
+
+  /* ── Desktop: fila orizzontale, filo tra i nodi ───────────────────────── */
+  @media (min-width: 768px) {
+    .bt {
+      /* gap condiviso tra flex e calcolo connettore + ancore nodo */
+      --bt-gap: clamp(0.5rem, 1.5vw, 1.5rem);
+      --bt-r: 3.25rem;
+      --bt-pad: 0.4rem;
+      --bt-end: calc(var(--bt-r) + var(--bt-pad) - var(--bt-gap) - 50%);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--bt-gap);
+    }
+    .bt-step {
+      position: relative;
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .bt-content {
+      margin-top: 1.25rem;
+      width: min(14rem, 95%);
+    }
+    /* ancore relative allo step (non al nodo) → il filo connette i cerchi */
+    .bt-link {
+      top: 3.25rem;
+      left: calc(50% + var(--bt-r) + var(--bt-pad));
+      right: var(--bt-end);
+      width: auto;
+      transform: translateY(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bt-link,
+    .bt-bollo,
+    .bt-ring { animation: none; }
+    .bt-bollo { display: none; }
+  }
+</style>

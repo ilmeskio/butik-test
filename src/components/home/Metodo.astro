@@ -147,10 +147,18 @@ import MetodoIcon from './MetodoIcon.astro';
   /* ── Desktop: fila orizzontale con frecce tratteggiate ────────────────── */
   @media (min-width: 768px) {
     .metodo {
+      /* gap condiviso tra flex e calcolo connettori: una sola fonte di verità */
+      --metodo-gap: clamp(0.5rem, 1.5vw, 1.5rem);
+      /* raggio nodo (6.5rem / 2) + respiro ai due lati del connettore */
+      --metodo-r: 3.25rem;
+      --metodo-pad: 0.4rem;
+      /* ancora destra della linea = bordo sinistro del nodo successivo - pad.
+         Distanza tra centri nodo = step + gap → va sottratto anche il gap. */
+      --metodo-end: calc(var(--metodo-r) + var(--metodo-pad) - var(--metodo-gap) - 50%);
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: clamp(0.5rem, 1.5vw, 1.5rem);
+      gap: var(--metodo-gap);
     }
     .metodo-step {
       position: relative;
@@ -169,17 +177,17 @@ import MetodoIcon from './MetodoIcon.astro';
       content: '';
       position: absolute;
       top: 3.25rem;
-      left: calc(50% + 3.5rem);
-      right: calc(-50% + 3.5rem);
+      left: calc(50% + var(--metodo-r) + var(--metodo-pad));
+      right: var(--metodo-end);
       border-top: 2px dashed
         color-mix(in srgb, var(--color-butik-red) 55%, transparent);
     }
-    /* punta della freccia */
+    /* punta della freccia: stessa ancora `right` della linea → sempre allineata */
     .metodo-step:not(:last-child)::before {
       content: '';
       position: absolute;
       top: calc(3.25rem - 4px);
-      right: calc(-50% + 3.25rem);
+      right: var(--metodo-end);
       width: 8px;
       height: 8px;
       border-top: 2px solid

@@ -139,10 +139,16 @@ import MetodoIcon from '../MetodoIcon.astro';
 
   @media (min-width: 768px) {
     .archi {
+      /* gap condiviso tra flex e calcolo connettori: una sola fonte di verità */
+      --archi-gap: clamp(0.5rem, 1.5vw, 1.5rem);
+      --archi-r: 3.25rem;
+      --archi-pad: 0.4rem;
+      /* va sottratto anche il gap: distanza tra centri nodo = step + gap */
+      --archi-end: calc(var(--archi-r) + var(--archi-pad) - var(--archi-gap) - 50%);
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: clamp(0.5rem, 1.5vw, 1.5rem);
+      gap: var(--archi-gap);
     }
     .archi-step {
       position: relative;
@@ -160,16 +166,17 @@ import MetodoIcon from '../MetodoIcon.astro';
       content: '';
       position: absolute;
       top: 3.25rem;
-      left: calc(50% + 3.5rem);
-      right: calc(-50% + 3.5rem);
+      left: calc(50% + var(--archi-r) + var(--archi-pad));
+      right: var(--archi-end);
       border-top: 2px dashed
         color-mix(in srgb, var(--color-butik-red) 55%, transparent);
     }
+    /* punta: stessa ancora `right` della linea → sempre allineata */
     .archi-step:not(:last-child)::before {
       content: '';
       position: absolute;
       top: calc(3.25rem - 4px);
-      right: calc(-50% + 3.25rem);
+      right: var(--archi-end);
       width: 8px;
       height: 8px;
       border-top: 2px solid
