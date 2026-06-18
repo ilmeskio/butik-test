@@ -1,0 +1,308 @@
+---
+// ── Studio musica 6 — Vinili interattivi + connettori a onda ───────────────
+// Fusione di Studio 5 (nodi = vinili con riflesso conico e scratch all'hover)
+// e Studio 1 (connettori = waveform che scorre, un solo elemento centrato tra i
+// nodi → niente disallineamenti). Desktop: dischi in fila uniti da onde che
+// scorrono. Mobile: colonna con onda verticale continua dietro i dischi.
+import { tappe } from '../../../../data/metodo';
+import MetodoIcon from '../../MetodoIcon.astro';
+
+// Path onda sinusoidale (quadratiche), periodo 64px → loop di -64px perfetto.
+const W = 640;
+const SEG = 32;
+const AMP = 9;
+const MID = 16;
+let d = `M0 ${MID}`;
+let up = true;
+for (let x = 0; x < W; x += SEG) {
+  d += ` Q ${x + SEG / 2} ${up ? MID - AMP : MID + AMP} ${x + SEG} ${MID}`;
+  up = !up;
+}
+
+// Versione verticale per il rail mobile (onda continua che scende).
+const SEGV = 20;
+const H = 1600;
+let dv = `M${MID} 0`;
+let upv = true;
+for (let y = 0; y < H; y += SEGV) {
+  dv += ` Q ${upv ? MID - AMP : MID + AMP} ${y + SEGV / 2} ${MID} ${y + SEGV}`;
+  upv = !upv;
+}
+---
+
+<section class="bg-white py-12 md:py-20 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-12 md:mb-16">
+      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
+        Come lavoriamo
+      </p>
+      <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark">
+        Il nostro metodo
+      </h2>
+    </div>
+
+    <ol class="vino">
+      {/* rail-onda continuo che scende: visibile solo su mobile */}
+      <span class="vino-rail" aria-hidden="true">
+        <svg viewBox={`0 0 ${MID * 2} ${H}`} preserveAspectRatio="none">
+          <path d={dv} />
+        </svg>
+      </span>
+      {
+        tappe.map((tappa, i) => (
+          <li class="vino-step">
+            <div class="vino-node">
+              <span class="vino-disc" aria-hidden="true">
+                <span class="vino-glint"></span>
+              </span>
+              <span class="vino-label">
+                <MetodoIcon name={tappa.icon} size={26} class="vino-icon" />
+              </span>
+              <span class="vino-num font-display">{String(i + 1).padStart(2, '0')}</span>
+            </div>
+            {i < tappe.length - 1 && (
+              <span class="vino-link" aria-hidden="true">
+                <svg viewBox="0 0 640 32" preserveAspectRatio="none">
+                  <path d={d} />
+                </svg>
+              </span>
+            )}
+            <div class="vino-content">
+              <h3 class="vino-title font-heading text-lg font-bold text-butik-dark">
+                {tappa.title}
+              </h3>
+              <p class="font-sans text-sm text-butik-dark/70 leading-relaxed mt-1">
+                {tappa.description}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .vino {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .vino-node {
+    position: relative;
+    width: 6.5rem;
+    height: 6.5rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    touch-action: none;
+    --vino-speed: 7s;
+  }
+  .vino-node:active { cursor: grabbing; }
+  /* disco: solchi concentrici + ombra */
+  .vino-disc {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: repeating-radial-gradient(
+      circle at center,
+      #0c0c0c 0 1.6px,
+      #1f1f1f 1.6px 3.4px
+    );
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 14px 30px -16px rgba(7, 17, 8, 0.45);
+    /* fallback no-JS: spin a velocità fissa. Con JS la rotazione (e l'inerzia
+       dello scratch) è guidata da requestAnimationFrame, che disattiva questa. */
+    animation: vino-spin var(--vino-speed, 7s) linear infinite;
+  }
+  /* riflesso luminoso che gira col disco: segnale di moto + lucidità */
+  .vino-glint {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    background: conic-gradient(
+      from -55deg,
+      rgba(255, 255, 255, 0.6) 0deg,
+      rgba(255, 255, 255, 0.05) 26deg,
+      transparent 60deg,
+      transparent 150deg,
+      rgba(255, 255, 255, 0.38) 180deg,
+      rgba(255, 255, 255, 0.03) 206deg,
+      transparent 240deg,
+      transparent 360deg
+    );
+  }
+  /* etichetta centrale rossa con icona — non ruota */
+  .vino-label {
+    position: relative;
+    z-index: 1;
+    width: 44%;
+    height: 44%;
+    border-radius: 50%;
+    background: var(--color-butik-red);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
+    pointer-events: none;
+  }
+  .vino-num {
+    position: absolute;
+    top: -0.6rem;
+    left: -0.6rem;
+    z-index: 2;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 9999px;
+    background: var(--color-butik-red);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: 0 0 0 4px #fff;
+    pointer-events: none;
+  }
+  .vino-title {
+    text-transform: none !important;
+    letter-spacing: -0.005em !important;
+    color: var(--color-butik-dark) !important;
+  }
+
+  @keyframes vino-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* onda di collegamento (un solo elemento, sempre allineato al centro nodo) */
+  .vino-link {
+    position: absolute;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--color-butik-red) 65%, transparent);
+  }
+  .vino-link svg {
+    display: block;
+    width: 200%;
+    height: 100%;
+    /* scorre verso destra (verso la tappa successiva) */
+    animation: vino-scroll 3.5s linear infinite;
+  }
+  .vino-link path,
+  .vino-rail path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+  /* rail verticale: nascosto di default, mostrato su mobile */
+  .vino-rail { display: none; }
+
+  @keyframes vino-scroll {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+  @keyframes vino-scroll-v {
+    from { transform: translateY(-50%); }
+    to { transform: translateY(0); }
+  }
+
+  /* ── Mobile: colonna con onda verticale continua dietro i dischi ───────── */
+  @media (max-width: 767px) {
+    .vino { position: relative; }
+    /* onda dietro la colonna, centrata sull'asse dei nodi; i dischi (z-index 1)
+       la coprono → l'onda "esce" solo tra un disco e l'altro */
+    .vino-rail {
+      display: block;
+      position: absolute;
+      top: 2rem;
+      bottom: 2rem;
+      left: 2.75rem;
+      width: 2rem;
+      transform: translateX(-50%);
+      overflow: hidden;
+      color: color-mix(in srgb, var(--color-butik-red) 65%, transparent);
+      z-index: 0;
+    }
+    .vino-rail svg {
+      display: block;
+      width: 100%;
+      height: 200%;
+      animation: vino-scroll-v 7s linear infinite;
+    }
+    .vino-step {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding-bottom: 2.5rem;
+      z-index: 1;
+    }
+    .vino-step:last-child { padding-bottom: 0; }
+    .vino-node {
+      width: 5.5rem;
+      height: 5.5rem;
+      z-index: 1;
+    }
+    .vino-content { padding-top: 0.75rem; }
+    .vino-link { display: none; }
+  }
+
+  /* ── Desktop: fila orizzontale, onda tra i dischi ─────────────────────── */
+  @media (min-width: 768px) {
+    .vino {
+      --vino-gap: clamp(0.5rem, 1.5vw, 1.5rem);
+      --vino-r: 3.25rem;
+      --vino-pad: 0.4rem;
+      --vino-end: calc(var(--vino-r) + var(--vino-pad) - var(--vino-gap) - 50%);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--vino-gap);
+    }
+    .vino-step {
+      position: relative;
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .vino-content {
+      margin-top: 1.25rem;
+      width: min(14rem, 95%);
+    }
+    /* l'onda parte dal bordo destro del disco e arriva a quello sinistro del
+       successivo: ancore relative allo step → connette i dischi */
+    .vino-link {
+      top: 3.25rem;
+      left: calc(50% + var(--vino-r) + var(--vino-pad));
+      right: var(--vino-end);
+      height: 2rem;
+      transform: translateY(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vino-disc { animation: none; }
+    .vino-link svg,
+    .vino-rail svg { animation: none; }
+  }
+</style>
+
+<script>
+  import { initVinylScratch } from '#lib/motion/vinylScratch';
+
+  initVinylScratch({
+    nodeSelector: '.vino-node',
+    discSelector: '.vino-disc',
+    speedVar: '--vino-speed',
+    defaultSpeed: 7,
+  });
+</script>

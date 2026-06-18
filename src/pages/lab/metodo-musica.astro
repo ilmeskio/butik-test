@@ -9,6 +9,8 @@ import MetodoOnde from '../../components/home/metodo-variants/musica/MetodoOnde.
 import MetodoVinili from '../../components/home/metodo-variants/musica/MetodoVinili.astro';
 import MetodoTraccia from '../../components/home/metodo-variants/musica/MetodoTraccia.astro';
 import MetodoBattito from '../../components/home/metodo-variants/musica/MetodoBattito.astro';
+import MetodoViniliScratch from '../../components/home/metodo-variants/musica/MetodoViniliScratch.astro';
+import MetodoViniliOnde from '../../components/home/metodo-variants/musica/MetodoViniliOnde.astro';
 
 const studi = [
   {
@@ -34,6 +36,18 @@ const studi = [
     label: 'Connettori = battito',
     nota: 'Filo a trattini che scorre con un bollo che viaggia “a tempo”; anelli che pulsano dietro i nodi come una membrana.',
     Comp: MetodoBattito,
+  },
+  {
+    n: 5,
+    label: 'Nodi = vinili interattivi (scratch)',
+    nota: 'Variante dello Studio 2 coi nuovi dischi: riflesso conico che gira col disco e, all’hover, scratch — il vinile segue il mouse come sotto la mano del dj invece di accelerare.',
+    Comp: MetodoViniliScratch,
+  },
+  {
+    n: 6,
+    label: 'Vinili + onde sonore',
+    nota: 'Fusione di Studio 1 e Studio 5: i dischi-vinile interattivi (scratch all’hover) uniti dai connettori a waveform che scorrono tra una tappa e l’altra.',
+    Comp: MetodoViniliOnde,
   },
 ];
 ---

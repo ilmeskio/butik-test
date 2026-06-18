@@ -13,6 +13,7 @@
   },
   "imports": {
     "#components/*": "./src/components/*",
+    "#lib/*": "./src/lib/*",
     "#layouts/*": "./src/layouts/*",
     "#styles/*": "./src/styles/*",
     "#assets/*": "./src/assets/*"

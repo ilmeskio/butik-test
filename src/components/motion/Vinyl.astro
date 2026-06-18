@@ -1,7 +1,9 @@
 ---
 // Disco in vinile che ruota — accento-firma musicale (alternativo all'equalizer).
-// Usabile accanto a un titolo, come loader, o decoro d'angolo. Gira più veloce
-// all'hover del contenitore.
+// Usabile accanto a un titolo, come loader, o decoro d'angolo. Gira da solo;
+// all'hover si "scratcha": il disco segue il mouse come sotto la mano del dj e,
+// al rilascio, mantiene la velocità del lancio rallentando per inerzia fino al
+// giro di regime (logica e parametri TAU/MAX_VEL/STALE in #lib/motion/vinylScratch).
 interface Props {
   size?: number; // px
   label?: 'red' | 'green' | 'dark';
@@ -17,17 +19,21 @@ const { size = 64, label = 'red', speed = 6, class: cls = '' } = Astro.props;
   aria-hidden="true"
 >
   <span class="vinyl__disc">
+    <span class="vinyl__glint"></span>
     <span class="vinyl__label"><span class="vinyl__hole"></span></span>
-    <span class="vinyl__sheen"></span>
   </span>
 </span>
 
 <style>
   .vinyl {
+    position: relative;
     display: inline-block;
     width: var(--vinyl-size, 64px);
     height: var(--vinyl-size, 64px);
+    cursor: grab;
+    touch-action: none;
   }
+  .vinyl:active { cursor: grabbing; }
   .vinyl__disc {
     position: relative;
     display: block;
@@ -37,10 +43,30 @@ const { size = 64, label = 'red', speed = 6, class: cls = '' } = Astro.props;
     background:
       repeating-radial-gradient(circle at center, #0c0c0c 0 1.5px, #1d1d1d 1.5px 3px);
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 8px 20px -8px rgba(7, 17, 8, 0.5);
+    /* fallback no-JS: spin a velocità fissa. Con JS la rotazione (e l'inerzia
+       dello scratch) è guidata da requestAnimationFrame, che disattiva questa. */
     animation: vinyl-spin var(--vinyl-speed, 6s) linear infinite;
   }
-  .vinyl:hover .vinyl__disc {
-    animation-duration: calc(var(--vinyl-speed, 6s) / 3);
+  /* riflesso luminoso che gira col disco: è il segnale di moto (i solchi
+     concentrici sono simmetrici e da soli non mostrano la rotazione) e dà
+     la lucidità del vinile. Due lobi opposti, come la luce su un disco vero. */
+  .vinyl__glint {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    background: conic-gradient(
+      from -55deg,
+      rgba(255, 255, 255, 0.6) 0deg,
+      rgba(255, 255, 255, 0.05) 26deg,
+      transparent 60deg,
+      transparent 150deg,
+      rgba(255, 255, 255, 0.38) 180deg,
+      rgba(255, 255, 255, 0.03) 206deg,
+      transparent 240deg,
+      transparent 360deg
+    );
   }
   .vinyl__label {
     position: absolute;
@@ -50,6 +76,7 @@ const { size = 64, label = 'red', speed = 6, class: cls = '' } = Astro.props;
     align-items: center;
     justify-content: center;
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85);
+    pointer-events: none;
   }
   .vinyl--red .vinyl__label { background: var(--color-butik-red); }
   .vinyl--green .vinyl__label { background: var(--color-butik-green); }
@@ -62,14 +89,6 @@ const { size = 64, label = 'red', speed = 6, class: cls = '' } = Astro.props;
     border-radius: 50%;
     background: #fff;
   }
-  /* riflesso obliquo statico, non ruota col disco */
-  .vinyl__sheen {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: linear-gradient(115deg, rgba(255, 255, 255, 0.16) 0 18%, transparent 38%);
-    pointer-events: none;
-  }
   @keyframes vinyl-spin {
     to { transform: rotate(360deg); }
   }
@@ -77,3 +96,14 @@ const { size = 64, label = 'red', speed = 6, class: cls = '' } = Astro.props;
     .vinyl__disc { animation: none; }
   }
 </style>
+
+<script>
+  import { initVinylScratch } from '#lib/motion/vinylScratch';
+
+  initVinylScratch({
+    nodeSelector: '.vinyl',
+    discSelector: '.vinyl__disc',
+    speedVar: '--vinyl-speed',
+    defaultSpeed: 6,
+  });
+</script>
