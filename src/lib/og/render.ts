@@ -75,6 +75,7 @@ function heroDataUriForSlug(slug: string): string | null {
 function footerRow(card: OgCard, handle: string, urlColor: string): Node {
   return h('div', {
     display: 'flex',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'space-between',
   }, [
@@ -146,27 +147,28 @@ function buildPlain(card: OgCard, handle: string): Node {
   }, [h('div', { display: 'flex', flexDirection: 'column' }, head), footerRow(card, handle, DARK)]);
 }
 
-// ── split (home): testo + pannello logo ──────────────────────────────────
-function buildSplit(card: OgCard, handle: string): Node {
-  const head: Node[] = [
+// ── home: composizione centrata su tre fasce ──────────────────────────────
+//   alto:   titolo piccolo · centro: bollo grande + @handle · basso: eyebrow
+function buildHome(card: OgCard): Node {
+  return h('div', {
+    width: 1200, height: 630, display: 'flex', flexDirection: 'column',
+    alignItems: 'center', justifyContent: 'space-between',
+    backgroundColor: LIGHT, padding: '72px 80px', textAlign: 'center',
+  }, [
+    // alto: titolo, più piccolo
+    h('div', {
+      fontFamily: SPARTAN, fontSize: 44, lineHeight: 1.1, color: DARK,
+      textAlign: 'center', maxWidth: 900,
+    }, clamp(card.title, 64)),
+    // centro: bollo grande + handle
+    h('div', { display: 'flex', alignItems: 'center' }, [
+      img(logoDataUri, { width: 200, height: 200 }),
+      h('div', {
+        fontFamily: SPARTAN, fontSize: 44, letterSpacing: '0.04em', color: DARK, marginLeft: 28,
+      }, '@wearebutik'),
+    ]),
+    // basso: eyebrow
     eyebrow(card.kind, RED),
-    h('div', { fontFamily: SPARTAN, fontSize: 62, lineHeight: 1, color: DARK, marginTop: 16 }, clamp(card.title, 60)),
-    h('div', {
-      fontFamily: CLEAR, fontSize: 30, lineHeight: 1.35, color: DARK,
-      opacity: 0.88, marginTop: 20,
-    }, clamp(card.subtitle, 150)),
-  ];
-  if (card.meta?.length) head.push(metaLine(card.meta, DARK, 0.7, 18));
-
-  return h('div', { width: 1200, height: 630, display: 'flex', flexDirection: 'row', backgroundColor: LIGHT }, [
-    h('div', {
-      display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-      flex: 1, padding: '64px 64px',
-    }, [h('div', { display: 'flex', flexDirection: 'column' }, head), footerRow(card, handle, DARK)]),
-    h('div', {
-      width: 460, height: 630, display: 'flex', alignItems: 'center', justifyContent: 'center',
-      backgroundColor: DARK,
-    }, [img(logoDataUri, { width: 248, height: 248 })]),
   ]);
 }
 
@@ -193,7 +195,7 @@ function buildBleed(card: OgCard, handle: string, hero: string): Node {
 }
 
 function buildCard(card: OgCard, handle: string): Node {
-  if (card.layout === 'split') return buildSplit(card, handle);
+  if (card.layout === 'home') return buildHome(card);
   if (card.layout === 'bleed' && card.slug) {
     const hero = heroDataUriForSlug(card.slug);
     if (hero) return buildBleed(card, handle, hero);

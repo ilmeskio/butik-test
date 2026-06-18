@@ -9,6 +9,25 @@ import bolloRosso from '#assets/logos/bollo-rosso.svg';
 import bolloNero from '#assets/logos/bollo-nero.svg';
 // Hero di un progetto, per le varianti che usano l'immagine.
 import heroDemo from '#assets/progetti/template-progetto/hero.jpg';
+// Card reali (per i link alle immagini effettivamente generate).
+import { getAllOgCards, ogPngPathForRoute } from '../../data/ogCards';
+
+const PROD = 'https://wearebutik.github.io';
+const ogCards = await getAllOgCards();
+const cardLinks = [...ogCards.entries()]
+  .map(([route, card]) => {
+    const pageUrl = PROD + (route === '/' ? '/' : `${route}/`);
+    return {
+      route,
+      title: card.title,
+      layout: card.layout ?? 'plain',
+      png: ogPngPathForRoute(route),
+      pageUrl,
+      opengraph: `https://www.opengraph.xyz/url/${encodeURIComponent(pageUrl)}`,
+      linkedin: `https://www.linkedin.com/post-inspector/inspect/${encodeURIComponent(pageUrl)}`,
+    };
+  })
+  .sort((a, b) => a.route.localeCompare(b.route));
 
 // Tipi di pagina coperti: progetto, servizio, pagina statica.
 // Ogni esempio porta la PROPRIA cta → dimostra l'override per-pagina.
@@ -236,6 +255,42 @@ const esempi: CardData[] = [
       justify-content: center;
     }
     .v-split .logo-pane img { width: 224px; height: 224px; }
+
+    /* ── Variante home · centrata su tre fasce ────────────────────── */
+    .v-home {
+      background-color: #fff2f1;
+      padding: 72px 80px;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+    }
+    .v-home .brand { display: flex; align-items: center; }
+    .v-home .brand img { width: 200px; height: 200px; }
+    .v-home .brand .url {
+      font-family: 'League Spartan', sans-serif;
+      font-weight: 700;
+      font-size: 44px;
+      letter-spacing: 0.04em;
+      color: #071108;
+      margin-left: 28px;
+    }
+    .v-home .eyebrow {
+      font-family: 'League Spartan', sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #e21929;
+    }
+    .v-home .title {
+      font-family: 'League Spartan', sans-serif;
+      font-weight: 700;
+      font-size: 44px;
+      line-height: 1.1;
+      color: #071108;
+      max-width: 900px;
+      margin: 0;
+    }
     .v-split .title { font-size: 60px; }
     .v-split .subtitle { -webkit-line-clamp: 3; max-width: none; }
 
@@ -307,9 +362,57 @@ const esempi: CardData[] = [
       Card in stile “anteprima discussione” (à la Reddit): tipo di pagina, titolo grande,
       sottotitolo, metadati e una <strong>call-to-action scelta dalla singola pagina</strong>.
       Ogni card è a dimensione reale <strong>1200×630</strong>, mostrata qui a metà scala.
-      Due direzioni a confronto — chiara e notturna. Una volta scelta, la cablo nel
-      generatore di build (Satori) così viene prodotta automaticamente per ogni pagina.
+      Le card sono prodotte automaticamente a build-time (Satori) per ogni pagina.
+      Sotto, le anteprime delle direzioni; più giù i link alle immagini reali e
+      gli URL da testare sui validator social.
     </p>
+  </section>
+
+  <!-- Link utili: immagini generate + URL da testare -->
+  <section class="max-w-5xl mx-auto px-6 py-8 border-t border-butik-dark/10">
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-2">
+      Card generate · in produzione
+    </p>
+    <h2 class="font-heading text-2xl md:text-3xl font-bold text-butik-dark mb-2">
+      Immagini reali & test
+    </h2>
+    <p class="font-sans text-sm text-butik-dark/60 max-w-2xl leading-relaxed mb-6">
+      Per ogni pagina: l’immagine PNG effettivamente generata, l’URL della pagina
+      (da incollare nei validator) e una scorciatoia per testarla. In locale apri il
+      <strong>PNG</strong>; per i validator serve l’URL pubblico (online dopo il deploy).
+    </p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-butik-dark/15">
+            <th class="font-display text-xs font-bold tracking-widest uppercase text-butik-red py-2 pr-4">Pagina</th>
+            <th class="font-display text-xs font-bold tracking-widest uppercase text-butik-red py-2 pr-4">Layout</th>
+            <th class="font-display text-xs font-bold tracking-widest uppercase text-butik-red py-2 pr-4">Immagine</th>
+            <th class="font-display text-xs font-bold tracking-widest uppercase text-butik-red py-2 pr-4">URL pagina</th>
+            <th class="font-display text-xs font-bold tracking-widest uppercase text-butik-red py-2">Test</th>
+          </tr>
+        </thead>
+        <tbody>
+          {cardLinks.map((c) => (
+            <tr class="border-b border-butik-dark/10 align-top">
+              <td class="font-sans text-sm text-butik-dark py-3 pr-4 whitespace-nowrap">{c.route}</td>
+              <td class="font-sans text-xs text-butik-dark/60 py-3 pr-4 whitespace-nowrap">{c.layout}</td>
+              <td class="py-3 pr-4 whitespace-nowrap">
+                <a href={c.png} target="_blank" class="font-sans text-sm text-butik-red underline">PNG ↗</a>
+              </td>
+              <td class="py-3 pr-4">
+                <a href={c.pageUrl} target="_blank" class="font-sans text-sm text-butik-dark/70 underline break-all">{c.pageUrl}</a>
+              </td>
+              <td class="py-3 whitespace-nowrap">
+                <a href={c.opengraph} target="_blank" class="font-sans text-sm text-butik-red underline">opengraph.xyz</a>
+                <span class="text-butik-dark/30"> · </span>
+                <a href={c.linkedin} target="_blank" class="font-sans text-sm text-butik-red underline">LinkedIn</a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <!-- Variante A · chiara -->
@@ -412,39 +515,29 @@ const esempi: CardData[] = [
     </div>
   </section>
 
-  <!-- Variante home · Split + logo -->
+  <!-- Variante home · solo header (adottata) -->
   <section class="max-w-5xl mx-auto px-6 py-8 border-t border-butik-dark/10">
     <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-2">
       Variante home · adottata
     </p>
     <h2 class="font-heading text-2xl md:text-3xl font-bold text-butik-dark mb-2">
-      Split + logo
+      Solo header
     </h2>
     <p class="font-sans text-sm text-butik-dark/60 max-w-2xl leading-relaxed mb-6">
-      Per la home: testo a sinistra, pannello brand col bollo a destra (al posto
-      della foto). Scelta in produzione: <strong>home → questa</strong>, progetti →
-      Full-bleed, servizi e altre pagine → Editoriale chiaro.
+      Per la home: marchio in alto, titolo grande in basso (stile copertina). Niente
+      descrizione né CTA. Scelte in produzione: <strong>home → questa</strong>,
+      progetti → Full-bleed, servizi e altre pagine → Editoriale chiaro.
     </p>
     <div class="flex flex-wrap gap-8">
       {[esempi[2]].map((c) => (
         <div class="og-stage">
-          <div class="og-card v-split v-light">
-            <div class="pane">
-              <div class="head-row">
-                <p class="eyebrow">{c.kind}</p>
-                <h3 class="title" style="margin-top:16px">{c.title}</h3>
-                <p class="subtitle">{c.subtitle}</p>
-                {c.meta && <p class="meta">{c.meta.join('  ·  ')}</p>}
-              </div>
-              <div class="footer-row">
-                <div class="handle">
-                  <img src={bolloRosso.src} alt="" />
-                  <span class="url">{c.url}</span>
-                </div>
-                <div class="cta">{c.cta}<span class="arrow">→</span></div>
-              </div>
+          <div class="og-card v-home">
+            <h3 class="title">{c.title}</h3>
+            <div class="brand">
+              <img src={bolloRosso.src} alt="" />
+              <span class="url">@wearebutik</span>
             </div>
-            <div class="logo-pane"><img src={bolloRosso.src} alt="" /></div>
+            <p class="eyebrow">{c.kind}</p>
           </div>
         </div>
       ))}

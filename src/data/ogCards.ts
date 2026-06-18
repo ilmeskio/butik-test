@@ -13,7 +13,7 @@ export interface OgCard {
   subtitle: string;
   meta?: string[];     // metadati (progetti: cliente · anno)
   cta: string;         // call-to-action scelta dalla pagina
-  layout?: 'plain' | 'split' | 'bleed'; // default plain
+  layout?: 'plain' | 'home' | 'bleed'; // default plain
   slug?: string;       // id progetto, per risolvere l'hero (layout bleed)
 }
 
@@ -33,7 +33,7 @@ const staticCards: Record<string, OgCard> = {
     subtitle:
       'La prima impresa sociale italiana specializzata in progettazione culturale e sviluppo territoriale attraverso la musica.',
     cta: 'Parliamone',
-    layout: 'split',
+    layout: 'home',
   },
   '/chi-siamo': {
     kind: 'Chi siamo',

@@ -15,10 +15,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const GET: APIRoute = async ({ props }) => {
   const png = await renderCardPng(props.card as OgCard, CARD_HANDLE);
+  // Nessun Cache-Control "immutable": nel build statico (GitHub Pages) la
+  // Response viene ignorata, e in dev causerebbe solo PNG vecchie in cache.
   return new Response(new Uint8Array(png), {
-    headers: {
-      'Content-Type': 'image/png',
-      'Cache-Control': 'public, max-age=31536000, immutable',
-    },
+    headers: { 'Content-Type': 'image/png' },
   });
 };
