@@ -13,10 +13,12 @@ export interface OgCard {
   subtitle: string;
   meta?: string[];     // metadati (progetti: cliente · anno)
   cta: string;         // call-to-action scelta dalla pagina
+  layout?: 'plain' | 'split' | 'bleed'; // default plain
+  slug?: string;       // id progetto, per risolvere l'hero (layout bleed)
 }
-// L'handle mostrato in basso (es. "wearebutik.github.io") NON è qui: viene
-// derivato dal dominio (SITE) al momento del render, così cambiando dominio
-// non resta nulla di vecchio scritto a mano.
+
+// Handle mostrato in basso nella card (profilo Instagram).
+export const CARD_HANDLE = '@wearebutik';
 
 // CTA di default per tipo (le singole pagine possono sovrascriverle: i
 // progetti/servizi via campo `ogCta` nel frontmatter, le statiche qui sotto).
@@ -31,6 +33,7 @@ const staticCards: Record<string, OgCard> = {
     subtitle:
       'La prima impresa sociale italiana specializzata in progettazione culturale e sviluppo territoriale attraverso la musica.',
     cta: 'Parliamone',
+    layout: 'split',
   },
   '/chi-siamo': {
     kind: 'Chi siamo',
@@ -64,6 +67,8 @@ export async function getAllOgCards(): Promise<Map<string, OgCard>> {
       subtitle: e.data.subtitle,
       meta: meta.length ? meta : undefined,
       cta: e.data.ogCta ?? CTA_PROGETTO,
+      layout: 'bleed',
+      slug: e.id,
     });
   }
 

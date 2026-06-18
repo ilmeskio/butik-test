@@ -2,7 +2,7 @@
 // getStaticPaths enumera tutte le rotte → Astro scrive i file in dist/og/*.png.
 // A runtime (GitHub Pages) non gira nulla: vengono serviti i PNG già pronti.
 import type { APIRoute, GetStaticPaths } from 'astro';
-import { getAllOgCards, routeToParam, type OgCard } from '../../data/ogCards';
+import { getAllOgCards, routeToParam, CARD_HANDLE, type OgCard } from '../../data/ogCards';
 import { renderCardPng } from '../../lib/og/render';
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -13,11 +13,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }));
 };
 
-export const GET: APIRoute = async ({ props, site }) => {
-  // Handle mostrato in card = host del dominio (SITE). Cambi dominio → cambia
-  // da solo. In dev `site` può non esserci: fallback ragionevole.
-  const handle = site ? site.host : 'wearebutik.github.io';
-  const png = await renderCardPng(props.card as OgCard, handle);
+export const GET: APIRoute = async ({ props }) => {
+  const png = await renderCardPng(props.card as OgCard, CARD_HANDLE);
   return new Response(new Uint8Array(png), {
     headers: {
       'Content-Type': 'image/png',
