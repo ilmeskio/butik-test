@@ -36,7 +36,7 @@ const {
 <BaseLayout
   title={metaTitle ?? `${title} — Butik`}
   description={metaDescription ?? subtitle}
-  ogImage={ogImage ?? (typeof heroImage === 'string' ? heroImage : heroImage.src)}
+  ogImage={ogImage}
 >
   <HeroBanner title={title} subtitle={subtitle} image={heroImage} imageAlt={heroAlt} transitionName={transitionName} />
 
