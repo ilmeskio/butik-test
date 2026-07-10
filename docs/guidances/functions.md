@@ -1,52 +1,52 @@
-> **Scelta per-feature.** Il sito è static-first e host-agnostic
-> ([ADR-0002](../adr/0002-runtime-and-delivery.md)). Questa guidance NON fissa un
-> runtime: elenca le opzioni e i criteri per scegliere, di volta in volta, dove
-> mettere la logica dinamica di una singola feature. Quando una scelta diventa
-> stabile e vale per tutto il sito, promuovila ad ADR.
+> **Per-feature choice.** The site is static-first and host-agnostic
+> ([ADR-0002](../adr/0002-runtime-and-delivery.md)). This guidance does NOT fix a
+> runtime: it lists the options and the criteria to choose, case by case, where a
+> single feature's dynamic logic goes. When a choice becomes stable and holds for
+> the whole site, promote it to an ADR.
 
-# Functions — dove mettere la logica dinamica
+# Functions — where dynamic logic goes
 
-Il sito è statico. Quando una feature ha bisogno di logica a runtime (invio form,
-lettura/scrittura dati, auth, webhook, generazione on-demand), la si aggiunge come
-**funzione isolata**, chiamata dal client. Non si introduce SSR globale.
+The site is static. When a feature needs runtime logic (form submission, reading/
+writing data, auth, webhooks, on-demand generation), add it as an **isolated
+function**, called from the client. Do not introduce global SSR.
 
-## Le opzioni
+## The options
 
-### 1. Servizio gestito (nessun backend nostro)
+### 1. Managed service (no backend of ours)
 
-Per casi standard e ben serviti da SaaS. Esempio già in uso: **Web3Forms** per il
-form contatti (nessun server, la key è pubblica by-design). Preferisci questa
-strada quando un servizio maturo copre il bisogno.
+For standard cases well served by SaaS. Example already in use: **Web3Forms** for
+the contact form (no server, the key is public by design). Prefer this road when a
+mature service covers the need.
 
-- ✅ Zero infra da mantenere, veloce.
-- ❌ Vendor lock-in leggero, meno controllo.
+- ✅ Zero infra to maintain, fast.
+- ❌ Light vendor lock-in, less control.
 
 ### 2. Cloudflare Workers / Pages Functions
 
-Per logica custom leggera vicina all'edge (proxy, trasformazioni, piccoli
-endpoint). Il repo ha già un `wrangler.jsonc` di prova.
+For lightweight custom logic near the edge (proxying, transforms, small
+endpoints). The repo already has a trial `wrangler.jsonc`.
 
-- ✅ Edge veloce, si integra bene se un domani il sito passa a Cloudflare Pages.
-- ❌ Un runtime in più da conoscere; stato/persistenza richiede KV/D1/R2.
+- ✅ Fast edge, integrates well if the site later moves to Cloudflare Pages.
+- ❌ One more runtime to know; state/persistence needs KV/D1/R2.
 
 ### 3. Supabase (edge functions + Postgres/Storage/Auth)
 
-Quando serve **stato persistente**: database, autenticazione, storage file.
+When you need **persistent state**: database, authentication, file storage.
 
-- ✅ Backend completo opensource, DB relazionale, auth pronta.
-- ❌ Più pesante; ha senso solo se il bisogno di dati lo giustifica.
+- ✅ Full opensource backend, relational DB, auth ready.
+- ❌ Heavier; only worth it if the data need justifies it.
 
-## Come scegliere
+## How to choose
 
-1. **C'è un servizio gestito che lo copre bene?** → usa quello (opzione 1).
-2. **Serve solo logica stateless leggera?** → Cloudflare Worker (opzione 2).
-3. **Serve stato persistente (dati, auth, file)?** → Supabase (opzione 3).
+1. **Is there a managed service that covers it well?** → use that (option 1).
+2. **Just lightweight stateless logic?** → Cloudflare Worker (option 2).
+3. **Need persistent state (data, auth, files)?** → Supabase (option 3).
 
-Regole trasversali:
+Cross-cutting rules:
 
-- La funzione è **isolata e sostituibile**: il client la chiama dietro
-  un'interfaccia chiara, così cambiare fornitore è un cambio locale.
-- I segreti non finiscono nel bundle client (solo le key pubbliche by-design,
-  come Web3Forms, possono).
-- Se una scelta si ripete su più feature e diventa "il modo in cui butik fa X",
-  smetti di deciderla caso per caso e scrivi un **ADR**.
+- The function is **isolated and replaceable**: the client calls it behind a clear
+  interface, so switching provider is a local change.
+- Secrets don't end up in the client bundle (only public-by-design keys, like
+  Web3Forms, may).
+- If a choice repeats across features and becomes "the way butik does X", stop
+  deciding it case by case and write an **ADR**.

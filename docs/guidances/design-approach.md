@@ -1,42 +1,42 @@
-> **Consigliata, non enforced.** Il vocabolario di design che un linter non può
-> verificare del tutto. Si applica dentro i confini decisi in
-> [ADR-0005](../adr/0005-design-system.md). La skill `design-check` copre la parte
-> meccanizzabile (token vs valori raw, contrasto, focus).
+> **Recommended, not enforced.** The design vocabulary a linter can't fully
+> verify. Applies within the boundaries decided in
+> [ADR-0005](../adr/0005-design-system.md). The `design-check` skill covers the
+> mechanizable part (tokens vs raw values, contrast, focus).
 
 # Design approach
 
-## Token come source of truth
+## Tokens as source of truth
 
-- Colori, spaziature, raggi, tipografia sono **token** (CSS custom properties in
-  `src/styles/`). I componenti li **consumano**; non ridefiniscono token e non
-  usano valori raw dove un token esiste.
-- Valori ammessi senza token: `0`, `1px` per bordi, percentuali, `currentColor`,
-  `color-mix()` di soli token. Se manca un token per un valore ricorrente,
-  **aggiungi il token**, non il valore raw.
+- Colours, spacing, radii, typography are **tokens** (CSS custom properties in
+  `src/styles/`). Components **consume** them; they don't redefine tokens and don't
+  use raw values where a token exists.
+- Values allowed without a token: `0`, `1px` for borders, percentages,
+  `currentColor`, `color-mix()` of tokens only. If a token is missing for a
+  recurring value, **add the token**, not the raw value.
 
 ## CSS Modules
 
-- Uno `*.module.css` co-locato al componente. Classi semantiche
-  (`.card`, `.cardTitle`), non utilitarie.
-- Niente Tailwind nei componenti a migrazione conclusa
+- One `*.module.css` co-located with the component. Semantic class names
+  (`.card`, `.cardTitle`), not utility ones.
+- No Tailwind in components once the migration is done
   ([ADR-0005](../adr/0005-design-system.md#css-modules)).
 
-## Accessibilità
+## Accessibility
 
-- Contrasto **AA**: ≥ 4.5:1 testo normale, ≥ 3:1 testo grande / UI.
-- **Focus visibile** su ogni elemento interattivo (`:focus-visible` con outline da
-  token); mai `outline: none` senza sostituto.
-- Elementi cliccabili non nativi con gestione tastiera e ruoli corretti; preferisci
-  elementi nativi.
+- **AA** contrast: ≥ 4.5:1 normal text, ≥ 3:1 large text / UI.
+- **Visible focus** on every interactive element (`:focus-visible` with a
+  token-based outline); never `outline: none` without a replacement.
+- Non-native clickable elements have keyboard handling and correct roles; prefer
+  native elements.
 
 ## Motion
 
-- Rispetta sempre `prefers-reduced-motion`.
-- La logica di animazione resta in `src/lib/motion` / `src/components/motion`, non
-  sparsa nei componenti ([ADR-0005](../adr/0005-design-system.md#motion)).
+- Always respect `prefers-reduced-motion`.
+- Animation logic stays in `src/lib/motion` / `src/components/motion`, not
+  scattered across components ([ADR-0005](../adr/0005-design-system.md#motion)).
 
-## Semplicità
+## Simplicity
 
-- YAGNI/KISS: non astrarre un componente prima di averne 2-3 usi reali.
-- Il nuovo codice legge come quello attorno: stessa densità di commenti, stesse
-  convenzioni di naming.
+- YAGNI/KISS: don't abstract a component before it has 2-3 real uses.
+- New code reads like the code around it: same comment density, same naming
+  conventions.

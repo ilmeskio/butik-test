@@ -1,31 +1,30 @@
-# PDR-NNNN: Titolo
+# PDR-NNNN: Title
 
 - Status: proposed | accepted | superseded by PDR-NNNN
 - Date: YYYY-MM-DD
-- Reviewers: <chi ha firmato — cliente / product owner / …>
+- Reviewers: <who signed off — client / product owner / …>
 
-## Contesto
+## Context
 
-Il problema di prodotto/utente. Cosa sappiamo, cosa dice il materiale di
-riferimento (`reference/…`), qual è il vincolo. Perché serve una scelta adesso.
+The product/user problem. What we know, what the reference material
+(`reference/…`) tells us, what the constraint is. Why a call is needed now.
 
-## Decisione
+## Decision
 
-Cosa abbiamo scelto, in forma attiva — il flusso, lo scope, il taglio. Concreto
-abbastanza da permettere a un designer o a uno sviluppatore di agire senza
-chiedere.
+What we chose, in active voice — the flow, the scope, the cut. Concrete enough that
+a designer or engineer can act on it without asking.
 
-## Motivazione
+## Rationale
 
-Perché questa e non le alternative considerate. Una riga per opzione scartata.
+Why this over the alternatives considered. One line per rejected option.
 
-## Conseguenze
+## Consequences
 
-- \+ Cosa sblocca.
-- − Cosa rinunciamo o rimandiamo.
+- \+ What this unlocks.
+- − What we give up or defer.
 
 <!--
-Superficie di review dipende da ADR-0005 (#workshop), ancora aperta: linka il
-prototipo (pagina lab/ o screenshot) accanto al "prima". Vedi
+Review surface depends on ADR-0005 (#workshop), still open: link the prototype (a
+lab/ page or screenshot) next to the "before". See
 docs/guidances/product-decisions.md.
 -->

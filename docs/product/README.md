@@ -1,28 +1,27 @@
 # Product decisions
 
-Il **log granulare delle decisioni di prodotto e design** — un file per scelta.
-È deliberatamente ciò che gli [ADR](../adr/README.md) *non* sono: gli ADR sono una
-piccola fondazione tematica per partire allineati
-([ADR-0001](../adr/0001-recording-decisions.md) — "un insieme piccolo e coerente…
-non una lista lunga di record granulari"). Le scelte di prodotto sono tante e
-frequenti, quindi hanno il loro spazio.
+The **granular log of product & design decisions** — one file per call. This is
+deliberately what the [ADRs](../adr/README.md) are *not*: ADRs are a small,
+thematic foundation to start aligned
+([ADR-0001](../adr/0001-recording-decisions.md) — "a small, coherent set … not a
+long list of granular records"). Product choices are many and frequent, so they
+get their own space.
 
-| Spazio | Contiene | Natura |
+| Space | Holds | Nature |
 |---|---|---|
-| [`../adr/`](../adr/README.md) | decisioni architetturali | poche, tematiche, immutabili |
-| **`decisions/`** | decisioni prodotto/design (PDR) | molte, granulari, source of truth |
-| [`../../reference/`](../../reference/README.md) | input grezzo (legacy, dump, prototipi) | storia read-only, in quarantena |
+| [`../adr/`](../adr/README.md) | architectural decisions | few, thematic, immutable |
+| **`decisions/`** | product/design decisions (PDR) | many, granular, source of truth |
+| [`../../reference/`](../../reference/README.md) | raw input (legacy, dumps, prototypes) | read-only history, quarantined |
 
-## Scrivere un PDR
+## Writing a PDR
 
-1. Copia [`decisions/template.md`](./decisions/template.md) in
-   `decisions/NNNN-titolo-kebab.md` (prossimo numero libero). Oppure lascia che la
-   skill `product-decision` lo scaffoldi.
-2. Tienilo corto: Contesto, Decisione, Motivazione, Conseguenze. Linka il
-   materiale di `reference/` da cui parte.
-3. I PDR sono **append-only** — non riscrivere una decisione accettata per farle
-   dire un'altra cosa; scrivine una nuova e marca la vecchia
-   `superseded by PDR-NNNN`.
+1. Copy [`decisions/template.md`](./decisions/template.md) to
+   `decisions/NNNN-short-kebab-title.md` (next free number). Or let the
+   `product-decision` skill scaffold it.
+2. Keep it short: Context, Decision, Rationale, Consequences. Link the
+   `reference/` material it draws on.
+3. PDRs are **append-only** — don't rewrite an accepted decision to mean something
+   else; write a new one and mark the old `superseded by PDR-NNNN`.
 
-Per il *come* scrivere e rivedere un PDR (inclusa la superficie di review) vedi la
-[guidance product-decisions](../guidances/product-decisions.md).
+For the *how* of writing and reviewing a PDR (including the review surface) see the
+[product-decisions guidance](../guidances/product-decisions.md).

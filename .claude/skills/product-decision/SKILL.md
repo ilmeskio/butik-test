@@ -20,8 +20,8 @@ WRITE skill: it creates a PDR file. **Confirm with the user before writing.**
    `docs/product/decisions/NNNN-short-kebab-title.md` and fill:
    - `Status: proposed` (unless already signed off → `accepted`), `Date`,
      `Reviewers`.
-   - Contesto / Decisione / Motivazione / Conseguenze — concrete, short, active
-     voice. One line per rejected option in Motivazione.
+   - Context / Decision / Rationale / Consequences — concrete, short, active
+     voice. One line per rejected option in Rationale.
    - Link the prototype (a `lab/` page or screenshot) and the "before", per the
      [product-decisions guidance](../../../docs/guidances/product-decisions.md).
 

@@ -1,20 +1,19 @@
 # Guidances
 
-Raccomandazioni per il sito, **non** meccanicamente enforced. Due tipi, ciascuno
-apre con un banner che dichiara quale:
+Recommendations for the site, **not** mechanically enforced. Two kinds, each
+opening with a banner that says which:
 
-- **Scelta per-feature** — decisioni che non fissiamo a livello globale perché
-  dipendono dal caso concreto (es. quale runtime serverless per una funzione
-  dinamica). Quando adotti una scelta stabile e valida per tutto il sito,
-  registrala come [ADR](../adr/README.md).
-- **Consigliata, non enforced** — pratiche di design che un linter non può
-  meccanizzare (il vocabolario di design), da applicare dentro i confini decisi.
+- **Per-feature choice** — decisions we don't fix globally because they depend on
+  the concrete case (e.g. which serverless runtime for a given dynamic function).
+  When a choice becomes stable and holds for the whole site, record it as an
+  [ADR](../adr/README.md).
+- **Recommended, not enforced** — design practices a linter can't mechanize (the
+  design vocabulary), to apply within the decided boundaries.
 
-| Guidance | Tipo | Copre |
+| Guidance | Kind | Covers |
 |---|---|---|
-| [Functions](./functions.md) | scelta per-feature | Dove mettere la logica dinamica: Cloudflare Workers, Supabase, servizi gestiti |
-| [Design approach](./design-approach.md) | consigliata | Token come source of truth, CSS Modules, accessibilità AA, motion |
-| [Product decisions](./product-decisions.md) | consigliata | Come scrivere i PDR in `docs/product/` e portarli in review |
+| [Functions](./functions.md) | per-feature choice | Where dynamic logic goes: Cloudflare Workers, Supabase, managed services |
+| [Design approach](./design-approach.md) | recommended | Tokens as source of truth, CSS Modules, AA accessibility, motion |
+| [Product decisions](./product-decisions.md) | recommended | How to write PDRs in `docs/product/` and take them to review |
 
-Vedi [ADR-0001](../adr/0001-recording-decisions.md) per come le guidance si
-relazionano agli ADR.
+See [ADR-0001](../adr/0001-recording-decisions.md) for how guidances relate to ADRs.

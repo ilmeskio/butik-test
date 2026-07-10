@@ -58,11 +58,11 @@ Read-only review personas in `.claude/agents/`: `architect` (Ada), `design-syste
 
 ## Conventions
 
-- **Language**: ADRs (`docs/adr/**`) and operational files for the agent
-  (`CLAUDE.md`, `.claude/skills/**`, `.claude/agents/**`) are in **English**.
-  Guidances (`docs/guidances/**`) and PDRs (`docs/product/**`) are in **Italian**
-  (team/stakeholder-facing). Commit messages follow the repo's existing Italian
-  convention (`feat(scope): …`), no `Co-Authored-By` trailers.
+- **Language**: everything in `docs/**` and the operational files
+  (`CLAUDE.md`, `.claude/**`) is in **English**. Only `reference/**` stays in
+  **Italian** — it's raw editorial input (the site copy is Italian by nature).
+  Commit messages follow the repo's existing Italian convention
+  (`feat(scope): …`), no `Co-Authored-By` trailers.
 - **Verify before claiming**: run the build (`npm run build`) before saying a
   change is safe; never call a check "passing" without running it.
 - **Open items** (ADR-0003): linter/formatter (Biome) and `@astrojs/check` are not

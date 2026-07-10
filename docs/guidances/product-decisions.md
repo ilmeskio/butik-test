@@ -1,32 +1,30 @@
-> **Consigliata, non enforced.** Come scrivere e rivedere le decisioni di prodotto
-> (PDR). Le decisioni vivono in [`../product/`](../product/README.md); qui sta il
-> *come*.
+> **Recommended, not enforced.** How to write and review product decisions (PDRs).
+> The decisions live in [`../product/`](../product/README.md); this is the *how*.
 
 # Product decisions
 
-Le scelte di prodotto/design sono molte e frequenti: hanno il loro log granulare
-in `docs/product/decisions/` (PDR), separato dai pochi ADR tematici.
+Product/design choices are many and frequent: they get their own granular log in
+`docs/product/decisions/` (PDRs), separate from the few thematic ADRs.
 
-## Scrivere un PDR
+## Writing a PDR
 
-1. Copia [`../product/decisions/template.md`](../product/decisions/template.md) in
-   `NNNN-titolo-kebab.md`, oppure lascia che la skill `product-decision` lo
-   scaffoldi.
-2. Tienilo corto: Contesto, Decisione, Motivazione, Conseguenze. Linka il
-   materiale di `reference/` da cui parte.
-3. I PDR sono **append-only**: non riscrivere una decisione accettata; scrivine una
-   nuova e marca la vecchia `superseded by PDR-NNNN`.
+1. Copy [`../product/decisions/template.md`](../product/decisions/template.md) to
+   `NNNN-short-kebab-title.md`, or let the `product-decision` skill scaffold it.
+2. Keep it short: Context, Decision, Rationale, Consequences. Link the
+   `reference/` material it draws on.
+3. PDRs are **append-only**: don't rewrite an accepted decision; write a new one
+   and mark the old `superseded by PDR-NNNN`.
 
-## Rivedere un PDR (con stakeholder non tecnici)
+## Reviewing a PDR (with non-technical stakeholders)
 
-Il `.md` è la source of truth. La **superficie di review** dipende dalla scelta di
-workshop componenti ancora aperta in
+The `.md` is the source of truth. The **review surface** depends on the
+still-open component-workshop choice in
 [ADR-0005](../adr/0005-design-system.md#workshop):
 
-- se si sceglie la **gallery Astro** → il PDR si rivede su una pagina `lab/` che
-  affianca prototipo e "prima";
-- se si sceglie **Storybook** → una pagina `Product/*` che importa il markdown e
-  lo renderizza accanto al prototipo.
+- if the **Astro gallery** is chosen → the PDR is reviewed on a `lab/` page that
+  puts the prototype next to the "before";
+- if **Storybook** is chosen → a `Product/*` page that imports the markdown and
+  renders it next to the prototype.
 
-Finché il workshop non è deciso, allega al PDR un link diretto al prototipo (pagina
-`lab/` o screenshot) così lo stakeholder rivede senza leggere markdown.
+Until the workshop is decided, attach a direct link to the prototype (a `lab/` page
+or a screenshot) to the PDR, so the stakeholder can review without reading markdown.
