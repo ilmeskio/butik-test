@@ -53,7 +53,7 @@ export const consentConfig: CookieConsent.CookieConsentConfig = {
         consentModal: {
           title: 'Utilizziamo i cookie',
           description:
-            'Usiamo strumenti di analisi per capire come viene usato il sito e migliorarlo. Nessun tracciamento parte senza il tuo consenso.',
+            'Usiamo strumenti di analisi per capire come viene usato il sito e migliorarlo. Nessun tracciamento parte senza il tuo consenso. Dettagli nella <a href="/privacy#cookie">Cookie Policy</a>.',
           acceptAllBtn: 'Accetta tutti',
           acceptNecessaryBtn: 'Rifiuta',
           showPreferencesBtn: 'Gestisci preferenze',
@@ -64,6 +64,9 @@ export const consentConfig: CookieConsent.CookieConsentConfig = {
           acceptNecessaryBtn: 'Rifiuta tutti',
           savePreferencesBtn: 'Salva preferenze',
           closeIconLabel: 'Chiudi',
+          // Link alla policy in fondo al modal preferenze.
+          footer:
+            '<a href="/privacy">Privacy &amp; Cookie Policy</a> · <a href="/termini">Termini di utilizzo</a>',
           sections: [
             {
               title: 'Cookie necessari',

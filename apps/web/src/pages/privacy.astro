@@ -1,0 +1,121 @@
+---
+// Privacy & Cookie Policy.
+// La Cookie Policy è accurata rispetto a ciò che il sito fa davvero (cookie del
+// consenso + PostHog analytics EU, gated). Le parti su titolare/base giuridica
+// sono segnate `[DA COMPLETARE]` e vanno riempite col testo legale reale.
+import BaseLayout from '#layouts/BaseLayout.astro';
+
+const updated = '2026-07-10';
+---
+
+<BaseLayout
+  title="Privacy & Cookie Policy — Butik"
+  description="Come Butik tratta i dati personali e usa i cookie su questo sito."
+>
+  <article class="max-w-3xl mx-auto px-6 py-16 md:py-24">
+    <div class="prose prose-lg max-w-none">
+      <h1>Privacy &amp; Cookie Policy</h1>
+      <p><em>Ultimo aggiornamento: {updated}.</em></p>
+
+      <h2>Titolare del trattamento</h2>
+      <p>
+        Il titolare del trattamento dei dati è <strong>Butik</strong>
+        [DA COMPLETARE: ragione sociale completa, sede legale, P.IVA/C.F.].
+        Per qualsiasi richiesta relativa ai dati personali puoi scrivere a
+        <a href="mailto:info@wearebutik.com">info@wearebutik.com</a>.
+      </p>
+
+      <h2>Quali dati raccogliamo</h2>
+      <ul>
+        <li>
+          <strong>Dati del form contatti.</strong> Quando ci scrivi tramite il
+          modulo, raccogliamo i dati che inserisci (es. nome, email, messaggio).
+          L'invio è gestito dal servizio <strong>Web3Forms</strong>, che recapita
+          il messaggio alla nostra casella. Base giuridica: riscontro alla tua
+          richiesta [DA COMPLETARE: eventuale riferimento contrattuale].
+        </li>
+        <li>
+          <strong>Dati di analisi aggregata.</strong> Se acconsenti alla categoria
+          «Analisi utilizzo», usiamo <strong>PostHog</strong> per statistiche
+          aggregate e anonime sull'uso del sito. Base giuridica: il tuo consenso.
+        </li>
+      </ul>
+
+      <h2>Strumenti di terze parti</h2>
+      <ul>
+        <li>
+          <strong>PostHog</strong> — analisi prodotto. I dati sono ospitati sul
+          <strong>cloud europeo (EU)</strong> di PostHog. Nessun dato viene inviato
+          finché non presti il consenso alla categoria analitica.
+        </li>
+        <li>
+          <strong>Web3Forms</strong> — recapito del form contatti.
+        </li>
+      </ul>
+      <p>
+        [DA COMPLETARE: link alle rispettive privacy policy dei fornitori e
+        riferimento a eventuali trasferimenti extra-UE.]
+      </p>
+
+      <h2>Conservazione</h2>
+      <p>
+        Conserviamo i dati per il tempo necessario alle finalità indicate e agli
+        obblighi di legge. [DA COMPLETARE: tempi di conservazione specifici.]
+      </p>
+
+      <h2>I tuoi diritti</h2>
+      <p>
+        Puoi esercitare in ogni momento i diritti previsti dal GDPR (accesso,
+        rettifica, cancellazione, limitazione, opposizione, portabilità) e
+        revocare il consenso. Per farlo scrivi a
+        <a href="mailto:info@wearebutik.com">info@wearebutik.com</a>.
+        [DA COMPLETARE: eventuale DPO e diritto di reclamo al Garante.]
+      </p>
+
+      <hr />
+
+      <h2 id="cookie">Cookie Policy</h2>
+      <p>
+        I cookie sono piccoli file salvati sul tuo dispositivo. Su questo sito
+        usiamo solo due tipi di cookie.
+      </p>
+
+      <h3>Cookie tecnici (necessari)</h3>
+      <p>
+        Servono al funzionamento del sito e a ricordare le tue scelte sui cookie.
+        Sono sempre attivi e non richiedono consenso.
+      </p>
+      <ul>
+        <li>
+          <code>cc_cookie</code> — memorizza le tue preferenze di consenso.
+          Durata: fino a 6 mesi. Nessun dato di profilazione.
+        </li>
+      </ul>
+
+      <h3>Cookie di analisi (previo consenso)</h3>
+      <p>
+        Attivi solo se acconsenti alla categoria «Analisi utilizzo». Servono a
+        capire in forma aggregata come viene usato il sito.
+      </p>
+      <ul>
+        <li>
+          <code>_ph_*</code> / <code>ph_*</code> — PostHog, analisi aggregata del
+          comportamento di navigazione. Durata: fino a 1 anno. Dati su cloud EU.
+        </li>
+      </ul>
+
+      <h3>Come gestire il consenso</h3>
+      <p>
+        Nessun cookie di analisi viene installato prima del tuo consenso. Puoi
+        modificare o revocare le tue scelte in qualsiasi momento tramite il
+        pulsante <strong>«Preferenze cookie»</strong> nel piè di pagina. Alla
+        revoca, i relativi cookie vengono rimossi automaticamente.
+      </p>
+
+      <p>
+        Per informazioni sull'uso dei dati vedi anche i
+        <a href="/termini">Termini di utilizzo</a>.
+      </p>
+    </div>
+  </article>
+</BaseLayout>
