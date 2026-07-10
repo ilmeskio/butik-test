@@ -1,0 +1,244 @@
+---
+// LAB · WORKSHOP — pilota della "gallery" Astro-native per il catalogo componenti
+// (ADR-0005 #workshop, opzione A). Mostra i componenti di @butik/ui con le loro
+// varianti e stati, consumando i token di @butik/ui-tokens. È la controparte
+// concreta da confrontare con Storybook (opzione B) nella nota di valutazione:
+// vedi ./README.md. Finché la decisione è aperta, questa superficie resta in lab/.
+import BaseLayout from '#layouts/BaseLayout.astro';
+import Button from '@butik/ui/Button.astro';
+
+interface Specimen {
+  label: string;
+  note?: string;
+}
+
+// Matrice varianti × stati del Button (unico componente di @butik/ui oggi).
+const buttonVariants = [
+  { key: 'primary', label: 'Primary' },
+  { key: 'ghost', label: 'Ghost' },
+] as const;
+---
+
+<BaseLayout
+  title="Component workshop — lab"
+  description="Gallery Astro-native dei componenti @butik/ui con varianti e stati (pilota ADR-0005)."
+>
+  <main class="ws">
+    <header class="ws__head">
+      <p class="ws__eyebrow">Interno · pilota ADR-0005 #workshop</p>
+      <h1 class="ws__title">Component workshop</h1>
+      <p class="ws__intro">
+        Catalogo dei componenti condivisi di <code>@butik/ui</code>, con le loro
+        varianti e i loro stati, costruiti sui token di <code>@butik/ui-tokens</code>.
+        Questa è la strada A (gallery Astro-native) resa concreta: da confrontare
+        con Storybook prima di decidere. La valutazione del trade-off è in
+        <a class="ws__link" href="/lab/workshop/readme">nota di valutazione</a>.
+      </p>
+    </header>
+
+    <section class="ws__section" aria-labelledby="cmp-button">
+      <div class="ws__section-head">
+        <h2 id="cmp-button" class="ws__section-title">Button</h2>
+        <p class="ws__section-desc">
+          <code>@butik/ui/Button.astro</code> — resa come <code>&lt;a&gt;</code>
+          quando c'è <code>href</code>, altrimenti <code>&lt;button&gt;</code>.
+          Prova la tastiera: <kbd>Tab</kbd> mostra il focus-visible.
+        </p>
+      </div>
+
+      <!-- Varianti × modalità di resa -->
+      {buttonVariants.map((v) => (
+        <div class="ws__group">
+          <p class="ws__group-label">{v.label}</p>
+          <div class="ws__specimens">
+            <figure class="ws__specimen">
+              <div class="ws__stage">
+                <Button href="#" variant={v.key}>{v.label}</Button>
+              </div>
+              <figcaption class="ws__caption">Link (href)</figcaption>
+            </figure>
+
+            <figure class="ws__specimen">
+              <div class="ws__stage">
+                <Button variant={v.key} type="button">{v.label}</Button>
+              </div>
+              <figcaption class="ws__caption">Button (type=button)</figcaption>
+            </figure>
+
+            <figure class="ws__specimen">
+              <div class="ws__stage">
+                <Button variant={v.key}>
+                  <span aria-hidden="true">♪</span> Con icona
+                </Button>
+              </div>
+              <figcaption class="ws__caption">Slot con contenuto misto</figcaption>
+            </figure>
+          </div>
+        </div>
+      ))}
+
+      <p class="ws__hint">
+        Hover e focus sono stati interattivi: passa il mouse o naviga con
+        <kbd>Tab</kbd>. Il movimento rispetta <code>prefers-reduced-motion</code>.
+      </p>
+    </section>
+
+    <section class="ws__section ws__section--empty">
+      <h2 class="ws__section-title">Prossimi componenti</h2>
+      <p class="ws__section-desc">
+        Il catalogo cresce man mano che i componenti vengono migrati a CSS Modules
+        + token (sweep Tailwind→CSS Modules). Ogni componente aggiunto qui va
+        rappresentato con tutte le sue varianti e i suoi stati
+        (cfr. skill <code>story-check</code>).
+      </p>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  /* Stile della gallery basato sui token di @butik/ui-tokens (nessun Tailwind,
+     nessun valore grezzo dove esiste un token). */
+  .ws {
+    max-width: 64rem;
+    margin-inline: auto;
+    padding: var(--space-24) var(--space-6) var(--space-16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+
+  .ws__eyebrow {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+  }
+
+  .ws__title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--color-fg);
+    margin-bottom: var(--space-4);
+  }
+
+  .ws__intro {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-lg);
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--color-fg) 80%, transparent);
+    max-width: 42rem;
+  }
+
+  .ws__link {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+  .ws__link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .ws__section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    padding-top: var(--space-8);
+    border-top: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
+  }
+
+  .ws__section-head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .ws__section-title {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--color-fg);
+  }
+
+  .ws__section-desc {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--color-fg) 70%, transparent);
+    max-width: 42rem;
+  }
+
+  .ws__group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .ws__group-label {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-fg) 55%, transparent);
+  }
+
+  .ws__specimens {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  .ws__specimen {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-white);
+  }
+
+  .ws__stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 6rem;
+    padding: var(--space-8) var(--space-4);
+    /* Sfondo a scacchiera leggera per leggere i bordi trasparenti del Ghost */
+    background: var(--color-bg);
+  }
+
+  .ws__caption {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-xs);
+    color: color-mix(in srgb, var(--color-fg) 60%, transparent);
+    padding: var(--space-2) var(--space-3);
+    border-top: 1px solid color-mix(in srgb, var(--color-fg) 10%, transparent);
+  }
+
+  .ws__hint {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-sm);
+    color: color-mix(in srgb, var(--color-fg) 60%, transparent);
+  }
+
+  .ws__section--empty {
+    opacity: 0.85;
+  }
+
+  code,
+  kbd {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.9em;
+  }
+  kbd {
+    padding: 0.1em 0.4em;
+    border-radius: var(--radius-sm);
+    border: 1px solid color-mix(in srgb, var(--color-fg) 20%, transparent);
+    background: var(--color-white);
+  }
+</style>

@@ -17,6 +17,16 @@ interface LabGroup {
 
 const gruppi: LabGroup[] = [
   {
+    eyebrow: 'Design system',
+    titolo: 'Workshop dei componenti',
+    intro:
+      'Pilota della vetrina Astro-native per il catalogo componenti (ADR-0005 #workshop): i componenti di @butik/ui con varianti e stati, più la nota di valutazione gallery-vs-Storybook da decidere col team.',
+    links: [
+      { href: '/lab/workshop', title: 'Component workshop (gallery)', desc: 'Button (Primary · Ghost) con stati e modalità di resa, su token @butik/ui-tokens.' },
+      { href: '/lab/workshop/readme', title: 'Nota: gallery vs Storybook', desc: 'Trade-off delle due strade e raccomandazione — decisione al team, esito in un nuovo ADR.' },
+    ],
+  },
+  {
     eyebrow: 'Motion & grafica',
     titolo: 'Tratti animati a tema musica',
     intro: 'Studio di 4 motivi animati (+ bonus) riutilizzabili: equalizer, waveform, marquee, beat pulse, count-up.',

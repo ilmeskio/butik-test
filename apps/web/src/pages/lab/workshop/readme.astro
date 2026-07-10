@@ -1,0 +1,224 @@
+---
+// LAB · WORKSHOP — nota di valutazione: gallery Astro-native vs Storybook
+// (ADR-0005 #workshop). Serve al team per DECIDERE quale superficie di catalogo
+// adottare. Non decide nulla: espone il trade-off. L'esito andrà registrato in un
+// nuovo ADR (o un emendamento tematico), non qui.
+import BaseLayout from '#layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Workshop: gallery vs Storybook — lab"
+  description="Nota di valutazione per scegliere la superficie del catalogo componenti (ADR-0005 #workshop)."
+>
+  <main class="doc">
+    <p class="doc__eyebrow">Interno · nota di decisione ADR-0005 #workshop</p>
+    <h1 class="doc__h1">Superficie del catalogo componenti: gallery vs Storybook</h1>
+
+    <p class="doc__lead">
+      L'ADR-0005 lascia <strong>aperta</strong> la scelta della superficie del
+      catalogo componenti e la delega a un pilota comparativo. Questa nota mette a
+      confronto le due strade su codice reale, così che il team possa decidere.
+      La <a class="doc__a" href="/lab/workshop">gallery pilota</a> è la strada A
+      resa concreta.
+    </p>
+
+    <section class="doc__sec">
+      <h2 class="doc__h2">Il contesto che conta</h2>
+      <p>
+        Il codice è quasi interamente <code>.astro</code> (pagine, layout,
+        componenti condivisi in <code>@butik/ui</code>). Lo stile è CSS Modules +
+        token. Il sito è <strong>statico</strong>, senza adapter SSR (ADR-0002).
+        Qualsiasi strumento di catalogo deve reggere questi vincoli senza
+        introdurre un runtime a framework solo per la vetrina.
+      </p>
+    </section>
+
+    <section class="doc__sec">
+      <h2 class="doc__h2">Strada A — Gallery Astro-native</h2>
+      <p>
+        Formalizzare <code>src/pages/lab/*</code> come vetrina: pagine
+        <code>.astro</code> che importano i componenti reali da
+        <code>@butik/ui</code> e li mostrano con varianti e stati. È esattamente
+        ciò che fa il pilota.
+      </p>
+      <h3 class="doc__h3">Pro</h3>
+      <ul class="doc__ul">
+        <li>Zero attrito con <code>.astro</code>: si importano i componenti veri, senza wrapper.</li>
+        <li>Nessuna nuova dipendenza, nessun secondo runtime, nessun secondo build.</li>
+        <li>Stessi token e stessa pipeline del sito: ciò che vedi in vetrina è ciò che spedisci.</li>
+        <li>Zero rischio per il sito statico (ADR-0002): sono pagine come le altre.</li>
+        <li>Versionato e diff-abile come il resto del codice; nessun tooling da imparare.</li>
+      </ul>
+      <h3 class="doc__h3">Contro</h3>
+      <ul class="doc__ul">
+        <li>Niente controlli/args interattivi già pronti (knobs) né docs autogenerate.</li>
+        <li>La matrice varianti × stati è scritta a mano (più codice ripetitivo).</li>
+        <li>Nessun ecosistema di addon (test di interazione, a11y, visual regression) incluso.</li>
+        <li>La disciplina "ogni componente in vetrina" va tenuta a mano (skill <code>story-check</code>).</li>
+      </ul>
+    </section>
+
+    <section class="doc__sec">
+      <h2 class="doc__h2">Strada B — Storybook</h2>
+      <p>
+        Storybook è potente e maturo, ma <strong>non ha supporto di prima classe
+        per <code>.astro</code></strong>: renderizza componenti di framework
+        (React, Vue, Svelte, Solid, web components), non file <code>.astro</code>.
+        Adottarlo su questo codice significherebbe:
+      </p>
+      <ul class="doc__ul">
+        <li>
+          Riscrivere/duplicare i componenti condivisi come <strong>island</strong>
+          di un framework (es. React) solo per poterli mettere in storia — oppure
+          mantenere una copia parallela dei componenti per la vetrina.
+        </li>
+        <li>
+          Introdurre e configurare quel framework, il builder di Storybook (Vite),
+          e un <strong>secondo processo di build/dev</strong> accanto ad Astro.
+        </li>
+        <li>
+          Accettare un <strong>drift</strong> strutturale: la vetrina mostrerebbe la
+          versione-island, non il vero componente <code>.astro</code> spedito dal
+          sito. Ciò che testi non è ciò che spedisci.
+        </li>
+      </ul>
+      <h3 class="doc__h3">Pro</h3>
+      <ul class="doc__ul">
+        <li>Controlli/args, viewport, sfondi, docs MDX autogenerate, ecosistema addon.</li>
+        <li>Test di interazione, a11y e visual regression integrabili con poco.</li>
+        <li>Strumento familiare a chi arriva da altri design system.</li>
+      </ul>
+      <h3 class="doc__h3">Contro</h3>
+      <ul class="doc__ul">
+        <li>Nessun supporto <code>.astro</code> di prima classe: servono island di framework.</li>
+        <li>Nuova dipendenza pesante + secondo build/dev da mantenere e aggiornare.</li>
+        <li>Rischio di divergenza vetrina ↔ componente reale.</li>
+        <li>Sovradimensionato per un catalogo che oggi conta pochi componenti.</li>
+      </ul>
+    </section>
+
+    <section class="doc__sec">
+      <h2 class="doc__h2">Raccomandazione</h2>
+      <p>
+        Per un catalogo <strong>quasi interamente <code>.astro</code></strong>, con
+        pochi componenti e un sito statico, la <strong>gallery Astro-native
+        (strada A)</strong> è la scelta con il miglior rapporto valore/rischio:
+        fedeltà totale al componente spedito, zero runtime aggiuntivo, zero drift.
+        Le lacune (knobs, docs autogenerate, addon) sono coperte oggi da poco
+        codice a mano e dalla skill <code>story-check</code>, e non giustificano il
+        costo e il drift di Storybook.
+      </p>
+      <p>
+        Storybook diventa interessante solo se in futuro il design system adottasse
+        <strong>island di framework</strong> come formato primario dei componenti
+        condivisi: a quel punto il supporto di prima classe di Storybook varrebbe il
+        secondo build. Finché il formato primario è <code>.astro</code>, non lo è.
+      </p>
+      <p class="doc__note">
+        Questa è una raccomandazione, non una decisione. La scelta la prende il
+        team; l'esito va registrato in un nuovo ADR (o come emendamento tematico
+        all'ADR-0005 che supera la sezione <code>#workshop</code>). Fino ad allora
+        <code>lab/</code> resta e non si rimuove.
+      </p>
+    </section>
+
+    <p class="doc__back"><a class="doc__a" href="/lab/workshop">← Torna alla gallery</a></p>
+  </main>
+</BaseLayout>
+
+<style>
+  /* Nota di prosa: stile token-driven (@butik/ui-tokens), nessun Tailwind. */
+  .doc {
+    max-width: 44rem;
+    margin-inline: auto;
+    padding: var(--space-24) var(--space-6) var(--space-16);
+    font-family: var(--font-sans);
+    color: var(--color-fg);
+    line-height: 1.65;
+  }
+
+  .doc__eyebrow {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--space-3);
+  }
+
+  .doc__h1 {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: var(--space-6);
+  }
+
+  .doc__h2 {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    margin-bottom: var(--space-3);
+  }
+
+  .doc__h3 {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-fg) 65%, transparent);
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-2);
+  }
+
+  .doc__lead {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-8);
+  }
+
+  .doc__sec {
+    padding-top: var(--space-8);
+    border-top: 1px solid color-mix(in srgb, var(--color-fg) 12%, transparent);
+    margin-bottom: var(--space-8);
+  }
+
+  .doc p {
+    margin-bottom: var(--space-4);
+  }
+
+  .doc__ul {
+    list-style: disc;
+    padding-left: var(--space-6);
+    margin-bottom: var(--space-4);
+  }
+  .doc__ul li {
+    margin-bottom: var(--space-2);
+  }
+
+  .doc__note {
+    font-size: var(--font-size-sm);
+    color: color-mix(in srgb, var(--color-fg) 70%, transparent);
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--space-4);
+  }
+
+  .doc__a {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+  .doc__a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .doc__back {
+    margin-top: var(--space-8);
+  }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.9em;
+  }
+</style>
