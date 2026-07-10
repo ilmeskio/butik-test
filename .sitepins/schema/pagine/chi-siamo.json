@@ -1,0 +1,344 @@
+{
+  "file": "apps/web/src/content/pagine/chi-siamo.md",
+  "name": "chi-siamo",
+  "fileType": "md",
+  "fmType": "yaml",
+  "template": [
+    {
+      "name": "type",
+      "label": "Type",
+      "type": "string",
+      "value": "chi-siamo",
+      "isIgnored": true,
+      "defaultValue": "chi-siamo"
+    },
+    {
+      "name": "metaTitle",
+      "label": "MetaTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "metaDescription",
+      "label": "MetaDescription",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "heroTitle",
+      "label": "HeroTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "heroSubtitle",
+      "label": "HeroSubtitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "heroImageAlt",
+      "label": "HeroImageAlt",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "introEyebrow",
+      "label": "IntroEyebrow",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "introP1",
+      "label": "IntroP1",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "introP2",
+      "label": "IntroP2",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "introP3",
+      "label": "IntroP3",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "introP4",
+      "label": "IntroP4",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "missionEyebrow",
+      "label": "MissionEyebrow",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "missionStatement",
+      "label": "MissionStatement",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "sdgEyebrow",
+      "label": "SdgEyebrow",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "sdgIntro",
+      "label": "SdgIntro",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "sdg8Title",
+      "label": "Sdg8Title",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "sdg11Title",
+      "label": "Sdg11Title",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "teamEyebrow",
+      "label": "TeamEyebrow",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "teamP1",
+      "label": "TeamP1",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "teamP2",
+      "label": "TeamP2",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "teamP3",
+      "label": "TeamP3",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder1Name",
+      "label": "Founder1Name",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder1Role",
+      "label": "Founder1Role",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder1Bio",
+      "label": "Founder1Bio",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder1Email",
+      "label": "Founder1Email",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder1Linkedin",
+      "label": "Founder1Linkedin",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder2Name",
+      "label": "Founder2Name",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder2Role",
+      "label": "Founder2Role",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder2Bio",
+      "label": "Founder2Bio",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder2Email",
+      "label": "Founder2Email",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder2Linkedin",
+      "label": "Founder2Linkedin",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder3Name",
+      "label": "Founder3Name",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder3Role",
+      "label": "Founder3Role",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder3Bio",
+      "label": "Founder3Bio",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder3Email",
+      "label": "Founder3Email",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "founder3Linkedin",
+      "label": "Founder3Linkedin",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "testimonialQuote",
+      "label": "TestimonialQuote",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "testimonialAuthor",
+      "label": "TestimonialAuthor",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaTitle",
+      "label": "CtaTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaBody",
+      "label": "CtaBody",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaLabel",
+      "label": "CtaLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaHref",
+      "label": "CtaHref",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+---
+type: "contatti"
+metaTitle: "Contatti — Butik"
+metaDescription: "Scrivici: che tu sia un Comune, una DMO, un operatore culturale o un festival, costruiamo qualcosa insieme."
+headerEyebrow: "Contatti"
+headerTitle: "Lavoriamo insieme?"
+headerIntro: "Che tu sia un Comune, una DMO, un operatore culturale o un festival, siamo pronti ad ascoltarti e costruire qualcosa insieme. Raccontaci la tua idea: ti rispondiamo al più presto."
+recapitiEyebrow: "Recapiti"
+emailLabel: "Email"
+emailValue: "info@wearebutik.com"
+pecLabel: "PEC"
+pecValue: "butik@legalmail.it"
+sedeLabel: "Sede"
+sedeAddress: "Butik s.r.l. Impresa Sociale<br />Via Plinio 14, 20129 Milano — Italy<br />P. IVA 10429130965"
+seguiciLabel: "Seguici"
+---
