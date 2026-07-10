@@ -27,7 +27,7 @@ partners:
   - name: AssoConcerti
     logo: ../../assets/logos/assoconcerti.png
   - name: Assomusica
-    logo: /assets/logos/assomusica.png
+    logo: /src/assets/logos/assomusica.png
   - name: FIMI
     logo: ../../assets/logos/fimi.png
   - name: SIAE
