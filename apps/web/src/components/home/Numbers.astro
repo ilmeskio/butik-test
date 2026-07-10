@@ -1,21 +1,18 @@
 ---
+// Copy content-driven (ADR-0004): metriche e label arrivano dalla collezione
+// `pagine` (entry `home`) come array, passate da index.astro.
 type Metric = {
   value: string;
   label: string;
 };
 
-const butikMetrics: Metric[] = [
-  { value: '30+', label: 'progetti realizzati' },
-  { value: '15+', label: 'territori coinvolti' },
-  { value: '10+', label: 'finanziamenti intercettati' },
-  { value: '5+', label: 'percorsi formativi' },
-  { value: '1000+', label: 'giovani formati' },
-];
+interface Props {
+  butikMetrics: Metric[];
+  mmwLabel: string;
+  mmwMetrics: Metric[];
+}
 
-const mmwMetrics: Metric[] = [
-  { value: '2', label: 'edizioni' },
-  { value: '70K+', label: 'persone raggiunte' },
-];
+const { butikMetrics, mmwLabel, mmwMetrics } = Astro.props;
 ---
 
 <section class="bg-butik-dark text-white py-10 md:py-14" aria-label="Numeri e impatto">
@@ -39,7 +36,7 @@ const mmwMetrics: Metric[] = [
 
   <div class="mt-10 lg:mt-16 pt-10 lg:pt-12 border-t border-white/15 max-w-7xl mx-auto px-6">
     <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-green mb-8 text-center">
-      Milano Music Week
+      {mmwLabel}
     </p>
 
     <dl class="grid grid-cols-2 gap-6 lg:gap-12 max-w-xl mx-auto text-center">

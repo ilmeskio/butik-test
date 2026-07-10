@@ -1,5 +1,17 @@
 ---
+// Copy content-driven (ADR-0004): titolo, testo e micro-copy arrivano dalla
+// collezione `pagine` (entry `home`), passati da index.astro. Il messaggio di
+// successo viaggia in un data-attribute e viene letto dallo script inline.
+interface Props {
+  title: string;
+  body: string;
+  placeholder: string;
+  button: string;
+  privacy: string;
+  success: string;
+}
 
+const { title, body, placeholder, button, privacy, success } = Astro.props;
 ---
 
 <section class="py-12 md:py-16 bg-butik-light">
@@ -7,12 +19,11 @@
     <h2
       class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark mb-6"
     >
-      Non perderti nessuna novità
+      {title}
     </h2>
 
     <p class="font-sans text-base text-butik-dark/70 mb-10">
-      Progetti, bandi, opportunità e approfondimenti sul turismo musicale e la
-      progettazione culturale: iscriviti per non perderti nulla
+      {body}
     </p>
 
     <div id="newsletter-container">
@@ -28,7 +39,7 @@
           type="email"
           name="email"
           required
-          placeholder="La tua email"
+          placeholder={placeholder}
           autocomplete="email"
           class="flex-1 px-5 py-3 md:py-4 border border-butik-dark/30 bg-white font-sans text-base focus:outline-none focus:border-butik-red"
         />
@@ -46,16 +57,11 @@
           type="submit"
           class="bg-butik-dark text-white px-8 py-3 md:py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-red transition-colors w-full md:w-auto"
         >
-          Iscriviti
+          {button}
         </button>
       </form>
 
-      <p class="font-sans text-xs text-butik-dark/50 mt-4">
-        Iscrivendoti accetti la nostra <a
-          href="/privacy"
-          class="text-butik-red underline">privacy policy</a
-        >
-      </p>
+      <p class="font-sans text-xs text-butik-dark/50 mt-4" set:html={privacy}></p>
     </div>
 
     <p
@@ -63,6 +69,7 @@
       class="font-sans text-base text-butik-dark hidden"
       role="status"
       aria-live="polite"
+      data-success={success}
     ></p>
   </div>
 </section>
@@ -82,7 +89,7 @@
       }
 
       container.classList.add('hidden');
-      status.textContent = 'Grazie, ti scriveremo a breve!';
+      status.textContent = status.dataset.success ?? '';
       status.classList.remove('hidden');
     });
   }

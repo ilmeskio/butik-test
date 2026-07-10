@@ -1,5 +1,10 @@
 import { defineCollection, z } from 'astro:content';
+import type { SchemaContext } from 'astro:content';
 import { glob } from 'astro/loaders';
+
+// Tipo dell'helper `image()` fornito dallo schema context di Astro: consente di
+// dichiarare riferimenti a media (risolti a build-time) anche dentro gli array.
+type ImageFn = SchemaContext['image'];
 
 const serviziCollection = defineCollection({
   loader: glob({
@@ -48,16 +53,70 @@ const progettiCollection = defineCollection({
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Collezione `pagine` (ADR-0004): pagine editoriali "singleton" la cui copy era
-// hardcoded nei `.astro`. Ogni entry è una pagina a sé (chi-siamo, contatti), con
-// un set di campi diverso: per questo usiamo una discriminated union su `type`.
-// I campi sono volutamente PIATTI e scalari (string), gli unici tipi che gli
-// schema Sitepins di questo repo usano oggi (string/media/number/boolean) — così
-// Zod e `.sitepins/schema/pagine/*.json` restano allineati (skill content-check).
+// hardcoded nei `.astro`. Ogni entry è una pagina a sé (home, chi-siamo,
+// contatti, partners, servizi), con un set di campi diverso: per questo usiamo
+// una discriminated union su `type`.
+//
+// Contenuti ripetuti (metriche, servizi, partner, founder, obiettivi SDG) sono
+// modellati come ARRAY di oggetti, con i media (loghi, foto) come riferimenti
+// `image()` risolti a build-time. Gli schema Sitepins in `.sitepins/schema/pagine/*`
+// rispecchiano questi array con campi `type: "list"` + sotto-`fields` (media =
+// `type: "media"`) — vedi nota nel summary sui limiti di verifica di Sitepins.
+// Zod resta la source of truth tipata: l'allineamento Zod ↔ Sitepins è vigilato
+// dalla skill content-check.
+//
 // Nota: alcune stringhe (paragrafi con <strong>/link, indirizzo) contengono HTML
 // inline e vengono rese con `set:html` nelle pagine per mantenere l'output
 // visivamente identico alla versione hardcoded.
 // ─────────────────────────────────────────────────────────────────────────────
-const paginaChiSiamo = z.object({
+
+// Voce metrica (Numbers): valore + etichetta.
+const metricSchema = z.object({
+  value: z.string(),
+  label: z.string(),
+});
+
+// Card servizio in hero home: titolo, link, descrizione breve.
+const heroServizioSchema = z.object({
+  title: z.string(),
+  href: z.string(),
+  description: z.string(),
+});
+
+const paginaHome = z.object({
+  type: z.literal('home'),
+  metaTitle: z.string(),
+  metaDescription: z.string(),
+  // Hero
+  heroTitle: z.string(),
+  heroSubtitle: z.string(),
+  heroCtaLabel: z.string(),
+  heroCtaHref: z.string(),
+  heroExploreLabel: z.string(),
+  heroExploreHref: z.string(),
+  heroServizi: z.array(heroServizioSchema),
+  // Numeri / impatto
+  butikMetrics: z.array(metricSchema),
+  mmwLabel: z.string(),
+  mmwMetrics: z.array(metricSchema),
+  // About inline
+  aboutTitle: z.string(),
+  aboutP1: z.string(),
+  aboutP2: z.string(),
+  aboutP3: z.string(),
+  aboutCtaLabel: z.string(),
+  aboutCtaHref: z.string(),
+  aboutImageAlt: z.string(),
+  // Newsletter
+  newsletterTitle: z.string(),
+  newsletterBody: z.string(),
+  newsletterPlaceholder: z.string(),
+  newsletterButton: z.string(),
+  newsletterPrivacy: z.string(),
+  newsletterSuccess: z.string(),
+});
+
+const paginaChiSiamo = (image: ImageFn) => z.object({
   type: z.literal('chi-siamo'),
   metaTitle: z.string(),
   metaDescription: z.string(),
@@ -73,27 +132,25 @@ const paginaChiSiamo = z.object({
   missionStatement: z.string(),
   sdgEyebrow: z.string(),
   sdgIntro: z.string(),
-  sdg8Title: z.string(),
-  sdg11Title: z.string(),
+  // Obiettivi di Sviluppo Sostenibile come ARRAY: num + titolo editoriale.
+  // Colore/icona restano config di design nella pagina (colori ufficiali SDG).
+  sdg: z.array(z.object({
+    num: z.number(),
+    title: z.string(),
+  })),
   teamEyebrow: z.string(),
   teamP1: z.string(),
   teamP2: z.string(),
   teamP3: z.string(),
-  founder1Name: z.string(),
-  founder1Role: z.string(),
-  founder1Bio: z.string(),
-  founder1Email: z.string(),
-  founder1Linkedin: z.string(),
-  founder2Name: z.string(),
-  founder2Role: z.string(),
-  founder2Bio: z.string(),
-  founder2Email: z.string(),
-  founder2Linkedin: z.string(),
-  founder3Name: z.string(),
-  founder3Role: z.string(),
-  founder3Bio: z.string(),
-  founder3Email: z.string(),
-  founder3Linkedin: z.string(),
+  // Founder come ARRAY di oggetti, con foto come media (`image()`).
+  founders: z.array(z.object({
+    name: z.string(),
+    role: z.string(),
+    bio: z.string(),
+    email: z.string(),
+    linkedin: z.string(),
+    photo: image(),
+  })),
   testimonialQuote: z.string(),
   testimonialAuthor: z.string(),
   ctaTitle: z.string(),
@@ -119,13 +176,49 @@ const paginaContatti = z.object({
   seguiciLabel: z.string(),
 });
 
+const paginaPartners = (image: ImageFn) => z.object({
+  type: z.literal('partners'),
+  metaTitle: z.string(),
+  metaDescription: z.string(),
+  eyebrow: z.string(),
+  title: z.string(),
+  // Partner come ARRAY di oggetti { nome, logo(media) }.
+  partners: z.array(z.object({
+    name: z.string(),
+    logo: image(),
+  })),
+});
+
+const paginaServizi = z.object({
+  type: z.literal('servizi-index'),
+  metaTitle: z.string(),
+  metaDescription: z.string(),
+  headerEyebrow: z.string(),
+  headerTitle: z.string(),
+  headerIntro1: z.string(),
+  headerIntro2: z.string(),
+  metodoEyebrow: z.string(),
+  metodoTitle: z.string(),
+  // Passi del metodo come ARRAY di oggetti { titolo, descrizione }.
+  metodo: z.array(z.object({
+    title: z.string(),
+    description: z.string(),
+  })),
+});
+
 const pagineCollection = defineCollection({
   loader: glob({
     pattern: '*.{md,mdx}',
     base: './src/content/pagine',
     generateId: ({ entry }) => entry.replace(/\.(mdx?)$/, ''),
   }),
-  schema: z.discriminatedUnion('type', [paginaChiSiamo, paginaContatti]),
+  schema: ({ image }) => z.discriminatedUnion('type', [
+    paginaHome,
+    paginaChiSiamo(image),
+    paginaContatti,
+    paginaPartners(image),
+    paginaServizi,
+  ]),
 });
 
 export const collections = {

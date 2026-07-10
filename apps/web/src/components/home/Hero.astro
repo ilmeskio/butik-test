@@ -41,19 +41,13 @@ const bgTiles: BgTile[] = [
 ];
 
 // ── Card servizi (5) ────────────────────────────────────────────────────
+// La lista servizi è copy editoriale content-driven (ADR-0004): arriva dalla
+// collezione `pagine` (entry `home`) come array, passata da index.astro.
 interface ServizioCard {
   title: string;
   href: string;
   description: string;
 }
-
-const servizi: ServizioCard[] = [
-  { title: 'Progettazione culturale', href: '/servizi/progettazione-culturale', description: 'Progetti che attivano territori e nuove generazioni.' },
-  { title: 'Consulenza strategica',   href: '/servizi/consulenza-strategica',   description: 'Patrimonio musicale come asset culturale e turistico.' },
-  { title: 'Formazione',              href: '/servizi/formazione-capacity-building', description: 'Percorsi immersivi per operatori e giovani professionisti.' },
-  { title: 'Eventi e format',         href: '/servizi/eventi-culturali-musicali',    description: 'Format musicali per attivare comunità e quartieri.' },
-  { title: 'Turismo musicale',        href: '/servizi/prodotti-turistico-musicali',  description: 'Prodotti turistici, itinerari e materiali editoriali.' },
-];
 
 // Slideshow mobile: 4-5 immagini di sfondo che ruotano
 const mobileBackgrounds = [bgTiles[0], bgTiles[2], bgTiles[4], bgTiles[6]];
@@ -70,8 +64,27 @@ interface Props {
   /** Come presentare i 5 servizi nell'hero (default = card attuali).
       'switch' = mostra tutte le presentazioni con un toggle in-page (eval). */
   services?: 'cards' | 'chip' | 'number' | 'tag' | 'icon' | 'list' | 'strip' | 'switch';
+  // Copy editoriale (content-driven): passata da index.astro.
+  title: string;
+  subtitle: string;
+  ctaLabel: string;
+  ctaHref: string;
+  exploreLabel: string;
+  exploreHref: string;
+  servizi: ServizioCard[];
 }
-const { proof = 'none', scrim = false, services = 'cards' } = Astro.props;
+const {
+  proof = 'none',
+  scrim = false,
+  services = 'cards',
+  title,
+  subtitle,
+  ctaLabel,
+  ctaHref,
+  exploreLabel,
+  exploreHref,
+  servizi,
+} = Astro.props;
 const cardVariant = ['chip', 'number', 'tag', 'icon'].includes(services);
 // Modalità valutazione: switcher flottante a 2 assi (hero + servizi), tutto
 // renderizzato e composto via JS. Default a video = aspetto attuale.
@@ -170,11 +183,10 @@ const proofLogos = partners.filter((p) => proofLogoNames.includes(p.name));
       <div class="hero-textcol relative text-center max-w-4xl mx-auto">
         {(scrim || isEval) && <div class="hero-scrim" data-hero-scrim hidden={isEval} aria-hidden="true"></div>}
         <h1 class="hero-title relative font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.05]">
-          Attiviamo territori, comunità e nuove generazioni attraverso la musica
+          {title}
         </h1>
         <p class="hero-subtitle relative font-sans text-base md:text-lg mt-5 max-w-2xl mx-auto">
-          Dal 2018 progettiamo cultura, formazione ed esperienze turistiche su base
-          musicale, al fianco di Comuni, DMO e operatori culturali.
+          {subtitle}
         </p>
 
         {(proof === 'numbers' || isEval) && (
@@ -212,10 +224,10 @@ const proofLogos = partners.filter((p) => proofLogoNames.includes(p.name));
 
         <div class="hero-cta relative mt-8">
           <a
-            href="/contatti"
+            href={ctaHref}
             class="inline-flex items-center justify-center bg-butik-red text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-butik-dark transition-colors"
           >
-            Inizia un progetto con noi
+            {ctaLabel}
           </a>
         </div>
       </div>
@@ -319,10 +331,10 @@ const proofLogos = partners.filter((p) => proofLogoNames.includes(p.name));
 
       <div class="text-center mt-4 md:mt-5">
         <a
-          href="/servizi"
+          href={exploreHref}
           class="font-display text-xs font-bold tracking-widest uppercase text-white/90 hover:text-white inline-flex items-center gap-2 underline underline-offset-4 decoration-white/30 hover:decoration-white"
         >
-          Esplora tutti i servizi <span aria-hidden="true">→</span>
+          {exploreLabel} <span aria-hidden="true">→</span>
         </a>
       </div>
     </div>

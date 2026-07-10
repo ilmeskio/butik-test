@@ -7,9 +7,6 @@ import Testimonials from '../components/home/Testimonials.astro';
 import { Image } from 'astro:assets';
 
 import heroImg from '../assets/hero-home.jpg';
-import founder1 from '../assets/servizi/template-servizio/gallery-1.jpg';
-import founder2 from '../assets/servizi/template-servizio/gallery-2.jpg';
-import founder3 from '../assets/servizi/template-servizio/gallery-3.jpg';
 
 // Copy editoriale content-driven via collezione `pagine` (ADR-0004): il testo è
 // editabile da Sitepins, la presentazione resta qui. Alcuni paragrafi contengono
@@ -20,22 +17,18 @@ if (!entry || entry.data.type !== 'chi-siamo') {
 }
 const c = entry.data;
 
-// Le foto restano import build-time (asset), zippate per posizione con la copy.
-// Email/LinkedIn placeholder ("#") arrivano dalla collezione finché non forniti
-// i profili reali.
-const founders = [
-  { name: c.founder1Name, role: c.founder1Role, bio: c.founder1Bio, email: c.founder1Email, linkedin: c.founder1Linkedin, photo: founder1 },
-  { name: c.founder2Name, role: c.founder2Role, bio: c.founder2Bio, email: c.founder2Email, linkedin: c.founder2Linkedin, photo: founder2 },
-  { name: c.founder3Name, role: c.founder3Role, bio: c.founder3Bio, email: c.founder3Email, linkedin: c.founder3Linkedin, photo: founder3 },
-];
+// Founder come ARRAY dalla collezione: nome/ruolo/bio/email/linkedin + foto
+// (media risolto a build-time da `image()`).
+const founders = c.founders;
 
-// Obiettivi di Sviluppo Sostenibile (Agenda ONU 2030): i titoli sono copy
-// editoriale (collezione), numero/colore/icona restano config di design qui —
-// i colori sono quelli ufficiali SDG.
-const sdg = [
-  { num: 8, title: c.sdg8Title, color: '#A21942', icon: '🎯' },
-  { num: 11, title: c.sdg11Title, color: '#FD9D24', icon: '🏙️' },
-];
+// Obiettivi di Sviluppo Sostenibile (Agenda ONU 2030): num + titolo sono copy
+// editoriale (array in collezione); colore/icona restano config di design qui —
+// i colori sono quelli ufficiali SDG, mappati per numero obiettivo.
+const sdgStyle: Record<number, { color: string; icon: string }> = {
+  8: { color: '#A21942', icon: '🎯' },
+  11: { color: '#FD9D24', icon: '🏙️' },
+};
+const sdg = c.sdg.map((o) => ({ ...o, ...sdgStyle[o.num] }));
 ---
 
 <BaseLayout

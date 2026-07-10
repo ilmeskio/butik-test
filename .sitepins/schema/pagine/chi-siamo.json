@@ -125,20 +125,29 @@
       "defaultValue": ""
     },
     {
-      "name": "sdg8Title",
-      "label": "Sdg8Title",
-      "type": "string",
-      "value": "",
+      "name": "sdg",
+      "label": "Sdg",
+      "type": "list",
       "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "sdg11Title",
-      "label": "Sdg11Title",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
+      "defaultValue": [],
+      "fields": [
+        {
+          "name": "num",
+          "label": "Num",
+          "type": "number",
+          "value": 0,
+          "isIgnored": false,
+          "defaultValue": 0
+        },
+        {
+          "name": "title",
+          "label": "Title",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        }
+      ]
     },
     {
       "name": "teamEyebrow",
@@ -173,124 +182,61 @@
       "defaultValue": ""
     },
     {
-      "name": "founder1Name",
-      "label": "Founder1Name",
-      "type": "string",
-      "value": "",
+      "name": "founders",
+      "label": "Founders",
+      "type": "list",
       "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder1Role",
-      "label": "Founder1Role",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder1Bio",
-      "label": "Founder1Bio",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder1Email",
-      "label": "Founder1Email",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder1Linkedin",
-      "label": "Founder1Linkedin",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder2Name",
-      "label": "Founder2Name",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder2Role",
-      "label": "Founder2Role",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder2Bio",
-      "label": "Founder2Bio",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder2Email",
-      "label": "Founder2Email",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder2Linkedin",
-      "label": "Founder2Linkedin",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder3Name",
-      "label": "Founder3Name",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder3Role",
-      "label": "Founder3Role",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder3Bio",
-      "label": "Founder3Bio",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder3Email",
-      "label": "Founder3Email",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
-    },
-    {
-      "name": "founder3Linkedin",
-      "label": "Founder3Linkedin",
-      "type": "string",
-      "value": "",
-      "isIgnored": false,
-      "defaultValue": ""
+      "defaultValue": [],
+      "fields": [
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "role",
+          "label": "Role",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "bio",
+          "label": "Bio",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "linkedin",
+          "label": "Linkedin",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "photo",
+          "label": "Photo",
+          "type": "media",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        }
+      ]
     },
     {
       "name": "testimonialQuote",

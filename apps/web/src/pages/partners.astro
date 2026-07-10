@@ -1,17 +1,26 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Image } from 'astro:assets';
-import { partners } from '../data/partners';
+import { getEntry } from 'astro:content';
+
+// Copy + lista partner content-driven (ADR-0004): collezione `pagine` (entry
+// `partners`), con i loghi come media risolti a build-time da `image()`.
+const entry = await getEntry('pagine', 'partners');
+if (!entry || entry.data.type !== 'partners') {
+  throw new Error('Contenuto pagina "partners" mancante o non valido (collezione pagine).');
+}
+const c = entry.data;
+const partners = c.partners;
 ---
 
 <BaseLayout
-  title="Partner — Butik"
-  description="Le istituzioni, gli enti e i partner con cui Butik ha collaborato in progetti di sviluppo territoriale attraverso la musica."
+  title={c.metaTitle}
+  description={c.metaDescription}
 >
   <!-- Page header -->
   <div class="pt-20 pb-12 text-center">
-    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Con chi lavoriamo</p>
-    <h1 class="font-heading text-5xl font-bold text-butik-dark">Partner</h1>
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">{c.eyebrow}</p>
+    <h1 class="font-heading text-5xl font-bold text-butik-dark">{c.title}</h1>
   </div>
 
   <!-- Lista logo · partner -->
