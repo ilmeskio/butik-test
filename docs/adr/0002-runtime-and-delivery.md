@@ -1,0 +1,71 @@
+---
+status: accepted
+date: 2026-07-10
+tags: [runtime, hosting, astro, static, serverless]
+---
+
+# ADR-0002: Runtime and delivery
+
+## Context
+
+butik is an Astro site. Today it is built as a **static site** and published to
+GitHub Pages (`.github/workflows/deploy-pages.yml`). A trial `wrangler.jsonc`
+(Cloudflare) already exists in the repo. The recurring question: where does
+"server logic" live when it's needed (forms, auth, storage, dynamic endpoints)?
+
+Explicit team constraint: **we don't want to bind ourselves to a server runtime.**
+The site must stay publishable on any static host, and dynamic functions are to be
+chosen case by case based on what's most effective — not imposed by an adapter.
+
+## Decision
+
+**Static-first and host-agnostic.** Astro produces a static build (`astro build`,
+no SSR adapter committed by default). The site must be serveable from any static
+host — GitHub Pages today, but also Cloudflare Pages, Netlify or others — without
+changing the build model.
+
+Dynamic needs are **not** solved by introducing global SSR. They are solved,
+case by case, with a **serverless function chosen for the specific case**:
+Cloudflare Workers / Pages Functions, Supabase (edge functions / DB), or managed
+services (e.g. Web3Forms for the contact form, already in use). The selection
+criteria and options are described as a **guidance**, not a fixed decision — see
+[`docs/guidances/functions.md`](../guidances/functions.md).
+
+Cookie consent and analytics stay **client-side** (see
+[ADR-0006](./0006-analytics-and-consent.md)), so they need no server runtime and
+don't constrain this choice.
+
+## Alternatives considered
+
+### Migrate everything to Cloudflare Pages/Workers with an SSR adapter
+
+`@astrojs/cloudflare`, hybrid build, native server functions. Rejected as the
+*default*: nothing requires it today (form via Web3Forms, OG at build-time,
+consent client-side) and it would bind the project to a runtime before it's
+needed. Still available as a per-feature choice via the guidance.
+
+### A single fixed backend (e.g. Supabase only)
+
+Rejected: it would force every dynamic function into one provider even when
+another option would be simpler. We prefer to choose per case.
+
+## Consequences
+
+### Positive
+
+- Zero hosting migration now; low risk.
+- Portability: switching static host is a CI change, not an architecture change.
+- Dynamic functions stay isolated and replaceable.
+
+### Negative / accepted risks
+
+- No "obvious place" for server logic: each dynamic function needs a micro-decision
+  (mitigated by the guidance with its criteria).
+- Features needing request-time logic on the HTML (not delegable to a client→
+  serverless call) aren't supported while we stay static-first.
+
+### When to deviate (revisit triggers)
+
+- A feature needs request-time server rendering (per-user HTML personalization,
+  auth-gating pages, etc.) that can't be done with a client→serverless call. Then
+  write a new ADR adopting an SSR adapter and fixing its runtime.
