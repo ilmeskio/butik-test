@@ -31,6 +31,12 @@ services (e.g. Web3Forms for the contact form, already in use). The selection
 criteria and options are described as a **guidance**, not a fixed decision — see
 [`docs/guidances/functions.md`](../guidances/functions.md).
 
+When such a function is our own code (not a managed service), it lives as a
+**separate app in the monorepo** — `apps/functions` (`@butik/functions`), with its
+own deploy lifecycle — not mixed into the static site's build
+([ADR-0007](./0007-monorepo-and-workspace-layout.md)). That app is created when the
+first function actually lands, not scaffolded empty.
+
 Cookie consent and analytics stay **client-side** (see
 [ADR-0006](./0006-analytics-and-consent.md)), so they need no server runtime and
 don't constrain this choice.

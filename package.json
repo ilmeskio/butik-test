@@ -1,35 +1,29 @@
 {
   "name": "butik",
+  "private": true,
   "type": "module",
   "version": "0.0.1",
   "engines": {
     "node": ">=24.0.0"
   },
+  "packageManager": "pnpm@10.33.4",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "imports": {
-    "#components/*": "./src/components/*",
-    "#lib/*": "./src/lib/*",
-    "#layouts/*": "./src/layouts/*",
-    "#styles/*": "./src/styles/*",
-    "#assets/*": "./src/assets/*"
-  },
-  "overrides": {
-    "vite": "^7"
-  },
-  "dependencies": {
-    "@astrojs/mdx": "^5.0.3",
-    "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.2.2",
-    "astro": "^6.1.5",
-    "tailwindcss": "^4.2.2"
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "preview": "turbo run preview",
+    "web": "pnpm --filter @butik/web"
   },
   "devDependencies": {
-    "@resvg/resvg-js": "^2.6.2",
-    "satori": "^0.26.0"
+    "turbo": "^2.10.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "^7"
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "@resvg/resvg-js"
+    ]
   }
 }

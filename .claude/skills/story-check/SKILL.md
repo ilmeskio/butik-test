@@ -14,10 +14,10 @@ not assume Storybook.
 ## Procedure
 
 1. **Detect the workshop.** If `.storybook/` or `*.stories.*` files exist →
-   Storybook. Otherwise the surface is the `src/pages/lab/**` gallery (today's
+   Storybook. Otherwise the surface is the `apps/web/src/pages/lab/**` gallery (today's
    reality). Say which you found.
 
-2. **Enumerate shared components.** List `src/components/**/*.astro` (and any
+2. **Enumerate shared components.** List `apps/web/src/components/**/*.astro` (and any
    framework island components), excluding one-off page-local pieces.
 
 3. **Map coverage.** For each shared component, find whether it appears in the

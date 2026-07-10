@@ -1,7 +1,7 @@
 {
-  "content": "src/content",
-  "media": "src/assets",
-  "public": "public",
+  "content": "apps/web/src/content",
+  "media": "apps/web/src/assets",
+  "public": "apps/web/public",
   "configs": [],
   "custom-commit": false,
   "arrangement": []

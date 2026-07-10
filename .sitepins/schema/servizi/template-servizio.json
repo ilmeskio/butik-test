@@ -1,5 +1,5 @@
 {
-  "file": "src/content/servizi/template-servizio/index.mdx",
+  "file": "apps/web/src/content/servizi/template-servizio/index.mdx",
   "name": "template-servizio",
   "fileType": "mdx",
   "fmType": "yaml",

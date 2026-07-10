@@ -13,7 +13,7 @@ consent**, PostHog opt-out-by-default, Google Consent Mode wired for GTM. Do
 
 ## What to check
 
-1. **Consent gate exists.** There is a consent module (expected `src/lib/consent/`)
+1. **Consent gate exists.** There is a consent module (expected `apps/web/src/lib/consent/`)
    that runs `vanilla-cookieconsent` with at least `necessary` (readOnly) and
    `analytics` categories, and it is initialised from the layout.
 

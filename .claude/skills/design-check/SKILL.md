@@ -11,9 +11,10 @@ Produce a **report** on how well the UI respects butik's design discipline (see
 [design-approach guidance](../../../docs/guidances/design-approach.md)). Do **not**
 edit files — output violations and recommended actions, ordered by severity.
 
-Scope: `src/components/**`, `src/layouts/**`, `src/styles/**`. Pages under
-`src/pages/**` are in scope only if the request includes them. `src/pages/lab/**`
-is experimental — flag as `note`, not `blocker`.
+Scope: `packages/ui/**`, `packages/ui-tokens/**`, `apps/web/src/components/**`,
+`apps/web/src/layouts/**`, `apps/web/src/styles/**`. Pages under
+`apps/web/src/pages/**` are in scope only if the request includes them.
+`apps/web/src/pages/lab/**` is experimental — flag as `note`, not `blocker`.
 
 ## What to check
 
@@ -24,8 +25,10 @@ is experimental — flag as `note`, not `blocker`.
   spacing/radius/font-size that should use `var(--…)`. Allowed: `0`, `1px`
   borders, percentages, `currentColor`, `color-mix()` of tokens only. A recurring
   raw value with no matching token → flag as "missing token" (add the token).
-- **Undefined tokens**: `var(--x)` used but not defined in the central token file
-  under `src/styles/` (exclude local custom properties in the same file).
+- **Undefined tokens**: `var(--x)` used but not defined in the token source
+  `packages/ui-tokens/tokens.css` (exclude local custom properties in the same
+  file). During the Tailwind migration, tokens may also come from the `@theme` in
+  `apps/web/src/styles/global.css`.
 
 ### 2. CSS strategy (migration-aware)
 
@@ -47,7 +50,7 @@ is experimental — flag as `note`, not `blocker`.
 
 - Every animation respects `prefers-reduced-motion` (a `@media (prefers-reduced-motion: reduce)`
   fallback or a JS guard). Flag animations with no reduced-motion path.
-- Motion logic lives in `src/lib/motion` / `src/components/motion`, not inlined
+- Motion logic lives in `apps/web/src/lib/motion` / `apps/web/src/components/motion`, not inlined
   ad-hoc in unrelated components.
 
 ## Output format

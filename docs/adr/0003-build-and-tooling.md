@@ -1,7 +1,7 @@
 ---
 status: accepted
 date: 2026-07-10
-tags: [build, tooling, astro, node, og]
+tags: [build, tooling, astro, node, pnpm, turbo, og, sharp]
 ---
 
 # ADR-0003: Build and tooling
@@ -9,54 +9,74 @@ tags: [build, tooling, astro, node, og]
 ## Context
 
 We need to fix the build stack and tools, so skills and reviews know what to take
-for granted. The repo's current state is already coherent; this ADR puts it on
-record and names the few open gaps.
+for granted. The repo is a **monorepo** (see
+[ADR-0007](./0007-monorepo-and-workspace-layout.md) for the why and the layout);
+this ADR records the toolchain that drives it.
 
 ## Decision
 
+- **Monorepo toolchain**: **pnpm workspaces** + **turbo**. `pnpm-workspace.yaml`
+  globs `apps/*` and `packages/*`; `turbo.json` defines the `build`/`dev`/`preview`
+  task graph (`build` depends on upstream `^build`, outputs `dist/**`). Run from
+  the root: `pnpm build` → `turbo run build`.
+- **Package manager**: **pnpm** (`packageManager: pnpm@10.x`, `pnpm-lock.yaml`,
+  `pnpm install --frozen-lockfile` in CI). npm is no longer used.
 - **Framework**: Astro 6 (static `astro build`, see
   [ADR-0002](./0002-runtime-and-delivery.md)). Content in MDX via `@astrojs/mdx`.
-- **Build runtime**: Node ≥ 24 (`engines` in `package.json`), package manager
-  **npm** (`package-lock.json`, `npm ci` in CI).
-- **Import aliases**: subpath imports in `package.json` (`#components/*`,
-  `#lib/*`, `#layouts/*`, `#styles/*`, `#assets/*`). New code uses these instead
-  of long relative paths.
+- **Node**: ≥ 24 (`.nvmrc` = 24, `engines` at root).
+- **Import aliases**: subpath imports in `apps/web/package.json` (`#components/*`,
+  `#lib/*`, `#layouts/*`, `#styles/*`, `#assets/*`) for intra-app paths.
+  Cross-package code uses the workspace scope `@butik/*`.
+- **pnpm specifics** (recorded because they bit us on migration):
+  - `sharp` is declared as an **explicit dependency of `@butik/web`** — Astro
+    treats it as optional and pnpm's isolated `node_modules` won't resolve it
+    otherwise.
+  - Native build scripts are allow-listed in the root `pnpm.onlyBuiltDependencies`
+    (`esbuild`, `sharp`, `@resvg/resvg-js`) — pnpm 10 blocks them by default.
+  - The `vite` override lives in root `pnpm.overrides`.
 - **Open Graph**: cards generated at **build-time** with `satori` +
-  `@resvg/resvg-js` (endpoint `src/pages/og/[...path].png.ts`). They stay
-  build-time, consistent with static-first.
-- **Deploy**: GitHub Actions → GitHub Pages (`deploy-pages.yml`), `SITE` injected
-  at build. The host is replaceable (ADR-0002).
+  `@resvg/resvg-js` (`apps/web/src/pages/og/[...path].png.ts`). The base layout
+  rasterizes the SVG logo → PNG via `getImage`, so `astro.config.mjs` sets
+  `image.dangerouslyProcessSVG: true` (Astro ≥ 6.4 disables SVG rasterization by
+  default; our use is limited to our own branding assets).
+- **Deploy**: GitHub Actions → GitHub Pages. CI sets up pnpm, installs frozen,
+  runs `pnpm build`, and uploads `apps/web/dist`. The host is replaceable
+  (ADR-0002).
 
 ### Open (to be decided, not yet fixed)
 
-- **Formatter/linter**: the repo currently has no Biome/ESLint/Prettier. Proposal:
-  adopt **Biome** (as in our other repos) with a `PostToolUse` hook on Write/Edit.
-  Not introduced in this ADR, to keep the foundation branch free of build changes;
-  it will be a later ADR/commit.
-- **Type-check**: `@astrojs/check` is not installed. Same reasoning: add it
-  together with the linter.
+- **Formatter/linter**: no Biome/ESLint/Prettier yet. Proposal: adopt **Biome**
+  at the root with a `PostToolUse` hook. A later ADR/commit.
+- **Type-check**: `@astrojs/check` not installed. Add it with the linter.
 
 ## Alternatives considered
 
-### pnpm instead of npm
+### npm workspaces (no turbo)
 
-Used in our other monorepos. Rejected here: butik is a single package, not a
-monorepo, and the npm lockfile is already in place. No gain that justifies the
-migration.
+Rejected: pnpm + turbo is the toolchain of our other repos (lunette, monowai), so
+the team already knows it, and turbo gives task caching/orchestration npm scripts
+don't. The small extra tooling is worth the consistency.
+
+### Single package (no monorepo)
+
+Rejected — see [ADR-0007](./0007-monorepo-and-workspace-layout.md): shared design
+tokens, a component catalogue, and future Cloudflare functions each want their own
+package/deploy boundary.
 
 ## Consequences
 
 ### Positive
 
-- Minimal stack, one package, no tooling that isn't needed.
-- OG and build stay deterministic and static.
+- One command builds everything with caching; clear package boundaries.
+- Consistent with the team's other repos.
 
 ### Negative / accepted risks
 
-- Without a linter/type-check in CI, quality depends on review until the "Open"
-  item is closed.
+- pnpm's strict resolution needs explicit deps for optional/native packages (noted
+  above) — a known footgun, documented here.
+- Without a linter/type-check in CI, quality depends on review until that item
+  closes.
 
 ### When to deviate (revisit triggers)
 
-- The project grows to multiple packages → consider a monorepo (pnpm workspace)
-  with a new ADR.
+- Build times or task graph outgrow turbo's local cache → consider remote caching.

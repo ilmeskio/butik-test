@@ -30,10 +30,19 @@ migration is transitional and must reach zero by the end of the sweep.
 ### Design tokens {#design-tokens}
 
 Visual values (colours, spacing, radii, typography) are **tokens** as CSS custom
-properties in a central file under `src/styles/`. Components **consume** tokens;
-they don't redefine them and don't use raw values where a token exists. The
-`design-check` skill watches this discipline (tokens vs raw values, AA contrast,
-visible focus).
+properties, owned by the **`@butik/ui-tokens`** package
+([ADR-0007](./0007-monorepo-and-workspace-layout.md)) — a single source of truth
+consumable by the site and, later, a component workshop. The site loads them once
+(`import '@butik/ui-tokens/tokens.css'` in the base layout). Components **consume**
+tokens; they don't redefine them and don't use raw values where a token exists.
+The `design-check` skill watches this discipline (tokens vs raw values, AA
+contrast, visible focus).
+
+Shared components live in the **`@butik/ui`** package (CSS Modules + tokens), grown
+from `apps/web/src/components` as they are migrated. During the Tailwind→CSS
+Modules migration, `@butik/ui-tokens` coexists with the Tailwind `@theme` in
+`apps/web/src/styles/global.css`; once the migration lands, the package is the only
+token source.
 
 ### Motion {#motion}
 

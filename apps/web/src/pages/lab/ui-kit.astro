@@ -1,0 +1,22 @@
+---
+// Lab page: smoke-test the cross-package wiring — @butik/ui components consuming
+// @butik/ui-tokens. Experimental gallery (ADR-0005 #workshop is still open).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '@butik/ui/Button.astro';
+---
+
+<BaseLayout title="UI kit — lab">
+  <main style="max-width: 48rem; margin: 0 auto; padding: var(--space-24) var(--space-6); display: flex; flex-direction: column; gap: var(--space-8);">
+    <h1 style="font-family: var(--font-heading); color: var(--color-fg);">
+      @butik/ui — pilot
+    </h1>
+    <p style="font-family: var(--font-sans); color: var(--color-fg);">
+      Prova di consumo cross-package: <code>@butik/ui/Button</code> con i token di
+      <code>@butik/ui-tokens</code>.
+    </p>
+    <div style="display: flex; gap: var(--space-4); flex-wrap: wrap;">
+      <Button href="/contatti" variant="primary">Primary</Button>
+      <Button href="/servizi" variant="ghost">Ghost</Button>
+    </div>
+  </main>
+</BaseLayout>

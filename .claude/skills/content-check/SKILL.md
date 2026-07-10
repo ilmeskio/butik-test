@@ -12,7 +12,7 @@ truth. Do **not** edit files.
 
 ## Procedure
 
-1. **Load the model.** Read `src/content.config.ts` (Zod collections) and every
+1. **Load the model.** Read `apps/web/src/content.config.ts` (Zod collections) and every
    `.sitepins/schema/**/*.json` (Sitepins templates). Read `.sitepins/config.json`
    for the content/media roots.
 
@@ -21,8 +21,8 @@ truth. Do **not** edit files.
    Sitepins template (or vice-versa) is drift. Report as
    `collection.field — Zod: <x> vs Sitepins: <y>`.
 
-3. **Hardcoded editorial copy.** Scan `src/pages/**/*.astro` (exclude
-   `src/pages/lab/**` — experimental). Flag pages where user-facing copy
+3. **Hardcoded editorial copy.** Scan `apps/web/src/pages/**/*.astro` (exclude
+   `apps/web/src/pages/lab/**` — experimental). Flag pages where user-facing copy
    (headings, paragraphs, CTA text, meta title/description) is written inline in
    the markup instead of coming from a content collection. Distinguish:
    - `warning` — a **new** page hardcoding copy (regression vs ADR-0004).

@@ -15,6 +15,7 @@ relate to the [`../guidances/`](../guidances/README.md) recommendations).
 | [0004](./0004-content-architecture.md) | Content architecture | accepted |
 | [0005](./0005-design-system.md) | Design system | accepted |
 | [0006](./0006-analytics-and-consent.md) | Analytics and consent | accepted |
+| [0007](./0007-monorepo-and-workspace-layout.md) | Monorepo and workspace layout | accepted |
 
 ## Writing a new ADR
 

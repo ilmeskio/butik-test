@@ -10,6 +10,11 @@ The site is static. When a feature needs runtime logic (form submission, reading
 writing data, auth, webhooks, on-demand generation), add it as an **isolated
 function**, called from the client. Do not introduce global SSR.
 
+When the function is our own code (not a managed service), it lives in the
+monorepo as `apps/functions` (`@butik/functions`), with its own deploy — created
+when the first one lands, not scaffolded empty
+([ADR-0007](../adr/0007-monorepo-and-workspace-layout.md)).
+
 ## The options
 
 ### 1. Managed service (no backend of ours)

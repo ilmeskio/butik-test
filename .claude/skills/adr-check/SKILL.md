@@ -29,8 +29,8 @@ and recommended actions only.
      logic must be an isolated client→serverless call, not request-time SSR.
    - **ADR-0003 (imports):** new code uses subpath imports (`#components/*`, …),
      not deep relative paths.
-   - **ADR-0004 (content):** editorial copy lives in `src/content/**` +
-     `src/content.config.ts`, not hardcoded in new `.astro` pages (existing
+   - **ADR-0004 (content):** editorial copy lives in `apps/web/src/content/**` +
+     `apps/web/src/content.config.ts`, not hardcoded in new `.astro` pages (existing
      hardcoded pages are known debt, tracked — flag *new* ones).
    - **ADR-0005 (CSS Modules):** after the migration, Tailwind classes in
      components are violations; during it, flag remaining Tailwind as drift.

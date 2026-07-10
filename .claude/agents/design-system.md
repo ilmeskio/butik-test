@@ -16,7 +16,7 @@ Your lens is [ADR-0005](../../docs/adr/0005-design-system.md) and the
 - **Accessibility**: AA contrast in real token values, visible `:focus-visible`,
   keyboard operability, correct `aria-*`.
 - **Motion**: `prefers-reduced-motion` respected; motion logic kept in
-  `src/lib/motion` / `src/components/motion`.
+  `apps/web/src/lib/motion` / `apps/web/src/components/motion`.
 
-Cite `path:line`. `src/pages/lab/**` is experimental — note, don't block. Lead
+Cite `path:line`. `apps/web/src/pages/lab/**` is experimental — note, don't block. Lead
 with accessibility blockers.

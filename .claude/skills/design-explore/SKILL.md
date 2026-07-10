@@ -1,11 +1,11 @@
 ---
 name: design-explore
-description: Scaffold 2-3 throwaway visual directions for a component or page as lab/ prototypes, so a direction can be chosen on real code before formalising it. WRITES files (under src/pages/lab/) — asks for confirmation first. Use when exploring a visual direction or running the workshop-surface pilot from ADR-0005.
+description: Scaffold 2-3 throwaway visual directions for a component or page as lab/ prototypes, so a direction can be chosen on real code before formalising it. WRITES files (under apps/web/src/pages/lab/) — asks for confirmation first. Use when exploring a visual direction or running the workshop-surface pilot from ADR-0005.
 ---
 
 # Explore visual directions (throwaway prototypes)
 
-WRITE skill: it creates prototype pages under `src/pages/lab/`. **Confirm before
+WRITE skill: it creates prototype pages under `apps/web/src/pages/lab/`. **Confirm before
 writing.** These are throwaway — meant to be compared, then most deleted.
 
 ## Procedure
@@ -14,7 +14,7 @@ writing.** These are throwaway — meant to be compared, then most deleted.
    (layout? density? motion? — or, for the ADR-0005 pilot: *gallery vs Storybook*).
    Agree on 2-3 distinct directions, not variations of one.
 
-2. **Scaffold prototypes.** Create `src/pages/lab/<topic>-<a|b|c>.astro` (or an
+2. **Scaffold prototypes.** Create `apps/web/src/pages/lab/<topic>-<a|b|c>.astro` (or an
    index that shows them side by side). Each direction is self-contained and
    labelled with what it commits to and the trade-off. Use CSS Modules + tokens
    per [ADR-0005](../../../docs/adr/0005-design-system.md) so the pilot reflects
