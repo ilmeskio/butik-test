@@ -41,7 +41,9 @@ Read the ADRs before making an architectural change. Cite them by file + anchor
   per-feature (see `docs/guidances/functions.md`), never global SSR.
 - **Content-driven** (ADR-0004): editorial copy lives in `apps/web/src/content/**`
   + `apps/web/src/content.config.ts`, editable via Sitepins — not hardcoded in new
-  `.astro` pages. Keep Zod and `.sitepins/schema/**` in sync.
+  `.astro` pages. Keep Zod and `.sitepins/schema/**` in sync. Media fields use the
+  `/src/assets/...` path convention so images resolve in both Astro `image()` and
+  the Sitepins editor (ADR-0009); Sitepins Media Folder is set to `apps/web/src`.
 - **CSS Modules + tokens** (ADR-0005): style in `*.module.css` co-located with the
   component, values from tokens in `@butik/ui-tokens`. Shared components go in
   `@butik/ui`. Tailwind is being removed — don't add new Tailwind.

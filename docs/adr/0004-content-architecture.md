@@ -29,6 +29,9 @@ collections are the typed source of truth.**
 - Every collection has a matching **Sitepins schema** in `.sitepins/schema/**`.
   Zod and Sitepins schemas must stay aligned (the `content-check` skill watches for
   drift).
+- **Media paths** follow the `/src/assets/...` convention so images resolve both in
+  Astro `image()` and the Sitepins editor — see
+  [ADR-0009](./0009-sitepins-media-paths.md).
 - **Goal (in progress, dedicated branch):** move today's hardcoded pages to be
   content-driven, so the whole site is manageable from Sitepins. Purely structural
   pages (e.g. the experimental `lab/*`) may stay in code.

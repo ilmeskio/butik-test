@@ -7,40 +7,40 @@ eyebrow: "Con chi lavoriamo"
 title: "Partner"
 partners:
   - name: Comune di Milano
-    logo: ../../assets/logos/comune-milano.png
+    logo: /src/assets/logos/comune-milano.png
   - name: Comune di Napoli
-    logo: ../../assets/logos/comune-napoli.png
+    logo: /src/assets/logos/comune-napoli.png
   - name: Comune di Brescia
-    logo: ../../assets/logos/comune-brescia.png
+    logo: /src/assets/logos/comune-brescia.png
   - name: Comune di Cremona
-    logo: ../../assets/logos/comune-cremona.png
+    logo: /src/assets/logos/comune-cremona.png
   - name: Comune di Pesaro
-    logo: ../../assets/logos/comune-pesaro.png
+    logo: /src/assets/logos/comune-pesaro.png
   - name: Comune di Verona
-    logo: ../../assets/logos/comune-verona.png
+    logo: /src/assets/logos/comune-verona.png
   - name: Visit Cremona
-    logo: ../../assets/logos/visit-cremona.png
+    logo: /src/assets/logos/visit-cremona.png
   - name: Camera di Commercio di Cremona
-    logo: ../../assets/logos/cciaa-cremona.png
+    logo: /src/assets/logos/cciaa-cremona.png
   - name: Ministero degli Affari Esteri
-    logo: ../../assets/logos/ministero-affari-esteri.png
+    logo: /src/assets/logos/ministero-affari-esteri.png
   - name: AssoConcerti
-    logo: ../../assets/logos/assoconcerti.png
+    logo: /src/assets/logos/assoconcerti.png
   - name: Assomusica
     logo: /src/assets/logos/assomusica.png
   - name: FIMI
-    logo: ../../assets/logos/fimi.png
+    logo: /src/assets/logos/fimi.png
   - name: SIAE
-    logo: ../../assets/logos/siae.png
+    logo: /src/assets/logos/siae.png
   - name: Nuovo IMAIE
-    logo: ../../assets/logos/nuovo-imaie.png
+    logo: /src/assets/logos/nuovo-imaie.png
   - name: Università IULM
-    logo: ../../assets/logos/iulm.png
+    logo: /src/assets/logos/iulm.png
   - name: NAM
-    logo: ../../assets/logos/nam.png
+    logo: /src/assets/logos/nam.png
   - name: 24ORE Business School
-    logo: ../../assets/logos/24ore-business-school.png
+    logo: /src/assets/logos/24ore-business-school.png
   - name: SAE
-    logo: ../../assets/logos/sae.png
+    logo: /src/assets/logos/sae.png
 ---
 ​
