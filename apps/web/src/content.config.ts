@@ -85,6 +85,8 @@ const heroServizioSchema = z.object({
 
 const paginaHome = z.object({
   type: z.literal('home'),
+  // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
+  title: z.string(),
   metaTitle: z.string(),
   metaDescription: z.string(),
   // Hero
@@ -118,6 +120,8 @@ const paginaHome = z.object({
 
 const paginaChiSiamo = (image: ImageFn) => z.object({
   type: z.literal('chi-siamo'),
+  // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
+  title: z.string(),
   metaTitle: z.string(),
   metaDescription: z.string(),
   heroTitle: z.string(),
@@ -161,6 +165,8 @@ const paginaChiSiamo = (image: ImageFn) => z.object({
 
 const paginaContatti = z.object({
   type: z.literal('contatti'),
+  // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
+  title: z.string(),
   metaTitle: z.string(),
   metaDescription: z.string(),
   headerEyebrow: z.string(),
@@ -191,6 +197,8 @@ const paginaPartners = (image: ImageFn) => z.object({
 
 const paginaServizi = z.object({
   type: z.literal('servizi-index'),
+  // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
+  title: z.string(),
   metaTitle: z.string(),
   metaDescription: z.string(),
   headerEyebrow: z.string(),

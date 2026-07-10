@@ -1,5 +1,6 @@
 ---
 type: "chi-siamo"
+title: "Chi siamo"
 metaTitle: "Chi siamo — Butik"
 metaDescription: "Un team di professioniste che ha fatto della musica uno strumento concreto di sviluppo culturale, sociale e territoriale."
 heroTitle: "Chi siamo"

@@ -13,6 +13,14 @@
       "defaultValue": "contatti"
     },
     {
+      "name": "title",
+      "label": "Title",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
       "name": "metaTitle",
       "label": "MetaTitle",
       "type": "string",

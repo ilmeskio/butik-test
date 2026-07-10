@@ -1,5 +1,6 @@
 ---
 type: "contatti"
+title: "Contatti"
 metaTitle: "Contatti — Butik"
 metaDescription: "Scrivici: che tu sia un Comune, una DMO, un operatore culturale o un festival, costruiamo qualcosa insieme."
 headerEyebrow: "Contatti"

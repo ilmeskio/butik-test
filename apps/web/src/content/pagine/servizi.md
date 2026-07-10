@@ -1,5 +1,6 @@
 ---
 type: "servizi-index"
+title: "Servizi"
 metaTitle: "Servizi — Butik"
 metaDescription: "Scopri i servizi di Butik: progettazione culturale, consulenza strategica, formazione, eventi e sviluppo turistico su base musicale."
 headerEyebrow: "Cosa facciamo"

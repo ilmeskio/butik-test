@@ -1,5 +1,6 @@
 ---
 type: "home"
+title: "Home"
 metaTitle: "Butik — Music Tourism in Italy"
 metaDescription: "La prima impresa sociale italiana specializzata in progettazione culturale e sviluppo territoriale attraverso la musica."
 heroTitle: "Attiviamo territori, comunità e nuove generazioni attraverso la musica"
