@@ -1,7 +1,7 @@
 // ── Dati condivisi della sezione "Il nostro metodo" ───────────────────────
 // Estratti da src/components/home/Metodo.astro per essere riusati dalle
 // varianti grafiche in /lab/metodo. Ogni tappa porta con sé:
-//  - title / description: il copy (docs/copy/site-copy-source.md)
+//  - title / description: il copy (reference/copy/site-copy-source.md)
 //  - x / y: coordinate libere usate dalla variante "serpentina" (x in %, y in rem)
 //  - icon: id dell'icona line-style (vedi MetodoIcon.astro)
 // NB: Metodo.astro continua a usare i propri dati inline finché non si sceglie

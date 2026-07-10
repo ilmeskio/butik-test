@@ -5,14 +5,23 @@ documentazione viva. Sola lettura, storia. Non è la source of truth di niente �
 lo sono gli [ADR](../docs/adr/README.md), le [guidance](../docs/guidances/README.md)
 e i [PDR](../docs/product/README.md).
 
-Cosa vive (o dovrebbe vivere) qui:
+## Cosa vive qui
 
-- **Brief, dump, prototipi throwaway** che hanno informato una decisione.
-- **Riferimenti visivi di partenza** — es. il kit Relume in `design/relume-ref/`
-  e i loghi originali in `docs/loghi-originali/` sono materiale di riferimento: se
-  in futuro si consolida `reference/`, è lì che andrebbero spostati. Per ora
-  restano dove sono per non rompere link/asset; questo README li dichiara come
-  reference.
+- **`copy/`** — copy editoriale sorgente (`site-copy-source.md`). È l'**input**
+  della migrazione a content collection: la source of truth finale è
+  `src/content/**`, editabile via Sitepins ([ADR-0004](../docs/adr/0004-content-architecture.md)).
+  Finché le pagine non sono tutte content-driven, questo file resta il riferimento.
+- **`loghi-originali/collaborazioni/`** — loghi partner **originali grezzi**. Le
+  versioni usate dal sito (rinominate, ottimizzate) stanno in `src/assets/logos/`;
+  questi sono gli originali da cui derivano, tenuti come archivio.
 
-Quando un PDR o un ADR cita del materiale, linka il file qui (o dove risiede) —
+## Materiale di riferimento che vive altrove
+
+Per non rompere link/asset, alcuni riferimenti restano nella loro sede storica ma
+sono a tutti gli effetti reference:
+
+- `design/relume-ref/` — kit Relume di partenza per il wireframe.
+- `design/branding/` — loghi butik ufficiali (usati anche come branding vivo).
+
+Quando un PDR o un ADR cita del materiale, linka il file (qui o dove risiede) —
 così la catena "da cosa siamo partiti → cosa abbiamo deciso" resta leggibile.
