@@ -1,0 +1,201 @@
+---
+// ── Il nostro metodo (issue #13) ──────────────────────────────────────────
+// Visualizzazione "cerchi con archi": ogni tappa è un cerchio bianco con arco
+// rosso (~290°), icona line-style al centro e badge numerato; le tappe sono in
+// fila orizzontale collegate da frecce tratteggiate. Su mobile diventa una
+// colonna verticale con rail tratteggiato a sinistra.
+// Dati e copy: src/data/metodo.ts (reference/copy/site-copy-source.md).
+import { tappe } from '../../data/metodo';
+import MetodoIcon from './MetodoIcon.astro';
+---
+
+<section class="bg-white py-12 md:py-20 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-12 md:mb-16">
+      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
+        Come lavoriamo
+      </p>
+      <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark">
+        Il nostro metodo
+      </h2>
+    </div>
+
+    <ol class="metodo">
+      {
+        tappe.map((tappa, i) => (
+          <li class="metodo-step">
+            <div class="metodo-node">
+              {/* arco rosso ~290° attorno al cerchio */}
+              <svg class="metodo-arc" viewBox="0 0 100 100" aria-hidden="true">
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="46"
+                  fill="none"
+                  stroke="var(--color-butik-red)"
+                  stroke-width="5"
+                  stroke-linecap="round"
+                  stroke-dasharray="230 60"
+                  transform="rotate(135 50 50)"
+                />
+              </svg>
+              <span class="metodo-num font-display">{String(i + 1).padStart(2, '0')}</span>
+              <MetodoIcon name={tappa.icon} size={30} class="metodo-icon" />
+            </div>
+            <div class="metodo-content">
+              <h3 class="metodo-title font-heading text-lg font-bold text-butik-dark">
+                {tappa.title}
+              </h3>
+              <p class="font-sans text-sm text-butik-dark/70 leading-relaxed mt-1">
+                {tappa.description}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .metodo {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .metodo-node {
+    position: relative;
+    width: 6.5rem;
+    height: 6.5rem;
+    border-radius: 9999px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+    flex-shrink: 0;
+    color: var(--color-butik-red);
+    box-shadow: 0 14px 30px -16px rgba(7, 17, 8, 0.35);
+  }
+  .metodo-arc {
+    position: absolute;
+    inset: -3px;
+    width: calc(100% + 6px);
+    height: calc(100% + 6px);
+    overflow: visible;
+  }
+  .metodo-num {
+    position: absolute;
+    top: -0.6rem;
+    left: -0.6rem;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 9999px;
+    background: var(--color-butik-red);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: 0 0 0 4px #fff;
+  }
+  /* Override stile globale h3 (uppercase + rosso): serve !important per vincere
+     sul selettore di elemento globale. */
+  .metodo-title {
+    text-transform: none !important;
+    letter-spacing: -0.005em !important;
+    color: var(--color-butik-dark) !important;
+  }
+
+  /* ── Mobile: colonna verticale (rail tratteggiato a sinistra) ─────────── */
+  @media (max-width: 767px) {
+    .metodo {
+      position: relative;
+    }
+    .metodo::before {
+      content: '';
+      position: absolute;
+      top: 2rem;
+      bottom: 2rem;
+      left: 3.25rem;
+      border-left: 2px dashed
+        color-mix(in srgb, var(--color-butik-red) 45%, transparent);
+    }
+    .metodo-step {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding-bottom: 2.5rem;
+    }
+    .metodo-step:last-child {
+      padding-bottom: 0;
+    }
+    .metodo-node {
+      width: 5.5rem;
+      height: 5.5rem;
+      z-index: 1;
+    }
+    .metodo-content {
+      padding-top: 0.75rem;
+    }
+  }
+
+  /* ── Desktop: fila orizzontale con frecce tratteggiate ────────────────── */
+  @media (min-width: 768px) {
+    .metodo {
+      /* gap condiviso tra flex e calcolo connettori: una sola fonte di verità */
+      --metodo-gap: clamp(0.5rem, 1.5vw, 1.5rem);
+      /* raggio nodo (6.5rem / 2) + respiro ai due lati del connettore */
+      --metodo-r: 3.25rem;
+      --metodo-pad: 0.4rem;
+      /* ancora destra della linea = bordo sinistro del nodo successivo - pad.
+         Distanza tra centri nodo = step + gap → va sottratto anche il gap. */
+      --metodo-end: calc(var(--metodo-r) + var(--metodo-pad) - var(--metodo-gap) - 50%);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--metodo-gap);
+    }
+    .metodo-step {
+      position: relative;
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .metodo-content {
+      margin-top: 1.25rem;
+      width: min(14rem, 95%);
+    }
+    /* freccia-connettore tratteggiata tra i nodi (all'altezza del cerchio) */
+    .metodo-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 3.25rem;
+      left: calc(50% + var(--metodo-r) + var(--metodo-pad));
+      right: var(--metodo-end);
+      border-top: 2px dashed
+        color-mix(in srgb, var(--color-butik-red) 55%, transparent);
+    }
+    /* punta della freccia: stessa ancora `right` della linea → sempre allineata */
+    .metodo-step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      top: calc(3.25rem - 4px);
+      right: var(--metodo-end);
+      width: 8px;
+      height: 8px;
+      border-top: 2px solid
+        color-mix(in srgb, var(--color-butik-red) 55%, transparent);
+      border-right: 2px solid
+        color-mix(in srgb, var(--color-butik-red) 55%, transparent);
+      transform: rotate(45deg);
+      z-index: 1;
+    }
+  }
+</style>
