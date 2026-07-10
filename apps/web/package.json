@@ -23,8 +23,10 @@
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.2",
     "astro": "^6.1.5",
+    "posthog-js": "^1.399.1",
     "sharp": "^0.34.5",
-    "tailwindcss": "^4.2.2"
+    "tailwindcss": "^4.2.2",
+    "vanilla-cookieconsent": "^3.1.0"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",

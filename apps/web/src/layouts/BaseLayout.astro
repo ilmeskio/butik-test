@@ -4,6 +4,9 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '@butik/ui-tokens/tokens.css';
 import '../styles/global.css';
+// Stili del cookie banner (ADR-0006). L'inizializzazione avviene lato client
+// nello <script> in fondo al layout.
+import 'vanilla-cookieconsent/dist/cookieconsent.css';
 import { getImage } from 'astro:assets';
 import logo from '../assets/logos/bollo-rosso.svg';
 import { getAllOgCards, ogPngPathForRoute, normalizeRoute } from '../data/ogCards';
@@ -86,5 +89,15 @@ const ogImageAlt = ogCard ? `${ogCard.title} — Butik` : title;
       <slot />
     </main>
     <Footer />
+
+    {/* Cookie consent (ADR-0006): nessun tracciamento prima del consenso.
+        Rieseguito a ogni astro:page-load perché le view transition rimpiazzano
+        il DOM; CookieConsent.run è idempotente. */}
+    <script>
+      import { initCookieConsent } from '#lib/consent/init.client';
+      document.addEventListener('astro:page-load', () => {
+        initCookieConsent();
+      });
+    </script>
   </body>
 </html>
