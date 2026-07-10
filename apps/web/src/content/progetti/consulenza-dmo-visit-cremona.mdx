@@ -14,17 +14,9 @@ featuredOrder: 2
 draft: false
 ---
 
-import ImageBlock from '#components/mdx/ImageBlock.astro';
-import ImageCarousel from '#components/mdx/ImageCarousel.astro';
-
-import imgBlock from '#assets/progetti/template-progetto/img-block.jpg';
-import gallery1 from '#assets/progetti/template-progetto/gallery-1.jpg';
-import gallery2 from '#assets/progetti/template-progetto/gallery-2.jpg';
-import gallery3 from '#assets/progetti/template-progetto/gallery-3.jpg';
-
 Butik ha affiancato la DMO Visit Cremona nella gestione del progetto biennale dedicato alla valorizzazione della musica e della liuteria come asset turistico strategico della destinazione: dalla mappatura dell'offerta esistente e la co-progettazione di nuovi prodotti con i principali attori cittadini, fino alla formazione degli operatori.
 
-<ImageBlock src={imgBlock} alt="Cremona, città della liuteria e della musica" caption="Cremona, patrimonio musicale e liutario come asset turistico" />
+<ImageBlock src="/src/assets/progetti/template-progetto/img-block.jpg" alt="Cremona, città della liuteria e della musica" caption="Cremona, patrimonio musicale e liutario come asset turistico" />
 
 ## Cosa abbiamo fatto
 
@@ -50,7 +42,7 @@ Butik ha affiancato la DMO Visit Cremona nella gestione del progetto biennale de
 ## Gallery
 
 <ImageCarousel images={[
-  { src: gallery1, alt: "Mappa turistico-musicale di Cremona", caption: "La mappa turistica illustrata bilingue di Cremona" },
-  { src: gallery2, alt: "Tavolo di lavoro con gli operatori", caption: "Tavolo di co-progettazione con gli operatori cittadini" },
-  { src: gallery3, alt: "Formazione operatori turistici", caption: "Una lezione del percorso formativo per operatori" },
+  { src: "/src/assets/progetti/template-progetto/gallery-1.jpg", alt: "Mappa turistico-musicale di Cremona", caption: "La mappa turistica illustrata bilingue di Cremona" },
+  { src: "/src/assets/progetti/template-progetto/gallery-2.jpg", alt: "Tavolo di lavoro con gli operatori", caption: "Tavolo di co-progettazione con gli operatori cittadini" },
+  { src: "/src/assets/progetti/template-progetto/gallery-3.jpg", alt: "Formazione operatori turistici", caption: "Una lezione del percorso formativo per operatori" },
 ]} />

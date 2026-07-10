@@ -14,14 +14,6 @@ featuredOrder: 4
 draft: false
 ---
 
-import ImageBlock from '#components/mdx/ImageBlock.astro';
-import ImageCarousel from '#components/mdx/ImageCarousel.astro';
-
-import imgBlock from '#assets/progetti/template-progetto/img-block.jpg';
-import gallery1 from '#assets/progetti/template-progetto/gallery-1.jpg';
-import gallery2 from '#assets/progetti/template-progetto/gallery-2.jpg';
-import gallery3 from '#assets/progetti/template-progetto/gallery-3.jpg';
-
 TUM è il format ideato da Butik per valorizzare e far conoscere al pubblico il patrimonio musicale materiale e immateriale di una città, mettendo in dialogo istituzioni e operatori culturali e turistici. Ogni edizione si svolge in una città diversa, con un programma modulare che include talk, workshop, itinerari urbani, concerti, conference con operatori di settore sul turismo musicale e tavoli istituzionali. Dal 2021 al 2024 il festival ha toccato quattro città: Milano, Cremona, Napoli e Pesaro.
 
 ## Bandi vinti
@@ -29,7 +21,7 @@ TUM è il format ideato da Butik per valorizzare e far conoscere al pubblico il 
 - CESVI "Scena Unita" — 2021
 - Ministero della Cultura, FUS Progetti Speciali Sezione Musica — 2022 / 2023
 
-<ImageBlock src={imgBlock} alt="Un'edizione del Festival del Turismo Musicale" caption="Una delle edizioni del Festival del Turismo Musicale" />
+<ImageBlock src="/src/assets/progetti/template-progetto/img-block.jpg" alt="Un'edizione del Festival del Turismo Musicale" caption="Una delle edizioni del Festival del Turismo Musicale" />
 
 ## Le edizioni precedenti
 
@@ -74,7 +66,7 @@ Focus sulla doppia anima musicale della città in occasione di Pesaro Capitale I
 ## Gallery
 
 <ImageCarousel images={[
-  { src: gallery1, alt: "Tour urbano musicale", caption: "Uno dei tour urbani musicali del festival" },
-  { src: gallery2, alt: "Talk con operatori di settore", caption: "Talk con istituzioni e operatori del turismo musicale" },
-  { src: gallery3, alt: "Concerto site-specific", caption: "Concerto site-specific durante un'edizione del festival" },
+  { src: "/src/assets/progetti/template-progetto/gallery-1.jpg", alt: "Tour urbano musicale", caption: "Uno dei tour urbani musicali del festival" },
+  { src: "/src/assets/progetti/template-progetto/gallery-2.jpg", alt: "Talk con operatori di settore", caption: "Talk con istituzioni e operatori del turismo musicale" },
+  { src: "/src/assets/progetti/template-progetto/gallery-3.jpg", alt: "Concerto site-specific", caption: "Concerto site-specific durante un'edizione del festival" },
 ]} />

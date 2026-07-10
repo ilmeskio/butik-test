@@ -12,19 +12,6 @@ order: 2
 draft: false
 ---
 
-import ImageRight from '#components/mdx/ImageRight.astro';
-import ImageLeft from '#components/mdx/ImageLeft.astro';
-import ImageBlock from '#components/mdx/ImageBlock.astro';
-import ImageCarousel from '#components/mdx/ImageCarousel.astro';
-
-import imgBlock from '#assets/progetti/mappe-comuni-musicali/img-block.jpg';
-import imgRight from '#assets/progetti/mappe-comuni-musicali/img-right.jpg';
-import imgLeft from '#assets/progetti/mappe-comuni-musicali/img-left.jpg';
-import gallery1 from '#assets/progetti/mappe-comuni-musicali/gallery-1.jpg';
-import gallery2 from '#assets/progetti/mappe-comuni-musicali/gallery-2.jpg';
-import gallery3 from '#assets/progetti/mappe-comuni-musicali/gallery-3.jpg';
-import gallery4 from '#assets/progetti/mappe-comuni-musicali/gallery-4.jpg';
-
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vehicula, libero vel cursus fermentum, felis nisl scelerisque libero, nec facilisis purus metus vel velit. Proin ac libero id arcu vestibulum gravida vel nec enim.
 
 Vivamus tincidunt erat id eros congue, non commodo augue efficitur. Donec suscipit felis vel odio consequat, in volutpat urna aliquet. Curabitur vel tortor at arcu euismod consequat.
@@ -33,7 +20,7 @@ Vivamus tincidunt erat id eros congue, non commodo augue efficitur. Donec suscip
 
 Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.
 
-<ImageBlock src={imgBlock} alt="Le quattro mappe illustrate" caption="Le quattro guide turistiche musicali — Brescia, Cremona, Bergamo, Mantova" />
+<ImageBlock src="/src/assets/progetti/mappe-comuni-musicali/img-block.jpg" alt="Le quattro mappe illustrate" caption="Le quattro guide turistiche musicali — Brescia, Cremona, Bergamo, Mantova" />
 
 Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Sed posuere consectetur est at lobortis.
 
@@ -41,7 +28,7 @@ Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut ferm
 
 Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod.
 
-<ImageRight src={imgRight} alt="Dettaglio illustrazione mappa" caption="Dettaglio dell'illustrazione per la mappa di Cremona">
+<ImageRight src="/src/assets/progetti/mappe-comuni-musicali/img-right.jpg" alt="Dettaglio illustrazione mappa" caption="Dettaglio dell'illustrazione per la mappa di Cremona">
   ### Contenuti editoriali
 
   Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae.
@@ -49,7 +36,7 @@ Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla 
   Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue.
 </ImageRight>
 
-<ImageLeft src={imgLeft} alt="Distribuzione delle mappe" caption="Le mappe distribuite nei punti turistici del territorio">
+<ImageLeft src="/src/assets/progetti/mappe-comuni-musicali/img-left.jpg" alt="Distribuzione delle mappe" caption="Le mappe distribuite nei punti turistici del territorio">
   ### Distribuzione e promozione
 
   Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.
@@ -67,10 +54,10 @@ Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla 
 ## Gallery
 
 <ImageCarousel images={[
-  { src: gallery1, alt: "Mappa di Brescia", caption: "Guida turistica musicale — Brescia" },
-  { src: gallery2, alt: "Mappa di Cremona", caption: "Guida turistica musicale — Cremona" },
-  { src: gallery3, alt: "Mappa di Bergamo", caption: "Guida turistica musicale — Bergamo" },
-  { src: gallery4, alt: "Mappa di Mantova", caption: "Guida turistica musicale — Mantova" },
+  { src: "/src/assets/progetti/mappe-comuni-musicali/gallery-1.jpg", alt: "Mappa di Brescia", caption: "Guida turistica musicale — Brescia" },
+  { src: "/src/assets/progetti/mappe-comuni-musicali/gallery-2.jpg", alt: "Mappa di Cremona", caption: "Guida turistica musicale — Cremona" },
+  { src: "/src/assets/progetti/mappe-comuni-musicali/gallery-3.jpg", alt: "Mappa di Bergamo", caption: "Guida turistica musicale — Bergamo" },
+  { src: "/src/assets/progetti/mappe-comuni-musicali/gallery-4.jpg", alt: "Mappa di Mantova", caption: "Guida turistica musicale — Mantova" },
 ]} />
 
 Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.

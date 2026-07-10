@@ -14,19 +14,11 @@ featuredOrder: 3
 draft: false
 ---
 
-import ImageBlock from '#components/mdx/ImageBlock.astro';
-import ImageCarousel from '#components/mdx/ImageCarousel.astro';
-
-import imgBlock from '#assets/progetti/template-progetto/img-block.jpg';
-import gallery1 from '#assets/progetti/template-progetto/gallery-1.jpg';
-import gallery2 from '#assets/progetti/template-progetto/gallery-2.jpg';
-import gallery3 from '#assets/progetti/template-progetto/gallery-3.jpg';
-
 Cult Funding è un percorso formativo pratico pensato per rafforzare la capacità progettuale di operatori culturali e giovani. Attraverso un mix di lezioni online e un'esperienza full immersion in presenza, i partecipanti acquisiscono strumenti e tecniche per costruire progetti solidi, reperire risorse e gestire la rendicontazione, fino a sperimentare in modo guidato la scrittura di un bando reale — in modo collaborativo e gamificato.
 
 La prima edizione si è svolta nella primavera del 2024 e si è articolata in tre momenti: un Online Lab di 5 lezioni tematiche su strumenti e tecniche di progettazione culturale, una Full Immersion di 7 giorni in Toscana — in cui 30 partecipanti hanno lavorato in gruppo a un project work comune, guidati dal team di Butik e da tutor esterni — e infine L'Esperta Risponde, 4 appuntamenti online dedicati al finanziamento europeo.
 
-<ImageBlock src={imgBlock} alt="Workshop full immersion di Cult Funding" caption="La Full Immersion di Cult Funding in Toscana" />
+<ImageBlock src="/src/assets/progetti/template-progetto/img-block.jpg" alt="Workshop full immersion di Cult Funding" caption="La Full Immersion di Cult Funding in Toscana" />
 
 ## Cliente e contesto
 
@@ -52,7 +44,7 @@ Attivato nell'ambito di **Cult Keys**, progetto di capacity building vincitore d
 ## Gallery
 
 <ImageCarousel images={[
-  { src: gallery1, alt: "Lezione online di Cult Funding", caption: "Una delle lezioni dell'Online Lab" },
-  { src: gallery2, alt: "Deck di carte gamificato", caption: "Il deck di carte per l'apprendimento gamificato" },
-  { src: gallery3, alt: "Project work in team", caption: "Il project work in team durante la Full Immersion" },
+  { src: "/src/assets/progetti/template-progetto/gallery-1.jpg", alt: "Lezione online di Cult Funding", caption: "Una delle lezioni dell'Online Lab" },
+  { src: "/src/assets/progetti/template-progetto/gallery-2.jpg", alt: "Deck di carte gamificato", caption: "Il deck di carte per l'apprendimento gamificato" },
+  { src: "/src/assets/progetti/template-progetto/gallery-3.jpg", alt: "Project work in team", caption: "Il project work in team durante la Full Immersion" },
 ]} />
