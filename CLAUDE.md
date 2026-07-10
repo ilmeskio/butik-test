@@ -48,6 +48,13 @@ Read the ADRs before making an architectural change. Cite them by file + anchor
   component, values from tokens in `@butik/ui-tokens`. Shared components go in
   `@butik/ui`. Tailwind is being removed — don't add new Tailwind.
   `apps/web/src/pages/lab/**` stays (experimental gallery).
+- **Component model = React islands + Storybook** (ADR-0008, supersedes ADR-0005
+  #workshop): `@butik/ui` components are authored as **React islands** (`.tsx`,
+  CSS Modules + tokens), consumed by the site via `@astrojs/react` — presentational
+  ones render to static HTML at build time (no client directive unless interactive),
+  so static-first (ADR-0002) holds. The **workshop is Storybook**
+  (`@storybook/react-vite`, scoped to `packages/ui`); it's a dev tool and never runs
+  in the site build. App-level page composition stays `.astro` (e.g. `CtaBanner`).
 - **No tracking before consent** (ADR-0006): analytics gated by
   `vanilla-cookieconsent`; PostHog opt-out-by-default; Google Consent Mode wired.
 - **Monorepo** (ADR-0007): `apps/*` + `packages/*`, pnpm + turbo. Cross-package

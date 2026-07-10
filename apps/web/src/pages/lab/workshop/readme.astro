@@ -1,25 +1,35 @@
 ---
-// LAB · WORKSHOP — nota di valutazione: gallery Astro-native vs Storybook
-// (ADR-0005 #workshop). Serve al team per DECIDERE quale superficie di catalogo
-// adottare. Non decide nulla: espone il trade-off. L'esito andrà registrato in un
-// nuovo ADR (o un emendamento tematico), non qui.
+// LAB · WORKSHOP — nota storica: il confronto gallery Astro-native vs Storybook
+// (ADR-0005 #workshop). La decisione È STATA PRESA: il team ha scelto Storybook
+// con i componenti di @butik/ui come island React (ADR-0008), che supera la
+// sezione #workshop dell'ADR-0005. Questa pagina resta come traccia del trade-off.
 import BaseLayout from '#layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
   title="Workshop: gallery vs Storybook — lab"
-  description="Nota di valutazione per scegliere la superficie del catalogo componenti (ADR-0005 #workshop)."
+  description="Nota storica del confronto per la superficie del catalogo componenti: scelto Storybook (ADR-0008)."
 >
   <main class="doc">
-    <p class="doc__eyebrow">Interno · nota di decisione ADR-0005 #workshop</p>
+    <p class="doc__eyebrow">Interno · decisione presa (ADR-0008)</p>
     <h1 class="doc__h1">Superficie del catalogo componenti: gallery vs Storybook</h1>
 
+    <p class="doc__decision">
+      <strong>Deciso:</strong> il team ha scelto <strong>Storybook</strong> (builder
+      react-vite) come workshop del catalogo, con i componenti di
+      <code>@butik/ui</code> autorati come <strong>island React</strong>. La
+      decisione è registrata in
+      <a class="doc__a" href="https://github.com/wearebutik/wearebutik.github.io/blob/main/docs/adr/0008-component-authoring-and-storybook.md">ADR-0008</a>
+      e supera la sezione <code>#workshop</code> dell'ADR-0005. Questa pagina resta
+      come traccia storica del trade-off che ha portato alla scelta.
+    </p>
+
     <p class="doc__lead">
-      L'ADR-0005 lascia <strong>aperta</strong> la scelta della superficie del
-      catalogo componenti e la delega a un pilota comparativo. Questa nota mette a
-      confronto le due strade su codice reale, così che il team possa decidere.
-      La <a class="doc__a" href="/lab/workshop">gallery pilota</a> è la strada A
-      resa concreta.
+      L'ADR-0005 lasciava <strong>aperta</strong> la scelta della superficie del
+      catalogo componenti e la delegava a un pilota comparativo. Questa nota mette a
+      confronto le due strade su codice reale. La
+      <a class="doc__a" href="/lab/workshop">anteprima in-site</a> mostra il Button
+      React reso a HTML statico dentro il sito.
     </p>
 
     <section class="doc__sec">
@@ -98,31 +108,32 @@ import BaseLayout from '#layouts/BaseLayout.astro';
     </section>
 
     <section class="doc__sec">
-      <h2 class="doc__h2">Raccomandazione</h2>
+      <h2 class="doc__h2">Decisione del team</h2>
       <p>
-        Per un catalogo <strong>quasi interamente <code>.astro</code></strong>, con
-        pochi componenti e un sito statico, la <strong>gallery Astro-native
-        (strada A)</strong> è la scelta con il miglior rapporto valore/rischio:
-        fedeltà totale al componente spedito, zero runtime aggiuntivo, zero drift.
-        Le lacune (knobs, docs autogenerate, addon) sono coperte oggi da poco
-        codice a mano e dalla skill <code>story-check</code>, e non giustificano il
-        costo e il drift di Storybook.
+        Il team ha scelto la <strong>strada B — Storybook</strong>, con i componenti
+        condivisi autorati come <strong>island React</strong> (formato primario di
+        <code>@butik/ui</code>). Ha pesato più di ogni altra cosa la
+        <strong>consistenza col resto dello stack del team</strong> e la maturità
+        dell'ecosistema: controlli/args interattivi, autodocs, e addon per test di
+        interazione, a11y e visual regression. Adottare island React scioglie anche
+        il vincolo che rendeva Storybook scomodo (niente supporto <code>.astro</code>
+        di prima classe): il componente in storia È il componente spedito.
       </p>
       <p>
-        Storybook diventa interessante solo se in futuro il design system adottasse
-        <strong>island di framework</strong> come formato primario dei componenti
-        condivisi: a quel punto il supporto di prima classe di Storybook varrebbe il
-        secondo build. Finché il formato primario è <code>.astro</code>, non lo è.
+        I costi accettati sono un <strong>secondo build/runtime</strong> (Storybook,
+        solo come dev tool, fuori dalla build statica del sito) e la dipendenza da
+        React. I token restano l'unica fonte visiva condivisa
+        (<code>@butik/ui-tokens</code>), caricati nel <code>.storybook/preview</code>.
       </p>
       <p class="doc__note">
-        Questa è una raccomandazione, non una decisione. La scelta la prende il
-        team; l'esito va registrato in un nuovo ADR (o come emendamento tematico
-        all'ADR-0005 che supera la sezione <code>#workshop</code>). Fino ad allora
-        <code>lab/</code> resta e non si rimuove.
+        Decisione registrata in <strong>ADR-0008</strong>, che supera la sezione
+        <code>#workshop</code> dell'ADR-0005. La skill <code>story-check</code>
+        continua a verificare che ogni componente condiviso sia rappresentato nel
+        workshop (ora Storybook).
       </p>
     </section>
 
-    <p class="doc__back"><a class="doc__a" href="/lab/workshop">← Torna alla gallery</a></p>
+    <p class="doc__back"><a class="doc__a" href="/lab/workshop">← Torna all'anteprima</a></p>
   </main>
 </BaseLayout>
 
@@ -176,6 +187,15 @@ import BaseLayout from '#layouts/BaseLayout.astro';
   .doc__lead {
     font-size: var(--font-size-lg);
     margin-bottom: var(--space-8);
+  }
+
+  .doc__decision {
+    font-size: var(--font-size-base);
+    border-left: 3px solid var(--color-accent);
+    padding: var(--space-3) var(--space-4);
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-6);
   }
 
   .doc__sec {

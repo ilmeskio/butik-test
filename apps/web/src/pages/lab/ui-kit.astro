@@ -2,7 +2,9 @@
 // Lab page: smoke-test the cross-package wiring — @butik/ui components consuming
 // @butik/ui-tokens. Experimental gallery (ADR-0005 #workshop is still open).
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Button from '@butik/ui/Button.astro';
+// @butik/ui/Button è un island React (ADR-0008); senza direttiva client Astro
+// lo rende a HTML statico a build-time.
+import Button from '@butik/ui/Button';
 ---
 
 <BaseLayout title="UI kit — lab">

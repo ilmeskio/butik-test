@@ -1,11 +1,10 @@
 ---
-// LAB · WORKSHOP — pilota della "gallery" Astro-native per il catalogo componenti
-// (ADR-0005 #workshop, opzione A). Mostra i componenti di @butik/ui con le loro
-// varianti e stati, consumando i token di @butik/ui-tokens. È la controparte
-// concreta da confrontare con Storybook (opzione B) nella nota di valutazione:
-// vedi ./README.md. Finché la decisione è aperta, questa superficie resta in lab/.
+// LAB · WORKSHOP — anteprima leggera in-site del Button di @butik/ui. Il workshop
+// ufficiale del catalogo è ora Storybook (ADR-0008): questa pagina resta come
+// smoke-test veloce, per vedere il componente reso a HTML statico dentro il sito,
+// senza avviare Storybook. La nota storica del confronto è in ./readme.
 import BaseLayout from '#layouts/BaseLayout.astro';
-import Button from '@butik/ui/Button.astro';
+import Button from '@butik/ui/Button';
 
 interface Specimen {
   label: string;
@@ -25,14 +24,14 @@ const buttonVariants = [
 >
   <main class="ws">
     <header class="ws__head">
-      <p class="ws__eyebrow">Interno · pilota ADR-0005 #workshop</p>
+      <p class="ws__eyebrow">Interno · anteprima in-site (ADR-0008)</p>
       <h1 class="ws__title">Component workshop</h1>
       <p class="ws__intro">
-        Catalogo dei componenti condivisi di <code>@butik/ui</code>, con le loro
-        varianti e i loro stati, costruiti sui token di <code>@butik/ui-tokens</code>.
-        Questa è la strada A (gallery Astro-native) resa concreta: da confrontare
-        con Storybook prima di decidere. La valutazione del trade-off è in
-        <a class="ws__link" href="/lab/workshop/readme">nota di valutazione</a>.
+        Anteprima leggera del Button condiviso di <code>@butik/ui</code>, con le sue
+        varianti e i suoi stati, costruito sui token di <code>@butik/ui-tokens</code>.
+        Il workshop ufficiale del catalogo è ora <strong>Storybook</strong> (island
+        React, <a class="ws__link" href="/lab/workshop/readme">ADR-0008</a>): questa
+        pagina resta come smoke-test in-site del componente reso a HTML statico.
       </p>
     </header>
 
@@ -40,9 +39,10 @@ const buttonVariants = [
       <div class="ws__section-head">
         <h2 id="cmp-button" class="ws__section-title">Button</h2>
         <p class="ws__section-desc">
-          <code>@butik/ui/Button.astro</code> — resa come <code>&lt;a&gt;</code>
-          quando c'è <code>href</code>, altrimenti <code>&lt;button&gt;</code>.
-          Prova la tastiera: <kbd>Tab</kbd> mostra il focus-visible.
+          <code>@butik/ui/Button</code> (island React) — resa come
+          <code>&lt;a&gt;</code> quando c'è <code>href</code>, altrimenti
+          <code>&lt;button&gt;</code>. Prova la tastiera: <kbd>Tab</kbd> mostra il
+          focus-visible.
         </p>
       </div>
 

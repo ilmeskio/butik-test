@@ -49,7 +49,12 @@ token source.
 Animations respect `prefers-reduced-motion`. Motion logic stays isolated in
 `src/lib/motion` / `src/components/motion`, not scattered across components.
 
-### Component workshop {#workshop} — PARTIALLY OPEN
+### Component workshop {#workshop} — superseded by ADR-0008
+
+> **Superseded by [ADR-0008](./0008-component-authoring-and-storybook.md).** The
+> pilot ran; the team chose **Storybook** (`@storybook/react-vite`) with `@butik/ui`
+> components authored as **React islands**. The text below is kept as the original
+> context that framed the choice.
 
 For the **component catalogue / review surface** there are two roads, and the
 choice is deferred to a comparative pilot (`design-explore` skill) in the
