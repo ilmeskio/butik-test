@@ -64,3 +64,45 @@ nothing fires until the user accepts.
 
 - Server-side tracking is added, or a provider that requires server-propagated
   consent → new ADR.
+
+## Update (2026-07-13): GTM enabled via Google Consent Mode v2
+
+The original decision left GTM/GA loaded-on-demand only ("GTM/GA aren't loaded by
+default; the consent hook is ready"). We now **load GTM on every page** using the
+pattern documented by `vanilla-cookieconsent` for tag managers — **Google Consent
+Mode v2** — because we want the tag manager in place now, not later.
+
+- **Loading model**: an inline script in `<head>` sets
+  `gtag('consent','default', { ad_storage, ad_user_data, ad_personalization,
+  analytics_storage: 'denied', wait_for_update: 500 })` **before** `gtm.js` is
+  requested, then loads the GTM container. No tag fires while consent is denied;
+  Consent Mode gates behaviour, not the script load.
+- **Container id**: read from `PUBLIC_GTM_ID` (Astro env, `PUBLIC_` required — the
+  id is public by nature). If unset, GTM is not injected and the build stays
+  green — same graceful-degradation contract as PostHog.
+- **Consent mapping** (`config.client.ts` → `applyConsent`): the `analytics`
+  category drives `analytics_storage` (and PostHog opt-in/out); the `marketing`
+  category drives the three ad signals `ad_storage`, `ad_user_data`,
+  `ad_personalization`. Both categories ship now so every GTM tag is enabled once
+  the user consents — we no longer wait for a "future" marketing category.
+- **Cookie/script audit** (follow-up, tracked as issue #22): the cookie
+  lists in the banner (`autoClear` + `cookieTable`) are **provisional** — the real
+  set depends on which tags are actually loaded in the GTM container. A mechanism
+  must reconcile the declared cookies/scripts against what is really loaded and
+  keep the banner list in sync. Until then, treat the `marketing` cookie rows as
+  a best-effort placeholder.
+- **Marketing section gating** (follow-up, issue #23): showing a `marketing`
+  toggle while no marketing tag is actually loaded is a minor information
+  mismatch. Revisit at go-live — hide the section until a real marketing tag
+  exists in the container, or keep it if such tags are imminent.
+
+### Accepted trade-off vs the original wording
+
+The original decision's "no third-party script is loaded/activated outside the
+consent gates" is relaxed for GTM: `gtm.js` itself loads before consent, but with
+Consent Mode default-`denied` no storage is written and no tag fires until the
+user accepts. Full script-blocking (loading `gtm.js` only after consent) was
+considered and rejected in favour of Consent Mode's conversion/behaviour
+modelling signals. If a stricter "zero Google contact before consent" posture is
+required, switch GTM to `vanilla-cookieconsent`'s `data-category` script blocking
+→ note it here.

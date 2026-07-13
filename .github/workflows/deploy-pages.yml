@@ -33,6 +33,9 @@ jobs:
         env:
           SITE: https://wearebutik.github.io
           PUBLIC_WEB3FORMS_ACCESS_KEY: ${{ secrets.WEB3FORMS_ACCESS_KEY }}
+          # GTM container ID (ADR-0006). Public per natura → repository variable,
+          # non un secret. Se la variable non è impostata, GTM non viene iniettato.
+          PUBLIC_GTM_ID: ${{ vars.PUBLIC_GTM_ID }}
         run: pnpm build
 
       - uses: actions/configure-pages@v5
