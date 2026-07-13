@@ -106,9 +106,26 @@ const year = new Date().getFullYear();
         <p class="flex flex-wrap gap-x-4 gap-y-2">
           <a href="/privacy" class="hover:text-butik-red transition-colors">Privacy policy</a>
           <a href="/termini" class="hover:text-butik-red transition-colors">Termini di utilizzo</a>
-          <a href="/cookie-settings" class="hover:text-butik-red transition-colors">Cookie settings</a>
+          <!-- Riapre la modale delle preferenze cookie (ADR-0006). -->
+          <button
+            id="cookie-preferences"
+            type="button"
+            class="font-sans text-xs text-inherit bg-transparent border-0 p-0 m-0 cursor-pointer hover:text-butik-red transition-colors"
+          >
+            Preferenze cookie
+          </button>
         </p>
       </div>
     </div>
   </div>
 </footer>
+
+<!-- Bind del bottone "Preferenze cookie" alla modale (ADR-0006). Rieseguito a
+     ogni astro:page-load: dopo una view transition il bottone è un nuovo nodo. -->
+<script>
+  import { showCookiePreferences } from '#lib/consent/init.client';
+  document.addEventListener('astro:page-load', () => {
+    const btn = document.getElementById('cookie-preferences');
+    btn?.addEventListener('click', () => showCookiePreferences());
+  });
+</script>

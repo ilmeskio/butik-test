@@ -4,6 +4,9 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '@butik/ui-tokens/tokens.css';
 import '../styles/global.css';
+// Stili del cookie banner (ADR-0006). L'inizializzazione avviene lato client
+// nello <script> in fondo al layout.
+import 'vanilla-cookieconsent/dist/cookieconsent.css';
 import { getImage } from 'astro:assets';
 import logo from '../assets/logos/bollo-rosso.svg';
 import { getAllOgCards, ogPngPathForRoute, normalizeRoute } from '../data/ogCards';
@@ -36,6 +39,11 @@ const ogImageURL = new URL(ogImagePath, siteBase).href;
 // width/height/type valgono solo per le card generate (1200×630 PNG):
 // per il logo di fallback la proporzione è diversa, meglio non dichiararli.
 const ogImageAlt = ogCard ? `${ogCard.title} — Butik` : title;
+
+// Google Tag Manager (ADR-0006, Update 2026-07-13): caricato via Google
+// Consent Mode v2. Il container si legge da `PUBLIC_GTM_ID`; se manca, GTM non
+// viene iniettato (no-op) e il sito builda comunque.
+const gtmId = import.meta.env.PUBLIC_GTM_ID as string | undefined;
 ---
 
 <!doctype html>
@@ -45,6 +53,39 @@ const ogImageAlt = ogCard ? `${ogCard.title} — Butik` : title;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <meta name="generator" content={Astro.generator} />
+
+    {/* Google Tag Manager + Consent Mode v2 (ADR-0006). Il default `denied`
+        DEVE precedere il caricamento di gtm.js: entrambi in questo unico script
+        inline, così l'ordine è garantito. Nessun tag scatta finché il consenso
+        `analytics` non aggiorna `analytics_storage` a `granted` (vedi
+        src/lib/consent/config.client.ts → applyAnalyticsConsent). */}
+    {gtmId && (
+      <script is:inline define:vars={{ gtmId }}>
+        // `define:vars` incapsula lo script in una IIFE: `gtag` va assegnato a
+        // `window` esplicitamente, altrimenti non è globale e `safeGtag`
+        // (gtag.ts) non lo troverebbe → il consent 'update' non arriverebbe mai
+        // a GTM. Lo snippet canonico di Google definisce `gtag` come globale.
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function gtag() { window.dataLayer.push(arguments); };
+        gtag('consent', 'default', {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          analytics_storage: 'denied',
+          wait_for_update: 500,
+        });
+        (function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != 'dataLayer' ? '&l=' + l : '';
+          j.async = true;
+          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+          f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', gtmId);
+      </script>
+    )}
 
     <!-- Preload font per spezzare la catena CSS → font -->
     <link rel="preload" href="/fonts/league-spartan-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -81,10 +122,26 @@ const ogImageAlt = ogCard ? `${ogCard.title} — Butik` : title;
     <ClientRouter />
   </head>
   <body class="flex flex-col min-h-screen">
+    {/* GTM fallback per client senza JS (ADR-0006). */}
+    {gtmId && (
+      <noscript
+        set:html={`<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`}
+      />
+    )}
     <Header />
     <main class="flex-1">
       <slot />
     </main>
     <Footer />
+
+    {/* Cookie consent (ADR-0006): nessun tracciamento prima del consenso.
+        Rieseguito a ogni astro:page-load perché le view transition rimpiazzano
+        il DOM; CookieConsent.run è idempotente. */}
+    <script>
+      import { initCookieConsent } from '#lib/consent/init.client';
+      document.addEventListener('astro:page-load', () => {
+        initCookieConsent();
+      });
+    </script>
   </body>
 </html>

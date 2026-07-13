@@ -32,7 +32,14 @@ jobs:
       - name: Build
         env:
           SITE: https://wearebutik.github.io
-          PUBLIC_WEB3FORMS_ACCESS_KEY: ${{ secrets.WEB3FORMS_ACCESS_KEY }}
+          # Tutte le chiavi PUBLIC_* sono client-side: finiscono nel bundle statico
+          # per design, quindi NON sono segreti → repository *variables*, non
+          # secrets. Se una variable manca, la feature relativa è un no-op e il
+          # build resta verde. (turbo envMode: loose le lascia passare al build.)
+          PUBLIC_WEB3FORMS_ACCESS_KEY: ${{ vars.PUBLIC_WEB3FORMS_ACCESS_KEY }}
+          PUBLIC_POSTHOG_KEY: ${{ vars.PUBLIC_POSTHOG_KEY }}
+          PUBLIC_POSTHOG_HOST: ${{ vars.PUBLIC_POSTHOG_HOST }}
+          PUBLIC_GTM_ID: ${{ vars.PUBLIC_GTM_ID }}
         run: pnpm build
 
       - uses: actions/configure-pages@v5
