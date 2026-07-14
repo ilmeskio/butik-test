@@ -16,6 +16,10 @@ relate to the [`../guidances/`](../guidances/README.md) recommendations).
 | [0005](./0005-design-system.md) | Design system | accepted |
 | [0006](./0006-analytics-and-consent.md) | Analytics and consent | accepted |
 | [0007](./0007-monorepo-and-workspace-layout.md) | Monorepo and workspace layout | accepted |
+| [0009](./0009-sitepins-media-paths.md) | Sitepins media path convention | accepted |
+
+> ADR-0008 (Component authoring & Storybook) lands with the `design-system`
+> branch; the row is added when that branch merges.
 
 ## Writing a new ADR
 

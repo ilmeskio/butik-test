@@ -1,6 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content';
 import ContentLayout from '../../layouts/ContentLayout.astro';
+import ImageBlock from '#components/mdx/ImageBlock.astro';
+import ImageCarousel from '#components/mdx/ImageCarousel.astro';
+import ImageLeft from '#components/mdx/ImageLeft.astro';
+import ImageRight from '#components/mdx/ImageRight.astro';
 
 export async function getStaticPaths() {
   const progetti = await getCollection('progetti', e => !e.data.draft);
@@ -27,5 +31,5 @@ const { Content } = await render(entry);
   year={entry.data.year}
   category={entry.data.category}
 >
-  <Content />
+  <Content components={{ ImageBlock, ImageCarousel, ImageLeft, ImageRight }} />
 </ContentLayout>

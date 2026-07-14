@@ -1,0 +1,23 @@
+---
+type: "servizi-index"
+title: "Servizi"
+metaTitle: "Servizi — Butik"
+metaDescription: "Scopri i servizi di Butik: progettazione culturale, consulenza strategica, formazione, eventi e sviluppo turistico su base musicale."
+headerEyebrow: "Cosa facciamo"
+headerTitle: "Servizi"
+headerIntro1: "Ogni territorio ha un patrimonio musicale unico e spesso poco valorizzato. Lavoriamo con Pubbliche Amministrazioni, enti territoriali, operatori culturali e turistici per attivarlo: dalla progettazione alla formazione, dagli eventi allo sviluppo turistico."
+headerIntro2: "I nostri progetti sono costruiti su misura, a partire dall'ascolto dei bisogni e dall'analisi del contesto. A questo si affiancano <strong class=\"font-bold text-butik-dark\">format proprietari</strong> già collaudati, attivabili e adattabili a diversi territori e necessità."
+metodoEyebrow: "Come lavoriamo"
+metodoTitle: "Il nostro metodo"
+metodo:
+  - title: "Ascolto attivo"
+    description: "Ogni progetto parte dalla ricerca sul campo per capire i bisogni reali di comunità, istituzioni e operatori."
+  - title: "Co-progettazione"
+    description: "Costruiamo le soluzioni insieme ai partner territoriali, senza importarle dall'esterno."
+  - title: "Protagonismo giovanile"
+    description: "Le nuove generazioni non sono un target dei nostri progetti, sono parte attiva dei processi."
+  - title: "Formazione immersiva ed esperienziale"
+    description: "Il nostro modello formativo è basato sull'esperienza diretta e sulla costruzione di una comunità temporanea di progetto."
+  - title: "Eventi come strumento strategico"
+    description: "Progettiamo format che attivano territori e generano impatto sociale."
+---

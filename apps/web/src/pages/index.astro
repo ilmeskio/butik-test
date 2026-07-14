@@ -1,28 +1,57 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
-import Hero from '../components/home/Hero.astro';
-import PartnerLogos from '../components/home/PartnerLogos.astro';
-import Numbers from '../components/home/Numbers.astro';
-import Testimonials from '../components/home/Testimonials.astro';
-import PortfolioGrid from '../components/home/PortfolioGrid.astro';
-import CtaBanner from '../components/CtaBanner.astro';
-import AboutInline from '../components/home/AboutInline.astro';
-import Metodo from '../components/home/Metodo.astro';
-import NewsletterSignup from '../components/home/NewsletterSignup.astro';
+import BaseLayout from '#layouts/BaseLayout.astro';
+import { getCollection, getEntry } from 'astro:content';
+import Hero from '#components/home/Hero.astro';
+import PartnerLogos from '#components/home/PartnerLogos.astro';
+import Numbers from '#components/home/Numbers.astro';
+import Testimonials from '#components/home/Testimonials.astro';
+import PortfolioGrid from '#components/home/PortfolioGrid.astro';
+import CtaBanner from '#components/CtaBanner.astro';
+import AboutInline from '#components/home/AboutInline.astro';
+import Metodo from '#components/home/Metodo.astro';
+import NewsletterSignup from '#components/home/NewsletterSignup.astro';
 
 const topProgetti = (await getCollection('progetti', e => e.data.featured && !e.data.draft))
   .sort((a, b) => a.data.featuredOrder - b.data.featuredOrder)
   .slice(0, 4);
+
+// Copy editoriale della home content-driven (ADR-0004): la collezione `pagine`
+// (entry `home`) è la source of truth tipata, editabile da Sitepins.
+const homeEntry = await getEntry('pagine', 'home');
+if (!homeEntry || homeEntry.data.type !== 'home') {
+  throw new Error('Contenuto pagina "home" mancante o non valido (collezione pagine).');
+}
+const c = homeEntry.data;
+
+// Partner (loghi come media) dalla collezione `pagine` (entry `partners`):
+// un'unica source of truth condivisa con la pagina /partners.
+const partnersEntry = await getEntry('pagine', 'partners');
+if (!partnersEntry || partnersEntry.data.type !== 'partners') {
+  throw new Error('Contenuto pagina "partners" mancante o non valido (collezione pagine).');
+}
+const partners = partnersEntry.data.partners;
 ---
 
 <BaseLayout
-  title="Butik — Music Tourism in Italy"
-  description="La prima impresa sociale italiana specializzata in progettazione culturale e sviluppo territoriale attraverso la musica."
+  title={c.metaTitle}
+  description={c.metaDescription}
 >
-  <Hero services="switch" />
-  <PartnerLogos />
-  <Numbers />
+  <Hero
+    services="switch"
+    title={c.heroTitle}
+    subtitle={c.heroSubtitle}
+    ctaLabel={c.heroCtaLabel}
+    ctaHref={c.heroCtaHref}
+    exploreLabel={c.heroExploreLabel}
+    exploreHref={c.heroExploreHref}
+    servizi={c.heroServizi}
+  />
+  <PartnerLogos partners={partners} />
+  <Numbers
+    butikMetrics={c.butikMetrics}
+    mmwLabel={c.mmwLabel}
+    mmwMetrics={c.mmwMetrics}
+  />
   <Metodo />
   <Testimonials />
   <PortfolioGrid progetti={topProgetti} />
@@ -32,11 +61,26 @@ const topProgetti = (await getCollection('progetti', e => e.data.featured && !e.
     primaryCta={{ label: 'Contattaci', href: '/contatti' }}
     secondaryCta={{ label: 'Scopri i servizi', href: '/servizi' }}
   />
-  <AboutInline />
+  <AboutInline
+    title={c.aboutTitle}
+    p1={c.aboutP1}
+    p2={c.aboutP2}
+    p3={c.aboutP3}
+    ctaLabel={c.aboutCtaLabel}
+    ctaHref={c.aboutCtaHref}
+    imageAlt={c.aboutImageAlt}
+  />
   <CtaBanner
     title="Cerchi una consulenza su misura o vuoi replicare uno dei nostri format sul tuo territorio?"
     primaryCta={{ label: 'Scopri tutti i nostri servizi', href: '/servizi' }}
     secondaryCta={{ label: 'Scopri i nostri format', href: '/formats' }}
   />
-  <NewsletterSignup />
+  <NewsletterSignup
+    title={c.newsletterTitle}
+    body={c.newsletterBody}
+    placeholder={c.newsletterPlaceholder}
+    button={c.newsletterButton}
+    privacy={c.newsletterPrivacy}
+    success={c.newsletterSuccess}
+  />
 </BaseLayout>

@@ -1,96 +1,55 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import HeroBanner from '../components/HeroBanner.astro';
-import CtaBanner from '../components/CtaBanner.astro';
-import Testimonials from '../components/home/Testimonials.astro';
+import { getEntry } from 'astro:content';
+import BaseLayout from '#layouts/BaseLayout.astro';
+import HeroBanner from '#components/HeroBanner.astro';
+import CtaBanner from '#components/CtaBanner.astro';
+import Testimonials from '#components/home/Testimonials.astro';
 import { Image } from 'astro:assets';
 
-import heroImg from '../assets/hero-home.jpg';
-import founder1 from '../assets/servizi/template-servizio/gallery-1.jpg';
-import founder2 from '../assets/servizi/template-servizio/gallery-2.jpg';
-import founder3 from '../assets/servizi/template-servizio/gallery-3.jpg';
+import heroImg from '#assets/hero-home.jpg';
 
-// Email LinkedIn placeholder ("#") finché non forniti i profili reali.
-const founders = [
-  {
-    name: 'Alessandra Di Caro',
-    role: 'Co-founder & Project Manager',
-    bio: 'Alessandra coordina l\'implementazione strategica dei progetti, guidando i processi di ascolto e co-progettazione e supervisionando il project management. Si occupa inoltre di fundraising e della gestione dei rapporti con sponsor e partner.',
-    email: 'alessandra@wearebutik.com',
-    linkedin: '#',
-    photo: founder1,
-  },
-  {
-    name: 'Alessia Naldini',
-    role: 'Co-founder & Direttrice Generale',
-    bio: 'Alessia guida l\'amministrazione e lo sviluppo delle relazioni B2B, coordina i rapporti con istituzioni e partner tecnici. È inoltre responsabile della scrittura di bandi e dello sviluppo progettuale.',
-    email: 'alessia@wearebutik.com',
-    linkedin: '#',
-    photo: founder2,
-  },
-  {
-    name: 'Marialuisa Rovetta',
-    role: 'Co-founder & Direttrice Creativa',
-    bio: 'Marialuisa dirige la visione creativa dei progetti, definendo concept, linguaggi e mood grafico. Coordina lo sviluppo dei contenuti editoriali e la strategia di comunicazione, assicurando coerenza, identità e riconoscibilità ad ogni progetto.',
-    email: 'marialuisa@wearebutik.com',
-    linkedin: '#',
-    photo: founder3,
-  },
-];
+// Copy editoriale content-driven via collezione `pagine` (ADR-0004): il testo è
+// editabile da Sitepins, la presentazione resta qui. Alcuni paragrafi contengono
+// <strong>/link inline e vengono resi con `set:html` per output identico.
+const entry = await getEntry('pagine', 'chi-siamo');
+if (!entry || entry.data.type !== 'chi-siamo') {
+  throw new Error('Contenuto pagina "chi-siamo" mancante o non valido (collezione pagine).');
+}
+const c = entry.data;
 
-// Obiettivi di Sviluppo Sostenibile (Agenda ONU 2030) — colori ufficiali SDG.
-const sdg = [
-  {
-    num: 8,
-    title: 'Lavoro Dignitoso e Crescita Economica',
-    color: '#A21942',
-    icon: '🎯',
-  },
-  {
-    num: 11,
-    title: 'Città e Comunità Sostenibili',
-    color: '#FD9D24',
-    icon: '🏙️',
-  },
-];
+// Founder come ARRAY dalla collezione: nome/ruolo/bio/email/linkedin + foto
+// (media risolto a build-time da `image()`).
+const founders = c.founders;
+
+// Obiettivi di Sviluppo Sostenibile (Agenda ONU 2030): num + titolo sono copy
+// editoriale (array in collezione); colore/icona restano config di design qui —
+// i colori sono quelli ufficiali SDG, mappati per numero obiettivo.
+const sdgStyle: Record<number, { color: string; icon: string }> = {
+  8: { color: '#A21942', icon: '🎯' },
+  11: { color: '#FD9D24', icon: '🏙️' },
+};
+const sdg = c.sdg.map((o) => ({ ...o, ...sdgStyle[o.num] }));
 ---
 
 <BaseLayout
-  title="Chi siamo — Butik"
-  description="Un team di professioniste che ha fatto della musica uno strumento concreto di sviluppo culturale, sociale e territoriale."
+  title={c.metaTitle}
+  description={c.metaDescription}
 >
   <HeroBanner
-    title="Chi siamo"
-    subtitle="Un team di professioniste che ha fatto della musica uno strumento concreto di sviluppo culturale, sociale e territoriale."
+    title={c.heroTitle}
+    subtitle={c.heroSubtitle}
     image={heroImg}
-    imageAlt="Il team di Butik al lavoro"
+    imageAlt={c.heroImageAlt}
   />
 
   <!-- Chi siamo -->
   <section class="max-w-3xl mx-auto px-6 py-16 md:py-20">
-    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-6">Chi siamo</p>
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-6">{c.introEyebrow}</p>
     <div class="space-y-5 font-sans text-base md:text-lg text-butik-body leading-relaxed">
-      <p>
-        Butik nasce nel 2018 dalla convinzione che la musica sia molto più di un linguaggio
-        artistico: è uno strumento potente per attivare territori, coinvolgere le comunità locali
-        e aprire spazi di partecipazione per le nuove generazioni.
-      </p>
-      <p>
-        Fondata da <strong class="font-bold text-butik-dark">tre professioniste</strong> con
-        background in management culturale, marketing e produzione di eventi, Butik vuole fornire
-        risposta concreta a un'esigenza diffusa: l'Italia ha un vasto patrimonio musicale, ma
-        frammentato, poco valorizzato e spesso distante dalle nuove generazioni.
-      </p>
-      <p>
-        Con il nostro lavoro costruiamo ponti tra la musica e il turismo, tra istituzioni e
-        cittadini, tra tradizione e contemporaneo — convinte che il patrimonio musicale possa
-        diventare un motore di sviluppo sociale ed economico.
-      </p>
-      <p>
-        Nel tempo abbiamo sviluppato <strong class="font-bold text-butik-dark">un metodo</strong>
-        che integra ascolto del territorio, formazione e progettazione culturale — con un obiettivo
-        chiaro: generare impatto sociale.
-      </p>
+      <p set:html={c.introP1}></p>
+      <p set:html={c.introP2}></p>
+      <p set:html={c.introP3}></p>
+      <p set:html={c.introP4}></p>
     </div>
   </section>
 
@@ -98,20 +57,18 @@ const sdg = [
   <section class="bg-white py-16 md:py-20">
     <div class="max-w-5xl mx-auto px-6">
       <div class="max-w-3xl">
-        <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">La nostra missione</p>
+        <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">{c.missionEyebrow}</p>
         <p class="font-heading text-2xl md:text-3xl font-bold text-butik-dark leading-snug">
-          Promuovere lo sviluppo culturale e territoriale attraverso la musica, attivando comunità,
-          valorizzando patrimoni e formando nuove generazioni di professionisti.
+          {c.missionStatement}
         </p>
       </div>
 
       <div class="mt-12 md:mt-16">
         <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
-          Gli obiettivi di sviluppo sostenibile su cui lavoriamo
+          {c.sdgEyebrow}
         </p>
         <p class="font-sans text-base text-butik-body leading-relaxed max-w-3xl">
-          Il nostro lavoro è orientato al raggiungimento degli Obiettivi di Sviluppo Sostenibile
-          dell'Agenda ONU 2030. In particolare:
+          {c.sdgIntro}
         </p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8">
           {sdg.map((o) => (
@@ -142,25 +99,11 @@ const sdg = [
   <!-- Il nostro team -->
   <section class="max-w-6xl mx-auto px-6 py-16 md:py-20">
     <div class="max-w-3xl">
-      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-6">Il nostro team</p>
+      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-6">{c.teamEyebrow}</p>
       <div class="space-y-5 font-sans text-base md:text-lg text-butik-body leading-relaxed">
-        <p>
-          Siamo un piccolo team con una grande rete. La nostra visione è human first: partiamo
-          dalle persone, dai loro bisogni e dal loro contesto. Ogni progetto è costruito su misura,
-          attraverso ascolto, partecipazione attiva e coinvolgimento dal basso, includendo comunità
-          e operatori del territorio.
-        </p>
-        <p>
-          Con 8 anni di esperienza sul campo, offriamo un esteso
-          <strong class="font-bold text-butik-dark"> network</strong> di rapporti consolidati con
-          Pubbliche Amministrazioni, professionisti della musica e del turismo, e la capacità di
-          intercettare finanziamenti per rendere i progetti sostenibili.
-        </p>
-        <p>
-          Siamo un'impresa guidata da donne, e crediamo che questo si rifletta nel nostro modo di
-          lavorare: con cura e attenzione alle relazioni.
-          <a href="#" class="text-butik-red underline hover:no-underline">Scopri il nostro Impegno con KeyChange →</a>
-        </p>
+        <p set:html={c.teamP1}></p>
+        <p set:html={c.teamP2}></p>
+        <p set:html={c.teamP3}></p>
       </div>
     </div>
 
@@ -168,14 +111,16 @@ const sdg = [
       {founders.map((f) => (
         <article class="flex flex-col">
           <div class="overflow-hidden mb-5 aspect-[4/5] bg-butik-light">
-            <Image
-              src={f.photo}
-              alt={`Ritratto di ${f.name}`}
-              widths={[300, 500]}
-              sizes="(max-width: 768px) 100vw, 33vw"
-              quality={72}
-              class="w-full h-full object-cover"
-            />
+            {f.photo && (
+              <Image
+                src={f.photo}
+                alt={`Ritratto di ${f.name}`}
+                widths={[300, 500]}
+                sizes="(max-width: 768px) 100vw, 33vw"
+                quality={72}
+                class="w-full h-full object-cover"
+              />
+            )}
           </div>
           <h2 class="font-heading text-xl font-bold text-butik-dark leading-tight">{f.name}</h2>
           <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mt-1">{f.role}</p>
@@ -210,14 +155,10 @@ const sdg = [
         <path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z" />
       </svg>
       <blockquote class="font-heading text-xl md:text-2xl font-bold leading-snug">
-        Il percorso mi ha fatto crescere moltissimo, sono stata posta davanti a diverse sfide che mi
-        hanno fatto crescere a livello professionale e umano. Ho apprezzato l'approccio di Butik, in
-        quanto sono state abili a creare uno spazio sicuro e libero da critiche anche durante
-        l'errore. Ho acquisito competenze legate alla progettazione e al modo di approcciarmi al
-        mondo professionale e lavorativo.
+        {c.testimonialQuote}
       </blockquote>
       <figcaption class="font-sans text-sm text-white/70 mt-6">
-        — Partecipante under 35 del percorso di formazione Cult Funding
+        {c.testimonialAuthor}
       </figcaption>
     </figure>
   </section>
@@ -227,8 +168,8 @@ const sdg = [
 
   <!-- CTA finale -->
   <CtaBanner
-    title="Vuoi essere parte del cambiamento?"
-    body="Che tu sia un'istituzione, un operatore culturale, turistico o un giovane professionista, costruiamo un progetto insieme!"
-    primaryCta={{ label: 'Contattaci', href: '/contatti' }}
+    title={c.ctaTitle}
+    body={c.ctaBody}
+    primaryCta={{ label: c.ctaLabel, href: c.ctaHref }}
   />
 </BaseLayout>

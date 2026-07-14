@@ -1,6 +1,16 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { socials } from '../data/socials';
+import { getEntry } from 'astro:content';
+import BaseLayout from '#layouts/BaseLayout.astro';
+import { socials } from '#data/socials';
+
+// Copy editoriale content-driven via collezione `pagine` (ADR-0004): il testo
+// attorno al form è editabile da Sitepins. La logica del form Web3Forms qui
+// sotto resta invariata.
+const entry = await getEntry('pagine', 'contatti');
+if (!entry || entry.data.type !== 'contatti') {
+  throw new Error('Contenuto pagina "contatti" mancante o non valido (collezione pagine).');
+}
+const c = entry.data;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Web3Forms access key — letta da variabile d'ambiente, NON committata.
@@ -18,16 +28,15 @@ const inputClass =
 ---
 
 <BaseLayout
-  title="Contatti — Butik"
-  description="Scrivici: che tu sia un Comune, una DMO, un operatore culturale o un festival, costruiamo qualcosa insieme."
+  title={c.metaTitle}
+  description={c.metaDescription}
 >
   <!-- Header -->
   <div class="max-w-3xl mx-auto px-6 pt-20 md:pt-24 pb-10 text-center">
-    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Contatti</p>
-    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark mb-5">Lavoriamo insieme?</h1>
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">{c.headerEyebrow}</p>
+    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark mb-5">{c.headerTitle}</h1>
     <p class="font-sans text-base md:text-lg text-butik-body leading-relaxed">
-      Che tu sia un Comune, una DMO, un operatore culturale o un festival, siamo pronti ad
-      ascoltarti e costruire qualcosa insieme. Raccontaci la tua idea: ti rispondiamo al più presto.
+      {c.headerIntro}
     </p>
   </div>
 
@@ -84,30 +93,27 @@ const inputClass =
 
       <!-- Recapiti -->
       <aside class="lg:border-l lg:border-butik-dark/15 lg:pl-12">
-        <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-6">Recapiti</p>
+        <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-6">{c.recapitiEyebrow}</p>
 
         <div class="space-y-6 font-sans text-base text-butik-body">
           <div>
-            <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-1">Email</p>
-            <a href="mailto:info@wearebutik.com" class="text-butik-dark underline hover:text-butik-red transition-colors">info@wearebutik.com</a>
+            <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-1">{c.emailLabel}</p>
+            <a href={`mailto:${c.emailValue}`} class="text-butik-dark underline hover:text-butik-red transition-colors">{c.emailValue}</a>
           </div>
 
           <div>
-            <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-1">PEC</p>
-            <a href="mailto:butik@legalmail.it" class="text-butik-dark underline hover:text-butik-red transition-colors">butik@legalmail.it</a>
+            <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-1">{c.pecLabel}</p>
+            <a href={`mailto:${c.pecValue}`} class="text-butik-dark underline hover:text-butik-red transition-colors">{c.pecValue}</a>
           </div>
 
           <div>
-            <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-1">Sede</p>
-            <address class="not-italic leading-relaxed text-butik-dark/80">
-              Butik s.r.l. Impresa Sociale<br />
-              Via Plinio 14, 20129 Milano — Italy<br />
-              P. IVA 10429130965
+            <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-1">{c.sedeLabel}</p>
+            <address class="not-italic leading-relaxed text-butik-dark/80" set:html={c.sedeAddress}>
             </address>
           </div>
 
           <div>
-            <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-2">Seguici</p>
+            <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-2">{c.seguiciLabel}</p>
             <ul class="flex items-center gap-4">
               {socials.map((s) => (
                 <li>

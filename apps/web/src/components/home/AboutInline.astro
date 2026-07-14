@@ -1,7 +1,21 @@
 ---
+// Copy content-driven (ADR-0004): testo e label arrivano dalla collezione
+// `pagine` (entry `home`), passati da index.astro. L'immagine resta asset locale.
 import { Image } from 'astro:assets';
 
 import heroHome from '../../assets/hero-home.jpg';
+
+interface Props {
+  title: string;
+  p1: string;
+  p2: string;
+  p3: string;
+  ctaLabel: string;
+  ctaHref: string;
+  imageAlt: string;
+}
+
+const { title, p1, p2, p3, ctaLabel, ctaHref, imageAlt } = Astro.props;
 ---
 
 <section class="py-12 md:py-16">
@@ -11,41 +25,33 @@ import heroHome from '../../assets/hero-home.jpg';
         <h2
           class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark leading-tight mb-6"
         >
-          Una realtà che crede nel potere della musica
+          {title}
         </h2>
 
         <p class="font-sans text-base text-butik-dark/80 leading-relaxed mb-4">
-          La prima impresa sociale italiana specializzata in progettazione
-          culturale e sviluppo territoriale attraverso la musica.
+          {p1}
         </p>
 
         <p class="font-sans text-base text-butik-dark/80 leading-relaxed mb-4">
-          Dal 2018 lavoriamo al fianco di Comuni, istituzioni, operatori
-          culturali e turistici per trasformare il patrimonio musicale in
-          strumento di crescita culturale, sociale e turistica — con un metodo
-          fondato sull'ascolto, la co-progettazione e il coinvolgimento attivo
-          delle nuove generazioni. Siamo tra le prime realtà in Italia ad aver
-          sviluppato un approccio strutturato al turismo musicale.
+          {p2}
         </p>
 
         <p class="font-sans text-base text-butik-dark/80 leading-relaxed">
-          Dal 2024 siamo l'ente organizzatore di Milano Music Week, uno dei
-          principali appuntamenti italiani dedicati alla musica e all'industria
-          musicale.
+          {p3}
         </p>
 
         <a
-          href="/chi-siamo"
+          href={ctaHref}
           class="inline-block bg-butik-dark text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-red transition-colors w-full md:w-auto text-center mt-8"
         >
-          Scopri di più
+          {ctaLabel}
         </a>
       </div>
 
       <div class="order-1 md:order-2">
         <Image
           src={heroHome}
-          alt="Il team Butik al lavoro su un progetto di sviluppo territoriale attraverso la musica"
+          alt={imageAlt}
           widths={[400, 700, 1000]}
           sizes="(max-width: 768px) 100vw, 50vw"
           quality={75}

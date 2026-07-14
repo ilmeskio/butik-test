@@ -1,5 +1,10 @@
 import { defineCollection, z } from 'astro:content';
+import type { SchemaContext } from 'astro:content';
 import { glob } from 'astro/loaders';
+
+// Tipo dell'helper `image()` fornito dallo schema context di Astro: consente di
+// dichiarare riferimenti a media (risolti a build-time) anche dentro gli array.
+type ImageFn = SchemaContext['image'];
 
 const serviziCollection = defineCollection({
   loader: glob({
@@ -46,7 +51,192 @@ const progettiCollection = defineCollection({
   }),
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Collezione `pagine` (ADR-0004): pagine editoriali "singleton" la cui copy era
+// hardcoded nei `.astro`. Ogni entry è una pagina a sé (home, chi-siamo,
+// contatti, partners, servizi), con un set di campi diverso: per questo usiamo
+// una discriminated union su `type`.
+//
+// Contenuti ripetuti (metriche, servizi, partner, founder, obiettivi SDG) sono
+// modellati come ARRAY di oggetti, con i media (loghi, foto) come riferimenti
+// `image()` risolti a build-time. Gli schema Sitepins in `.sitepins/schema/pagine/*`
+// rispecchiano questi array con campi `type: "list"` + sotto-`fields` (media =
+// `type: "media"`) — vedi nota nel summary sui limiti di verifica di Sitepins.
+// Zod resta la source of truth tipata: l'allineamento Zod ↔ Sitepins è vigilato
+// dalla skill content-check.
+//
+// Nota: alcune stringhe (paragrafi con <strong>/link, indirizzo) contengono HTML
+// inline e vengono rese con `set:html` nelle pagine per mantenere l'output
+// visivamente identico alla versione hardcoded.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Voce metrica (Numbers): valore + etichetta.
+const metricSchema = z.object({
+  value: z.string(),
+  label: z.string(),
+});
+
+// Card servizio in hero home: titolo, link, descrizione breve.
+const heroServizioSchema = z.object({
+  title: z.string(),
+  href: z.string(),
+  description: z.string(),
+});
+
+const paginaHome = z.object({
+  type: z.literal('home'),
+  // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
+  title: z.string(),
+  metaTitle: z.string(),
+  metaDescription: z.string(),
+  // Hero
+  heroTitle: z.string(),
+  heroSubtitle: z.string(),
+  heroCtaLabel: z.string(),
+  heroCtaHref: z.string(),
+  heroExploreLabel: z.string(),
+  heroExploreHref: z.string(),
+  heroServizi: z.array(heroServizioSchema),
+  // Numeri / impatto
+  butikMetrics: z.array(metricSchema),
+  mmwLabel: z.string(),
+  mmwMetrics: z.array(metricSchema),
+  // About inline
+  aboutTitle: z.string(),
+  aboutP1: z.string(),
+  aboutP2: z.string(),
+  aboutP3: z.string(),
+  aboutCtaLabel: z.string(),
+  aboutCtaHref: z.string(),
+  aboutImageAlt: z.string(),
+  // Newsletter
+  newsletterTitle: z.string(),
+  newsletterBody: z.string(),
+  newsletterPlaceholder: z.string(),
+  newsletterButton: z.string(),
+  newsletterPrivacy: z.string(),
+  newsletterSuccess: z.string(),
+});
+
+const paginaChiSiamo = (image: ImageFn) => z.object({
+  type: z.literal('chi-siamo'),
+  // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
+  title: z.string(),
+  metaTitle: z.string(),
+  metaDescription: z.string(),
+  heroTitle: z.string(),
+  heroSubtitle: z.string(),
+  heroImageAlt: z.string(),
+  introEyebrow: z.string(),
+  introP1: z.string(),
+  introP2: z.string(),
+  introP3: z.string(),
+  introP4: z.string(),
+  missionEyebrow: z.string(),
+  missionStatement: z.string(),
+  sdgEyebrow: z.string(),
+  sdgIntro: z.string(),
+  // Obiettivi di Sviluppo Sostenibile come ARRAY: num + titolo editoriale.
+  // Colore/icona restano config di design nella pagina (colori ufficiali SDG).
+  sdg: z.array(z.object({
+    num: z.number(),
+    title: z.string(),
+  })),
+  teamEyebrow: z.string(),
+  teamP1: z.string(),
+  teamP2: z.string(),
+  teamP3: z.string(),
+  // Founder come ARRAY di oggetti, con foto come media (`image()`).
+  // `.or('')` tollera la riga appena aggiunta da Sitepins senza immagine
+  // (defaultValue vuoto) — senza questo, un salvataggio dal CMS romperebbe
+  // `astro build`. La pagina salta il render dell'immagine se vuota.
+  founders: z.array(z.object({
+    name: z.string(),
+    role: z.string(),
+    bio: z.string(),
+    email: z.string(),
+    linkedin: z.string(),
+    photo: image().or(z.literal('')),
+  })),
+  testimonialQuote: z.string(),
+  testimonialAuthor: z.string(),
+  ctaTitle: z.string(),
+  ctaBody: z.string(),
+  ctaLabel: z.string(),
+  ctaHref: z.string(),
+});
+
+const paginaContatti = z.object({
+  type: z.literal('contatti'),
+  // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
+  title: z.string(),
+  metaTitle: z.string(),
+  metaDescription: z.string(),
+  headerEyebrow: z.string(),
+  headerTitle: z.string(),
+  headerIntro: z.string(),
+  recapitiEyebrow: z.string(),
+  emailLabel: z.string(),
+  emailValue: z.string(),
+  pecLabel: z.string(),
+  pecValue: z.string(),
+  sedeLabel: z.string(),
+  sedeAddress: z.string(),
+  seguiciLabel: z.string(),
+});
+
+const paginaPartners = (image: ImageFn) => z.object({
+  type: z.literal('partners'),
+  metaTitle: z.string(),
+  metaDescription: z.string(),
+  eyebrow: z.string(),
+  title: z.string(),
+  // Partner come ARRAY di oggetti { nome, logo(media) }.
+  // `.or('')` tollera la riga appena aggiunta da Sitepins senza logo
+  // (defaultValue vuoto) — evita di rompere `astro build` dal CMS.
+  // La pagina salta il render del logo se vuoto.
+  partners: z.array(z.object({
+    name: z.string(),
+    logo: image().or(z.literal('')),
+  })),
+});
+
+const paginaServizi = z.object({
+  type: z.literal('servizi-index'),
+  // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
+  title: z.string(),
+  metaTitle: z.string(),
+  metaDescription: z.string(),
+  headerEyebrow: z.string(),
+  headerTitle: z.string(),
+  headerIntro1: z.string(),
+  headerIntro2: z.string(),
+  metodoEyebrow: z.string(),
+  metodoTitle: z.string(),
+  // Passi del metodo come ARRAY di oggetti { titolo, descrizione }.
+  metodo: z.array(z.object({
+    title: z.string(),
+    description: z.string(),
+  })),
+});
+
+const pagineCollection = defineCollection({
+  loader: glob({
+    pattern: '*.{md,mdx}',
+    base: './src/content/pagine',
+    generateId: ({ entry }) => entry.replace(/\.(mdx?)$/, ''),
+  }),
+  schema: ({ image }) => z.discriminatedUnion('type', [
+    paginaHome,
+    paginaChiSiamo(image),
+    paginaContatti,
+    paginaPartners(image),
+    paginaServizi,
+  ]),
+});
+
 export const collections = {
   servizi: serviziCollection,
   progetti: progettiCollection,
+  pagine: pagineCollection,
 };

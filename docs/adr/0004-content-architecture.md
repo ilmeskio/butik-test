@@ -29,6 +29,19 @@ collections are the typed source of truth.**
 - Every collection has a matching **Sitepins schema** in `.sitepins/schema/**`.
   Zod and Sitepins schemas must stay aligned (the `content-check` skill watches for
   drift).
+- **Media paths** follow the `/src/assets/...` convention so images resolve both in
+  Astro `image()` and the Sitepins editor — see
+  [ADR-0009](./0009-sitepins-media-paths.md).
+- **MDX bodies & Sitepins.** Sitepins edits Markdown, so `import` lines in an MDX
+  body leak into the editor as loose paragraphs (fragile) while JSX is preserved as
+  a code block. **`progetti`** bodies are therefore kept import-free: the image
+  components (`ImageBlock`/`ImageCarousel`/`ImageLeft`/`ImageRight`) are provided
+  globally via `<Content components={{…}} />` and take a **string `src`**
+  (`/src/assets/…`) resolved to an optimized asset by `#lib/media` (`resolveAsset`
+  + `import.meta.glob`). Their prose is Sitepins-editable. **`servizi`** are a
+  different shape — page compositions built from domain components with inline
+  `export const` data — so they stay **dev-authored** (edited in code; only their
+  frontmatter is Sitepins-editable).
 - **Goal (in progress, dedicated branch):** move today's hardcoded pages to be
   content-driven, so the whole site is manageable from Sitepins. Purely structural
   pages (e.g. the experimental `lab/*`) may stay in code.

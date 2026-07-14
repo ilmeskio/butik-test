@@ -1,0 +1,113 @@
+{
+  "file": "apps/web/src/content/pagine/servizi.md",
+  "name": "servizi",
+  "fileType": "md",
+  "fmType": "yaml",
+  "template": [
+    {
+      "name": "type",
+      "label": "Type",
+      "type": "string",
+      "value": "servizi-index",
+      "isIgnored": true,
+      "defaultValue": "servizi-index"
+    },
+    {
+      "name": "title",
+      "label": "Title",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "metaTitle",
+      "label": "MetaTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "metaDescription",
+      "label": "MetaDescription",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "headerEyebrow",
+      "label": "HeaderEyebrow",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "headerTitle",
+      "label": "HeaderTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "headerIntro1",
+      "label": "HeaderIntro1",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "headerIntro2",
+      "label": "HeaderIntro2",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "metodoEyebrow",
+      "label": "MetodoEyebrow",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "metodoTitle",
+      "label": "MetodoTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "metodo",
+      "label": "Metodo",
+      "type": "list",
+      "isIgnored": false,
+      "defaultValue": [],
+      "fields": [
+        {
+          "name": "title",
+          "label": "Title",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        }
+      ]
+    }
+  ]
+}

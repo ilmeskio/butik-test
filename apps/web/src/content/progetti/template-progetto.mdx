@@ -14,18 +14,6 @@ featuredOrder: 1
 draft: false
 ---
 
-import ImageRight from '#components/mdx/ImageRight.astro';
-import ImageLeft from '#components/mdx/ImageLeft.astro';
-import ImageBlock from '#components/mdx/ImageBlock.astro';
-import ImageCarousel from '#components/mdx/ImageCarousel.astro';
-
-import imgBlock from '#assets/progetti/template-progetto/img-block.jpg';
-import imgRight from '#assets/progetti/template-progetto/img-right.jpg';
-import imgLeft from '#assets/progetti/template-progetto/img-left.jpg';
-import gallery1 from '#assets/progetti/template-progetto/gallery-1.jpg';
-import gallery2 from '#assets/progetti/template-progetto/gallery-2.jpg';
-import gallery3 from '#assets/progetti/template-progetto/gallery-3.jpg';
-
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vehicula, libero vel cursus fermentum, felis nisl scelerisque libero, nec facilisis purus metus vel velit. Proin ac libero id arcu vestibulum gravida vel nec enim.
 
 Vivamus tincidunt erat id eros congue, non commodo augue efficitur. Donec suscipit felis vel odio consequat, in volutpat urna aliquet.
@@ -34,7 +22,7 @@ Vivamus tincidunt erat id eros congue, non commodo augue efficitur. Donec suscip
 
 Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est.
 
-<ImageBlock src={imgBlock} alt="Panoramica della Milano Music Week" caption="Il palco principale della Milano Music Week 2024 — Triennale di Milano" />
+<ImageBlock src="/src/assets/progetti/template-progetto/img-block.jpg" alt="Panoramica della Milano Music Week" caption="Il palco principale della Milano Music Week 2024 — Triennale di Milano" />
 
 Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Sed posuere consectetur est at lobortis. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
 
@@ -42,7 +30,7 @@ Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut ferm
 
 Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod.
 
-<ImageRight src={imgRight} alt="Team creativo al lavoro" caption="Il team Butik durante la fase di produzione">
+<ImageRight src="/src/assets/progetti/template-progetto/img-right.jpg" alt="Team creativo al lavoro" caption="Il team Butik durante la fase di produzione">
   ### Coordinamento artistico
 
   Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae.
@@ -50,7 +38,7 @@ Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla 
   Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat.
 </ImageRight>
 
-<ImageLeft src={imgLeft} alt="Pubblico all'evento" caption="Il pubblico durante uno degli showcases serali">
+<ImageLeft src="/src/assets/progetti/template-progetto/img-left.jpg" alt="Pubblico all'evento" caption="Il pubblico durante uno degli showcases serali">
   ### Produzione e logistica
 
   Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.
@@ -69,9 +57,9 @@ Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla 
 ## Gallery
 
 <ImageCarousel images={[
-  { src: gallery1, alt: "Opening night", caption: "Opening night alla Triennale di Milano" },
-  { src: gallery2, alt: "Showcase al Magnolia", caption: "Showcase al Magnolia — sold out" },
-  { src: gallery3, alt: "Panel di discussione", caption: "Industry panel: il futuro della musica italiana" },
+  { src: "/src/assets/progetti/template-progetto/gallery-1.jpg", alt: "Opening night", caption: "Opening night alla Triennale di Milano" },
+  { src: "/src/assets/progetti/template-progetto/gallery-2.jpg", alt: "Showcase al Magnolia", caption: "Showcase al Magnolia — sold out" },
+  { src: "/src/assets/progetti/template-progetto/gallery-3.jpg", alt: "Panel di discussione", caption: "Industry panel: il futuro della musica italiana" },
 ]} />
 
 Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.
