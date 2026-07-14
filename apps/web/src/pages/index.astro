@@ -1,15 +1,15 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from '#layouts/BaseLayout.astro';
 import { getCollection, getEntry } from 'astro:content';
-import Hero from '../components/home/Hero.astro';
-import PartnerLogos from '../components/home/PartnerLogos.astro';
-import Numbers from '../components/home/Numbers.astro';
-import Testimonials from '../components/home/Testimonials.astro';
-import PortfolioGrid from '../components/home/PortfolioGrid.astro';
-import CtaBanner from '../components/CtaBanner.astro';
-import AboutInline from '../components/home/AboutInline.astro';
-import Metodo from '../components/home/Metodo.astro';
-import NewsletterSignup from '../components/home/NewsletterSignup.astro';
+import Hero from '#components/home/Hero.astro';
+import PartnerLogos from '#components/home/PartnerLogos.astro';
+import Numbers from '#components/home/Numbers.astro';
+import Testimonials from '#components/home/Testimonials.astro';
+import PortfolioGrid from '#components/home/PortfolioGrid.astro';
+import CtaBanner from '#components/CtaBanner.astro';
+import AboutInline from '#components/home/AboutInline.astro';
+import Metodo from '#components/home/Metodo.astro';
+import NewsletterSignup from '#components/home/NewsletterSignup.astro';
 
 const topProgetti = (await getCollection('progetti', e => e.data.featured && !e.data.draft))
   .sort((a, b) => a.data.featuredOrder - b.data.featuredOrder)

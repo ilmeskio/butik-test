@@ -43,4 +43,3 @@ partners:
   - name: SAE
     logo: /src/assets/logos/sae.png
 ---
-​

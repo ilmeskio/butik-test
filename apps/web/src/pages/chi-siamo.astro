@@ -1,12 +1,12 @@
 ---
 import { getEntry } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import HeroBanner from '../components/HeroBanner.astro';
-import CtaBanner from '../components/CtaBanner.astro';
-import Testimonials from '../components/home/Testimonials.astro';
+import BaseLayout from '#layouts/BaseLayout.astro';
+import HeroBanner from '#components/HeroBanner.astro';
+import CtaBanner from '#components/CtaBanner.astro';
+import Testimonials from '#components/home/Testimonials.astro';
 import { Image } from 'astro:assets';
 
-import heroImg from '../assets/hero-home.jpg';
+import heroImg from '#assets/hero-home.jpg';
 
 // Copy editoriale content-driven via collezione `pagine` (ADR-0004): il testo è
 // editabile da Sitepins, la presentazione resta qui. Alcuni paragrafi contengono
@@ -111,14 +111,16 @@ const sdg = c.sdg.map((o) => ({ ...o, ...sdgStyle[o.num] }));
       {founders.map((f) => (
         <article class="flex flex-col">
           <div class="overflow-hidden mb-5 aspect-[4/5] bg-butik-light">
-            <Image
-              src={f.photo}
-              alt={`Ritratto di ${f.name}`}
-              widths={[300, 500]}
-              sizes="(max-width: 768px) 100vw, 33vw"
-              quality={72}
-              class="w-full h-full object-cover"
-            />
+            {f.photo && (
+              <Image
+                src={f.photo}
+                alt={`Ritratto di ${f.name}`}
+                widths={[300, 500]}
+                sizes="(max-width: 768px) 100vw, 33vw"
+                quality={72}
+                class="w-full h-full object-cover"
+              />
+            )}
           </div>
           <h2 class="font-heading text-xl font-bold text-butik-dark leading-tight">{f.name}</h2>
           <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mt-1">{f.role}</p>

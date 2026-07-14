@@ -147,13 +147,16 @@ const paginaChiSiamo = (image: ImageFn) => z.object({
   teamP2: z.string(),
   teamP3: z.string(),
   // Founder come ARRAY di oggetti, con foto come media (`image()`).
+  // `.or('')` tollera la riga appena aggiunta da Sitepins senza immagine
+  // (defaultValue vuoto) — senza questo, un salvataggio dal CMS romperebbe
+  // `astro build`. La pagina salta il render dell'immagine se vuota.
   founders: z.array(z.object({
     name: z.string(),
     role: z.string(),
     bio: z.string(),
     email: z.string(),
     linkedin: z.string(),
-    photo: image(),
+    photo: image().or(z.literal('')),
   })),
   testimonialQuote: z.string(),
   testimonialAuthor: z.string(),
@@ -189,9 +192,12 @@ const paginaPartners = (image: ImageFn) => z.object({
   eyebrow: z.string(),
   title: z.string(),
   // Partner come ARRAY di oggetti { nome, logo(media) }.
+  // `.or('')` tollera la riga appena aggiunta da Sitepins senza logo
+  // (defaultValue vuoto) — evita di rompere `astro build` dal CMS.
+  // La pagina salta il render del logo se vuoto.
   partners: z.array(z.object({
     name: z.string(),
-    logo: image(),
+    logo: image().or(z.literal('')),
   })),
 });
 
