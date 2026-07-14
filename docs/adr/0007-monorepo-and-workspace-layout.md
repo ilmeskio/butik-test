@@ -33,13 +33,16 @@ apps/
   functions/    # Cloudflare Workers / Pages Functions (@butik/functions) — added when the first one lands
 packages/
   ui-tokens/    # @butik/ui-tokens — design tokens as CSS custom properties
-  ui/           # @butik/ui — shared component catalogue (CSS Modules + tokens)
+  ui/           # @butik/ui — shared component catalogue (React islands + CSS Modules + tokens, ADR-0008; Storybook workshop)
 docs/  .claude/  reference/  design/   # repo-wide, stay at root
 ```
 
 - **Scopes**: workspace packages are `@butik/*`. Cross-package consumption uses
   the scope (`import '@butik/ui-tokens/tokens.css'`, `import Button from
-  '@butik/ui/Button.astro'`); intra-app paths use the `#*` subpath imports.
+  '@butik/ui/Button'`); intra-app paths use the `#*` subpath imports. Since
+  [ADR-0008](./0008-component-authoring-and-storybook.md) `packages/ui` components
+  are **React islands** (`.tsx`), consumed by the site via `@astrojs/react` and
+  authored in a **Storybook** workshop.
 - **What's at root, not in a package**: `docs/`, `.claude/`, `reference/`,
   `design/` are repo-wide (decisions, agent config, raw input, brand assets) and
   don't belong to any single app/package. `.sitepins/` stays at root but its

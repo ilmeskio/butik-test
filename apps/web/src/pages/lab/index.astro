@@ -17,6 +17,16 @@ interface LabGroup {
 
 const gruppi: LabGroup[] = [
   {
+    eyebrow: 'Design system',
+    titolo: 'Workshop dei componenti',
+    intro:
+      'Il workshop del catalogo è Storybook, con i componenti di @butik/ui come island React (ADR-0008). Qui restano l’anteprima in-site del Button e la nota storica del confronto gallery-vs-Storybook.',
+    links: [
+      { href: '/lab/workshop', title: 'Component workshop (anteprima in-site)', desc: 'Button (Primary · Ghost) reso a HTML statico, su token @butik/ui-tokens.' },
+      { href: '/lab/workshop/readme', title: 'Nota storica: gallery vs Storybook', desc: 'Trade-off delle due strade e la decisione presa (Storybook + island React, ADR-0008).' },
+    ],
+  },
+  {
     eyebrow: 'Motion & grafica',
     titolo: 'Tratti animati a tema musica',
     intro: 'Studio di 4 motivi animati (+ bonus) riutilizzabili: equalizer, waveform, marquee, beat pulse, count-up.',

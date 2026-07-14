@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
+import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
@@ -18,7 +19,9 @@ export default defineConfig({
     // (solo i nostri asset di branding).
     dangerouslyProcessSVG: true,
   },
-  integrations: [mdx()],
+  // I componenti condivisi di @butik/ui sono island React (ADR-0008): l'integrazione
+  // React li rende a HTML statico a build-time (nessuna direttiva client = zero JS).
+  integrations: [react(), mdx()],
   vite: {
     plugins: [tailwindcss()],
   },
