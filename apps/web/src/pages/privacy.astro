@@ -1,10 +1,11 @@
 ---
-// Privacy & Cookie Policy — content-driven via Sitepins (ADR-0004). Il testo
-// resta accurato rispetto a ciò che il sito fa davvero (cookie del consenso +
-// PostHog analytics EU, gated/legittimo interesse); le parti di base legale
-// segnate `[DA COMPLETARE]` restano placeholder editabili da Sitepins, non più
-// hardcoded nel codice.
-import { getEntry } from 'astro:content';
+// Privacy & Cookie Policy — content-driven via Sitepins (ADR-0004). A
+// differenza delle altre pagine di `pagine` (frontmatter-only), questa è
+// prosa lunga senza struttura ricorrente: il corpo vive nel body Markdown
+// dell'entry (stessa forma di `progetti`), non in campi frontmatter separati.
+// Il frontmatter resta minimo: meta + il pezzo che il layout interpola fuori
+// dal flusso di prosa (titolo H1, data aggiornamento).
+import { getEntry, render } from 'astro:content';
 import BaseLayout from '#layouts/BaseLayout.astro';
 
 const entry = await getEntry('pagine', 'privacy');
@@ -12,6 +13,7 @@ if (!entry || entry.data.type !== 'privacy') {
   throw new Error('Contenuto pagina "privacy" mancante o non valido (collezione pagine).');
 }
 const c = entry.data;
+const { Content } = await render(entry);
 ---
 
 <BaseLayout
@@ -22,51 +24,7 @@ const c = entry.data;
     <div class="prose prose-lg max-w-none">
       <h1>{c.pageTitle}</h1>
       <p><em>Ultimo aggiornamento: {c.updatedDate}.</em></p>
-
-      <h2>{c.titolareTitle}</h2>
-      <p set:html={c.titolareText} />
-
-      <h2>{c.datiRaccoltiTitle}</h2>
-      <ul>
-        <li set:html={c.datiFormText} />
-        <li set:html={c.datiAnalisiCookielessText} />
-        <li set:html={c.datiAnalisiCookieText} />
-      </ul>
-
-      <h2>{c.terzePartiTitle}</h2>
-      <ul>
-        <li set:html={c.terzePartiPosthogText} />
-        <li set:html={c.terzePartiWeb3formsText} />
-      </ul>
-      <p set:html={c.terzePartiNote} />
-
-      <h2>{c.conservazioneTitle}</h2>
-      <p>{c.conservazioneText}</p>
-
-      <h2>{c.dirittiTitle}</h2>
-      <p set:html={c.dirittiText} />
-
-      <hr />
-
-      <h2 id="cookie">{c.cookiePolicyTitle}</h2>
-      <p>{c.cookieIntroText}</p>
-
-      <h3>{c.cookieTecniciTitle}</h3>
-      <p>{c.cookieTecniciText}</p>
-      <ul>
-        <li set:html={c.cookieTecniciListText} />
-      </ul>
-
-      <h3>{c.cookieAnalisiTitle}</h3>
-      <p>{c.cookieAnalisiText}</p>
-      <ul>
-        <li set:html={c.cookieAnalisiListText} />
-      </ul>
-
-      <h3>{c.consensoTitle}</h3>
-      <p set:html={c.consensoText} />
-
-      <p set:html={c.terminiLinkText} />
+      <Content />
     </div>
   </article>
 </BaseLayout>

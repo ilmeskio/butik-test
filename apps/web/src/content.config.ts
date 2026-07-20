@@ -218,6 +218,13 @@ const paginaContatti = z.object({
   formNetworkErrorMessage: z.string(),
 });
 
+// paginaPrivacy: a differenza delle altre entry di `pagine` (frontmatter-only,
+// un campo per stringa), questa è prosa lunga e sequenziale senza struttura
+// ricorrente (niente array/card) — stessa forma di `progetti` (ADR-0004), non
+// di chi-siamo/contatti. Il corpo vive quindi nel body Markdown dell'entry
+// (Sitepins lo edita come markdown, non campo per campo); il frontmatter
+// resta minimo: solo meta + il pezzo che il layout .astro deve interpolare
+// fuori dal flusso di prosa (titolo H1, data aggiornamento).
 const paginaPrivacy = z.object({
   type: z.literal('privacy'),
   // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
@@ -226,31 +233,6 @@ const paginaPrivacy = z.object({
   metaDescription: z.string(),
   pageTitle: z.string(),
   updatedDate: z.string(),
-  titolareTitle: z.string(),
-  titolareText: z.string(),
-  datiRaccoltiTitle: z.string(),
-  datiFormText: z.string(),
-  datiAnalisiCookielessText: z.string(),
-  datiAnalisiCookieText: z.string(),
-  terzePartiTitle: z.string(),
-  terzePartiPosthogText: z.string(),
-  terzePartiWeb3formsText: z.string(),
-  terzePartiNote: z.string(),
-  conservazioneTitle: z.string(),
-  conservazioneText: z.string(),
-  dirittiTitle: z.string(),
-  dirittiText: z.string(),
-  cookiePolicyTitle: z.string(),
-  cookieIntroText: z.string(),
-  cookieTecniciTitle: z.string(),
-  cookieTecniciText: z.string(),
-  cookieTecniciListText: z.string(),
-  cookieAnalisiTitle: z.string(),
-  cookieAnalisiText: z.string(),
-  cookieAnalisiListText: z.string(),
-  consensoTitle: z.string(),
-  consensoText: z.string(),
-  terminiLinkText: z.string(),
 });
 
 const paginaPartners = (image: ImageFn) => z.object({
