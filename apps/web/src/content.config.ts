@@ -234,6 +234,21 @@ const paginaPartners = (image: ImageFn) => z.object({
   })),
 });
 
+// paginaTermini: stessa forma minimale di paginaPrivacy (PR #30) — prosa
+// legale lunga e sequenziale senza struttura ricorrente (niente array/card),
+// come `progetti` (ADR-0004). Il corpo vive nel body Markdown dell'entry, non
+// in campi frontmatter; il frontmatter resta solo meta + i due pezzi che il
+// layout interpola fuori dal flusso di prosa (titolo H1, data aggiornamento).
+const paginaTermini = z.object({
+  type: z.literal('termini'),
+  // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
+  title: z.string(),
+  metaTitle: z.string(),
+  metaDescription: z.string(),
+  pageTitle: z.string(),
+  updatedDate: z.string(),
+});
+
 const paginaServizi = z.object({
   type: z.literal('servizi-index'),
   // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
@@ -292,6 +307,7 @@ const pagineCollection = defineCollection({
     paginaPartners(image),
     paginaServizi,
     paginaTestimonials,
+    paginaTermini,
   ]),
 });
 
