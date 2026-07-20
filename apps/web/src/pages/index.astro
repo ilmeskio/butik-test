@@ -9,6 +9,7 @@ import PortfolioGrid from '#components/home/PortfolioGrid.astro';
 import CtaBanner from '#components/CtaBanner.astro';
 import AboutInline from '#components/home/AboutInline.astro';
 import Metodo from '#components/home/Metodo.astro';
+import type { MetodoIconName } from '#data/metodo';
 import NewsletterSignup from '#components/home/NewsletterSignup.astro';
 
 const topProgetti = (await getCollection('progetti', e => e.data.featured && !e.data.draft))
@@ -30,6 +31,23 @@ if (!partnersEntry || partnersEntry.data.type !== 'partners') {
   throw new Error('Contenuto pagina "partners" mancante o non valido (collezione pagine).');
 }
 const partners = partnersEntry.data.partners;
+
+// Metodo (issue #26 — W2): stessa entry `pagine/servizi` di /servizi, unica
+// source of truth per eyebrow/titolo/passi. Le icone per tappa restano config
+// di design qui, non nello schema Sitepins.
+const serviziEntry = await getEntry('pagine', 'servizi');
+if (!serviziEntry || serviziEntry.data.type !== 'servizi-index') {
+  throw new Error('Contenuto pagina "servizi" mancante o non valido (collezione pagine) — richiesto anche dalla sezione Metodo in home.');
+}
+const metodoIcons: MetodoIconName[] = ['ascolto', 'co-progettazione', 'protagonismo', 'formazione', 'eventi'];
+
+// Testimonianze: entry condivisa `pagine/testimonials`, riusata identica da
+// chi-siamo.astro.
+const testimonialsEntry = await getEntry('pagine', 'testimonials');
+if (!testimonialsEntry || testimonialsEntry.data.type !== 'testimonials') {
+  throw new Error('Contenuto pagina "testimonials" mancante o non valido (collezione pagine).');
+}
+const testimonials = testimonialsEntry.data;
 ---
 
 <BaseLayout
@@ -52,14 +70,23 @@ const partners = partnersEntry.data.partners;
     mmwLabel={c.mmwLabel}
     mmwMetrics={c.mmwMetrics}
   />
-  <Metodo />
-  <Testimonials />
+  <Metodo
+    eyebrow={serviziEntry.data.metodoEyebrow}
+    title={serviziEntry.data.metodoTitle}
+    tappe={serviziEntry.data.metodo}
+    icons={metodoIcons}
+  />
+  <Testimonials
+    eyebrow={testimonials.eyebrow}
+    sectionTitle={testimonials.sectionTitle}
+    testimonials={testimonials.testimonials}
+  />
   <PortfolioGrid progetti={topProgetti} />
   <CtaBanner
-    title="Lavoriamo insieme?"
-    body="Che tu sia un Comune, una DMO, un operatore culturale o un festival, siamo pronti ad ascoltarti e costruire qualcosa insieme."
-    primaryCta={{ label: 'Contattaci', href: '/contatti' }}
-    secondaryCta={{ label: 'Scopri i servizi', href: '/servizi' }}
+    title={c.ctaBanner1Title}
+    body={c.ctaBanner1Body}
+    primaryCta={{ label: c.ctaBanner1PrimaryLabel, href: c.ctaBanner1PrimaryHref }}
+    secondaryCta={{ label: c.ctaBanner1SecondaryLabel, href: c.ctaBanner1SecondaryHref }}
   />
   <AboutInline
     title={c.aboutTitle}
@@ -71,9 +98,9 @@ const partners = partnersEntry.data.partners;
     imageAlt={c.aboutImageAlt}
   />
   <CtaBanner
-    title="Cerchi una consulenza su misura o vuoi replicare uno dei nostri format sul tuo territorio?"
-    primaryCta={{ label: 'Scopri tutti i nostri servizi', href: '/servizi' }}
-    secondaryCta={{ label: 'Scopri i nostri format', href: '/formats' }}
+    title={c.ctaBanner2Title}
+    primaryCta={{ label: c.ctaBanner2PrimaryLabel, href: c.ctaBanner2PrimaryHref }}
+    secondaryCta={{ label: c.ctaBanner2SecondaryLabel, href: c.ctaBanner2SecondaryHref }}
   />
   <NewsletterSignup
     title={c.newsletterTitle}

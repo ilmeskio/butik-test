@@ -123,6 +123,118 @@
       "value": "",
       "isIgnored": false,
       "defaultValue": ""
+    },
+    {
+      "name": "formNameLabel",
+      "label": "FormNameLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formNamePlaceholder",
+      "label": "FormNamePlaceholder",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formEmailLabel",
+      "label": "FormEmailLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formEmailPlaceholder",
+      "label": "FormEmailPlaceholder",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formOrgLabel",
+      "label": "FormOrgLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formOrgPlaceholder",
+      "label": "FormOrgPlaceholder",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formMessageLabel",
+      "label": "FormMessageLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formMessagePlaceholder",
+      "label": "FormMessagePlaceholder",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formSubmitLabel",
+      "label": "FormSubmitLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formSubmitLoadingLabel",
+      "label": "FormSubmitLoadingLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formMissingKeyMessage",
+      "label": "FormMissingKeyMessage",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formSuccessMessage",
+      "label": "FormSuccessMessage",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formErrorMessage",
+      "label": "FormErrorMessage",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "formNetworkErrorMessage",
+      "label": "FormNetworkErrorMessage",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
     }
   ]
 }
