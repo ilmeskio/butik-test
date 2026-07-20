@@ -29,14 +29,29 @@ const { title, body, primaryCta, secondaryCta } = Astro.props;
     </div>
 
     <div class={styles.actions}>
-      <a href={primaryCta.href} class={`${styles.cta} ${styles.primary}`}>
+      <a href={primaryCta.href} data-cta-banner data-cta-variant="primary" class={`${styles.cta} ${styles.primary}`}>
         {primaryCta.label}
       </a>
       {secondaryCta && (
-        <a href={secondaryCta.href} class={`${styles.cta} ${styles.secondary}`}>
+        <a href={secondaryCta.href} data-cta-banner data-cta-variant="secondary" class={`${styles.cta} ${styles.secondary}`}>
           {secondaryCta.label}
         </a>
       )}
     </div>
   </div>
 </section>
+
+<script>
+  import posthog from 'posthog-js';
+
+  // Uses event delegation so a single listener covers all CtaBanner instances on the page.
+  document.addEventListener('click', (e) => {
+    const link = (e.target as Element).closest<HTMLAnchorElement>('[data-cta-banner]');
+    if (!link) return;
+    posthog.capture('cta_banner_clicked', {
+      label: link.textContent?.trim(),
+      href: link.getAttribute('href'),
+      variant: link.dataset.ctaVariant,
+    });
+  });
+</script>

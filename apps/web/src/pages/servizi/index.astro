@@ -35,9 +35,9 @@ const metodo = c.metodo;
 
   <!-- Grid -->
   <section class="max-w-7xl mx-auto px-6 pb-20">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10" data-servizi-grid>
       {servizi.map((s, i) => (
-        <a href={`/servizi/${s.id}`} class="group block">
+        <a href={`/servizi/${s.id}`} class="group block" data-service-id={s.id} data-service-title={s.data.title} data-service-position={i}>
           <div class="overflow-hidden mb-5">
             <Image
               src={s.data.heroImage}
@@ -96,6 +96,27 @@ const metodo = c.metodo;
 
   <ServiziPageSwitcher current="orig" />
 </BaseLayout>
+
+<script>
+  import posthog from 'posthog-js';
+
+  function initServiceTracking() {
+    const grid = document.querySelector('[data-servizi-grid]');
+    if (!grid || (grid as HTMLElement).dataset.phBound) return;
+    (grid as HTMLElement).dataset.phBound = 'true';
+    grid.addEventListener('click', (e) => {
+      const card = (e.target as Element).closest<HTMLAnchorElement>('[data-service-id]');
+      if (!card) return;
+      posthog.capture('service_card_clicked', {
+        service_id: card.dataset.serviceId,
+        service_title: card.dataset.serviceTitle,
+        position: Number(card.dataset.servicePosition),
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initServiceTracking);
+</script>
 
 <style>
   .metodo-title {

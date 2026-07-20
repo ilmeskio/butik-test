@@ -75,6 +75,8 @@ const { title, body, placeholder, button, privacy, success } = Astro.props;
 </section>
 
 <script>
+  import posthog from 'posthog-js';
+
   const container = document.getElementById('newsletter-container');
   const status = document.getElementById('newsletter-status');
   const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
@@ -88,6 +90,7 @@ const { title, body, placeholder, button, privacy, success } = Astro.props;
         return;
       }
 
+      posthog.capture('newsletter_subscribed');
       container.classList.add('hidden');
       status.textContent = status.dataset.success ?? '';
       status.classList.remove('hidden');

@@ -225,6 +225,7 @@ const proofLogos = partners.filter((p) => proofLogoNames.includes(p.name));
         <div class="hero-cta relative mt-8">
           <a
             href={ctaHref}
+            data-hero-cta
             class="inline-flex items-center justify-center bg-butik-red text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-butik-dark transition-colors"
           >
             {ctaLabel}
@@ -620,4 +621,23 @@ const proofLogos = partners.filter((p) => proofLogoNames.includes(p.name));
   }
   document.addEventListener('astro:page-load', initHeroEval);
   initHeroEval();
+</script>
+
+<script>
+  import posthog from 'posthog-js';
+
+  function initHeroCtaTracking() {
+    const cta = document.querySelector<HTMLAnchorElement>('[data-hero-cta]');
+    if (!cta || cta.dataset.phBound) return;
+    cta.dataset.phBound = 'true';
+    cta.addEventListener('click', () => {
+      posthog.capture('hero_cta_clicked', {
+        cta_label: cta.textContent?.trim(),
+        cta_href: cta.getAttribute('href'),
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initHeroCtaTracking);
+  initHeroCtaTracking();
 </script>

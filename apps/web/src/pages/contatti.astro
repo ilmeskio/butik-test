@@ -139,6 +139,8 @@ const inputClass =
 </BaseLayout>
 
 <script>
+  import posthog from 'posthog-js';
+
   // Aggancia il form. Idempotente: con ClientRouter astro:page-load rifà girare
   // questa init ad ogni navigazione, ma il binding avviene una volta per elemento.
   function initContactForm() {
@@ -148,6 +150,13 @@ const inputClass =
     const submit = document.getElementById('contact-submit') as HTMLButtonElement | null;
     if (!result || !submit) return;
     form.dataset.bound = 'true';
+
+    // Track social link clicks by platform label.
+    document.querySelectorAll<HTMLAnchorElement>('aside a[aria-label]').forEach((link) => {
+      link.addEventListener('click', () => {
+        posthog.capture('social_link_clicked', { platform: link.getAttribute('aria-label') });
+      });
+    });
 
     const showMessage = (text: string, ok: boolean) => {
       result.textContent = text;
@@ -181,11 +190,14 @@ const inputClass =
         if (response.ok && data.success) {
           form.reset();
           showMessage('Grazie! Il tuo messaggio è stato inviato. Ti risponderemo al più presto.', true);
+          posthog.capture('contact_form_submitted');
         } else {
           showMessage(data.message || 'Qualcosa è andato storto. Riprova o scrivici a info@wearebutik.com.', false);
+          posthog.capture('contact_form_failed', { reason: 'api_error' });
         }
       } catch {
         showMessage('Errore di rete. Riprova o scrivici a info@wearebutik.com.', false);
+        posthog.capture('contact_form_failed', { reason: 'network_error' });
       } finally {
         submit.disabled = false;
         submit.textContent = originalLabel;
