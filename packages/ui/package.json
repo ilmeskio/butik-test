@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "chromatic": "chromatic --exit-zero-on-changes"
   },
   "exports": {
     "./Button": "./src/Button.tsx"
@@ -18,12 +19,14 @@
     "react-dom": "^18 || ^19"
   },
   "devDependencies": {
-    "@storybook/react-vite": "^10.5.0",
+    "@storybook/addon-a11y": "10.5.3",
+    "@storybook/react-vite": "^10.5.3",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "chromatic": "18.0.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "storybook": "^10.5.0",
+    "storybook": "^10.5.3",
     "vite": "^7.0.0"
   }
 }

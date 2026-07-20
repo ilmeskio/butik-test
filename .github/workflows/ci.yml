@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  # Pubblica Storybook su Chromatic: review/commenti su ogni PR (link in fondo
+  # al check) + visual regression sulla build pubblicata (ADR-0008, issue #27).
+  # Questo job assorbe anche la verifica "Storybook builda ad ogni PR": se la
+  # build fallisce, il job fallisce prima ancora di pubblicare. Richiede il
+  # secret repo CHROMATIC_PROJECT_TOKEN (creato manualmente su chromatic.com,
+  # non gestito da questo workflow) — finché non è impostato il job fallisce
+  # sull'auth.
+  chromatic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Chromatic confronta contro la baseline del branch base: senza la
+          # storia completa non riesce a determinare il commit di baseline.
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: Publish to Chromatic
+        uses: chromaui/action@v1
+        with:
+          workingDir: packages/ui
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}

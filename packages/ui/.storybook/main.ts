@@ -6,7 +6,10 @@ import type { StorybookConfig } from '@storybook/react-vite';
 const config: StorybookConfig = {
   // Le storie sono co-locate accanto ai componenti in src/.
   stories: ['../src/**/*.stories.@(ts|tsx)'],
-  addons: [],
+  // a11y (issue #29): pannello di audit accessibilità per storia, basato su
+  // axe-core. Verifica ARIA/contrasto/focus direttamente nel workshop, oltre
+  // a design-check.
+  addons: ['@storybook/addon-a11y'],
   framework: {
     name: '@storybook/react-vite',
     options: {},
