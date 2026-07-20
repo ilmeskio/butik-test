@@ -8,8 +8,7 @@
     "build-storybook": "storybook build"
   },
   "exports": {
-    "./Button": "./src/Button.tsx",
-    "./*": "./src/*"
+    "./Button": "./src/Button.tsx"
   },
   "dependencies": {
     "@butik/ui-tokens": "workspace:*"
