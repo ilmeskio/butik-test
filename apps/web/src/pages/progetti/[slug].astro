@@ -33,3 +33,25 @@ const { Content } = await render(entry);
 >
   <Content components={{ ImageBlock, ImageCarousel, ImageLeft, ImageRight }} />
 </ContentLayout>
+
+<span
+  id="ph-project-data"
+  hidden
+  data-slug={entry.id}
+  data-title={entry.data.title}
+  data-category={entry.data.category ?? ''}
+></span>
+
+<script>
+  import { trackEvent } from '#lib/analytics/posthog.client';
+
+  document.addEventListener('astro:page-load', () => {
+    const el = document.getElementById('ph-project-data');
+    if (!el) return;
+    trackEvent('project_viewed', {
+      slug: el.dataset.slug,
+      title: el.dataset.title,
+      category: el.dataset.category || undefined,
+    });
+  });
+</script>

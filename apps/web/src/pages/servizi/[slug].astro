@@ -28,3 +28,23 @@ const { Content } = await render(entry);
   <Content />
   <div class="not-prose"><VariantSwitcher current="orig" slug={entry.id} /></div>
 </ContentLayout>
+
+<span
+  id="ph-service-data"
+  hidden
+  data-slug={entry.id}
+  data-title={entry.data.title}
+></span>
+
+<script>
+  import { trackEvent } from '#lib/analytics/posthog.client';
+
+  document.addEventListener('astro:page-load', () => {
+    const el = document.getElementById('ph-service-data');
+    if (!el) return;
+    trackEvent('service_viewed', {
+      slug: el.dataset.slug,
+      title: el.dataset.title,
+    });
+  });
+</script>

@@ -87,7 +87,17 @@ const inputClass =
             {c.formSubmitLabel}
           </button>
 
-          <p id="form-result" class="font-sans text-sm hidden" role="status" aria-live="polite"></p>
+          <p
+            id="form-result"
+            class="font-sans text-sm hidden"
+            role="status"
+            aria-live="polite"
+            data-missing-key={c.formMissingKeyMessage}
+            data-loading={c.formSubmitLoadingLabel}
+            data-success={c.formSuccessMessage}
+            data-error={c.formErrorMessage}
+            data-network-error={c.formNetworkErrorMessage}
+          ></p>
         </form>
       </div>
 
@@ -138,16 +148,12 @@ const inputClass =
   </section>
 </BaseLayout>
 
-<script define:vars={{
-  formMissingKeyMessage: c.formMissingKeyMessage,
-  formSubmitLoadingLabel: c.formSubmitLoadingLabel,
-  formSuccessMessage: c.formSuccessMessage,
-  formErrorMessage: c.formErrorMessage,
-  formNetworkErrorMessage: c.formNetworkErrorMessage,
-}}>
+<script>
+  import { trackEvent } from '#lib/analytics/posthog.client';
+
   // Aggancia il form. Idempotente: con ClientRouter astro:page-load rifà girare
   // questa init ad ogni navigazione, ma il binding avviene una volta per elemento.
-  // Messaggi di stato content-driven (issue #26): iniettati da define:vars sopra.
+  // Messaggi di stato content-driven (issue #26): letti dai data-* di #form-result.
   function initContactForm() {
     const form = document.getElementById('contact-form') as HTMLFormElement | null;
     if (!form || form.dataset.bound === 'true') return;
@@ -155,6 +161,12 @@ const inputClass =
     const submit = document.getElementById('contact-submit') as HTMLButtonElement | null;
     if (!result || !submit) return;
     form.dataset.bound = 'true';
+
+    const formMissingKeyMessage = result.dataset.missingKey ?? '';
+    const formSubmitLoadingLabel = result.dataset.loading ?? '';
+    const formSuccessMessage = result.dataset.success ?? '';
+    const formErrorMessage = result.dataset.error ?? '';
+    const formNetworkErrorMessage = result.dataset.networkError ?? '';
 
     const showMessage = (text: string, ok: boolean) => {
       result.textContent = text;
@@ -188,11 +200,14 @@ const inputClass =
         if (response.ok && data.success) {
           form.reset();
           showMessage(formSuccessMessage, true);
+          trackEvent('contact_form_submitted');
         } else {
           showMessage(data.message || formErrorMessage, false);
+          trackEvent('contact_form_error', { error_message: data.message });
         }
       } catch {
         showMessage(formNetworkErrorMessage, false);
+        trackEvent('contact_form_error', { error_message: 'network_error' });
       } finally {
         submit.disabled = false;
         submit.textContent = originalLabel;
