@@ -1,4 +1,7 @@
 ---
+// Testimonianze content-driven via Sitepins (ADR-0004): entry condivisa
+// `pagine/testimonials`, riusata identica da home (index.astro) e
+// chi-siamo.astro — entrambe passano le stesse props a questo componente.
 type Testimonial = {
   rating: number;
   quote: string;
@@ -6,38 +9,22 @@ type Testimonial = {
   role: string;
 };
 
-const testimonials: Testimonial[] = [
-  {
-    rating: 5,
-    quote:
-      'Butik ha trasformato il nostro modo di pensare al patrimonio musicale come asset turistico. Un percorso strutturato, fatto di ascolto vero.',
-    name: 'Maria Rossi',
-    role: 'Direttrice DMO Visit Cremona',
-  },
-  {
-    rating: 5,
-    quote:
-      'Il loro approccio integra formazione, progettazione e impatto sociale. Ha generato risultati misurabili e duraturi sul territorio.',
-    name: 'Luca Bianchi',
-    role: 'Assessore alla Cultura, Comune di Napoli',
-  },
-  {
-    rating: 5,
-    quote:
-      "Lavorare con Butik significa avere al fianco un partner strategico e non un fornitore. Co-progettazione vera, dall'idea alla rendicontazione.",
-    name: 'Sara Verdi',
-    role: 'Project Manager Cariplo',
-  },
-];
+interface Props {
+  eyebrow: string;
+  sectionTitle: string;
+  testimonials: Testimonial[];
+}
+
+const { eyebrow, sectionTitle, testimonials } = Astro.props;
 ---
 
 <section class="bg-butik-light py-12 md:py-16">
   <div class="max-w-7xl mx-auto px-6">
     <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4 text-center">
-      Testimonianze
+      {eyebrow}
     </p>
     <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark text-center mb-8 md:mb-10">
-      Cosa dicono di noi
+      {sectionTitle}
     </h2>
 
     <div

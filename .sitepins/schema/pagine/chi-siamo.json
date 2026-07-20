@@ -158,6 +158,14 @@
       ]
     },
     {
+      "name": "sdgObiettivoLabel",
+      "label": "SdgObiettivoLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
       "name": "teamEyebrow",
       "label": "TeamEyebrow",
       "type": "string",
@@ -245,6 +253,14 @@
           "defaultValue": ""
         }
       ]
+    },
+    {
+      "name": "linkedinLabel",
+      "label": "LinkedinLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
     },
     {
       "name": "testimonialQuote",

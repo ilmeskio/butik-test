@@ -20,6 +20,7 @@ sdg:
     title: "Lavoro Dignitoso e Crescita Economica"
   - num: 11
     title: "Città e Comunità Sostenibili"
+sdgObiettivoLabel: "Obiettivo"
 teamEyebrow: "Il nostro team"
 teamP1: "Siamo un piccolo team con una grande rete. La nostra visione è human first: partiamo dalle persone, dai loro bisogni e dal loro contesto. Ogni progetto è costruito su misura, attraverso ascolto, partecipazione attiva e coinvolgimento dal basso, includendo comunità e operatori del territorio."
 teamP2: "Con 8 anni di esperienza sul campo, offriamo un esteso <strong class='font-bold text-butik-dark'> network</strong> di rapporti consolidati con Pubbliche Amministrazioni, professionisti della musica e del turismo, e la capacità di intercettare finanziamenti per rendere i progetti sostenibili."
@@ -43,6 +44,7 @@ founders:
     email: "marialuisa@wearebutik.com"
     linkedin: "#"
     photo: "/src/assets/servizi/template-servizio/gallery-3.jpg"
+linkedinLabel: "LinkedIn"
 testimonialQuote: "Il percorso mi ha fatto crescere moltissimo, sono stata posta davanti a diverse sfide che mi hanno fatto crescere a livello professionale e umano. Ho apprezzato l'approccio di Butik, in quanto sono state abili a creare uno spazio sicuro e libero da critiche anche durante l'errore. Ho acquisito competenze legate alla progettazione e al modo di approcciarmi al mondo professionale e lavorativo."
 testimonialAuthor: "— Partecipante under 35 del percorso di formazione Cult Funding"
 ctaTitle: "Vuoi essere parte del cambiamento?"
