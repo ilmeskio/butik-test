@@ -106,3 +106,40 @@ considered and rejected in favour of Consent Mode's conversion/behaviour
 modelling signals. If a stricter "zero Google contact before consent" posture is
 required, switch GTM to `vanilla-cookieconsent`'s `data-category` script blocking
 → note it here.
+
+## Update (2026-07-20): cookieless PostHog signals run without consent
+
+The original decision read "no tracking before consent" as a blanket rule tied to
+`opt_out_capturing_by_default`. That conflated two different things: whether a
+**cookie** is written on the visitor's device, and whether **any** signal is
+captured. ePrivacy art. 5(3) / art. 122 Codice Privacy require consent for storing
+or accessing information on the device — not for every kind of data collection.
+A signal that touches no cookie and carries no persistent identifier does not need
+it; it rests on legitimate interest (measuring and keeping the site working).
+
+- **Always on, cookieless, legitimate interest**: `$pageview`/`$pageleave` and web
+  vitals (`capture_performance: { web_vitals: true }`). PostHog initializes
+  immediately (if `PUBLIC_POSTHOG_KEY` is set) with `persistence: 'memory'` — no
+  cookie, no `localStorage`, nothing survives a reload. `autocapture` stays off at
+  this tier: it captures element text, which the always-on tier must not touch.
+- **Consent-gated**: upgrading `persistence` to `'localStorage+cookie'` — a
+  durable, cross-visit identifier — happens only on `analytics` opt-in. Revoking
+  consent downgrades back to `persistence: 'memory'` and calls `reset()`; the
+  cookieless pageview/web-vitals signals are **not** stopped, because they never
+  needed the consent they are losing nothing by keeping.
+- **Banner and Cookie Policy wording**: rephrased from "no tracking before
+  consent" to "no cookie before consent" (`config.client.ts`'s consent modal
+  description, `privacy.astro`'s data-collection section) — the Cookie Policy
+  section itself already said "no analytics *cookie* before consent"
+  (`privacy.astro#cookie`), which was accurate all along; only the two broader
+  claims needed correcting.
+- **Scope**: this update covers PostHog only. GTM/GA stay exactly as the
+  2026-07-13 update left them (Consent Mode v2, `analytics_storage` denied by
+  default) — Consent Mode already expresses a device-side default-deny posture
+  for Google's tags, so nothing there needed to change.
+
+### Alternative considered: keep the original blanket rule
+
+Rejected: it throws away real, low-risk product signal (pageviews and web vitals
+correlate directly with real-world usage and performance) for a compliance
+posture the actual regulation does not require, once no cookie is written.
