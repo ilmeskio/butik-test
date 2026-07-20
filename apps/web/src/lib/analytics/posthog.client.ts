@@ -29,6 +29,12 @@ const HOST =
   (import.meta.env.PUBLIC_POSTHOG_HOST as string | undefined) ?? 'https://eu.i.posthog.com';
 
 let initialized = false;
+// Distinto da `initialized`: quello diventa true già al livello cookieless
+// (subito, senza consenso). `consented` traccia invece se l'utente ha
+// concesso la categoria `analytics` — è il gate corretto per gli eventi
+// custom (trackEvent), che sono identificazione personale, non semplice
+// pageview/web-vitals.
+let consented = false;
 
 // Inizializza PostHog una sola volta, subito (se la chiave c'è) — non aspetta
 // il consenso, perché il livello cookieless non ne ha bisogno. Ritorna `false`
@@ -72,6 +78,7 @@ export function optInPostHog(): void {
   if (!ensureInit()) return;
   posthog.set_config({ persistence: 'localStorage+cookie', autocapture: true });
   posthog.startSessionRecording();
+  consented = true;
 }
 
 // Consenso negato/revocato: torna al livello cookieless. Pageview e web vitals
@@ -82,13 +89,14 @@ export function optOutPostHog(): void {
   posthog.stopSessionRecording();
   posthog.set_config({ persistence: 'memory', autocapture: false });
   posthog.reset();
+  consented = false;
 }
 
-// Punto d'ingresso unico per gli eventi custom. Gated esplicitamente su
-// `initialized`: se il consenso non è mai stato concesso, `ensureInit()` non è
-// mai girato e questa funzione è un no-op, indipendentemente da come il
-// singleton di posthog-js si comporta internamente.
+// Punto d'ingresso unico per gli eventi custom (contact_form_submitted,
+// newsletter_subscribed, ecc.). Sono identificazione personale come
+// l'autocapture e la session recording, non pageview/web-vitals: gated su
+// `consented`, non su `initialized` (che è già true al livello cookieless).
 export function trackEvent(event: string, properties?: Record<string, unknown>): void {
-  if (!initialized) return;
+  if (!consented) return;
   posthog.capture(event, properties);
 }
