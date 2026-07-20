@@ -20,4 +20,10 @@ metodo:
     description: "Il nostro modello formativo è basato sull'esperienza diretta e sulla costruzione di una comunità temporanea di progetto."
   - title: "Eventi come strumento strategico"
     description: "Progettiamo format che attivano territori e generano impatto sociale."
+cardCtaLabel: "Scopri di più →"
+ctaTitle: "Vuoi vedere i nostri servizi in azione?"
+ctaPrimaryLabel: "Visiona il nostro portfolio"
+ctaPrimaryHref: "/progetti"
+ctaSecondaryLabel: "Scopri i nostri format"
+ctaSecondaryHref: "/formats"
 ---

@@ -101,6 +101,13 @@ const paginaHome = z.object({
   butikMetrics: z.array(metricSchema),
   mmwLabel: z.string(),
   mmwMetrics: z.array(metricSchema),
+  // CTA banner 1 (dopo Metodo/Testimonials/PortfolioGrid)
+  ctaBanner1Title: z.string(),
+  ctaBanner1Body: z.string(),
+  ctaBanner1PrimaryLabel: z.string(),
+  ctaBanner1PrimaryHref: z.string(),
+  ctaBanner1SecondaryLabel: z.string(),
+  ctaBanner1SecondaryHref: z.string(),
   // About inline
   aboutTitle: z.string(),
   aboutP1: z.string(),
@@ -109,6 +116,12 @@ const paginaHome = z.object({
   aboutCtaLabel: z.string(),
   aboutCtaHref: z.string(),
   aboutImageAlt: z.string(),
+  // CTA banner 2 (dopo AboutInline, senza body)
+  ctaBanner2Title: z.string(),
+  ctaBanner2PrimaryLabel: z.string(),
+  ctaBanner2PrimaryHref: z.string(),
+  ctaBanner2SecondaryLabel: z.string(),
+  ctaBanner2SecondaryHref: z.string(),
   // Newsletter
   newsletterTitle: z.string(),
   newsletterBody: z.string(),
@@ -142,6 +155,8 @@ const paginaChiSiamo = (image: ImageFn) => z.object({
     num: z.number(),
     title: z.string(),
   })),
+  // Prefisso label di ogni card SDG (es. "Obiettivo 8").
+  sdgObiettivoLabel: z.string(),
   teamEyebrow: z.string(),
   teamP1: z.string(),
   teamP2: z.string(),
@@ -158,6 +173,8 @@ const paginaChiSiamo = (image: ImageFn) => z.object({
     linkedin: z.string(),
     photo: image().or(z.literal('')),
   })),
+  // Label del link LinkedIn di ogni founder (visibile accanto all'icona).
+  linkedinLabel: z.string(),
   testimonialQuote: z.string(),
   testimonialAuthor: z.string(),
   ctaTitle: z.string(),
@@ -183,6 +200,22 @@ const paginaContatti = z.object({
   sedeLabel: z.string(),
   sedeAddress: z.string(),
   seguiciLabel: z.string(),
+  // Form contatti (issue #26): label/placeholder dei campi, testo del
+  // pulsante e messaggi di stato mostrati dallo script client-side.
+  formNameLabel: z.string(),
+  formNamePlaceholder: z.string(),
+  formEmailLabel: z.string(),
+  formEmailPlaceholder: z.string(),
+  formOrgLabel: z.string(),
+  formOrgPlaceholder: z.string(),
+  formMessageLabel: z.string(),
+  formMessagePlaceholder: z.string(),
+  formSubmitLabel: z.string(),
+  formSubmitLoadingLabel: z.string(),
+  formMissingKeyMessage: z.string(),
+  formSuccessMessage: z.string(),
+  formErrorMessage: z.string(),
+  formNetworkErrorMessage: z.string(),
 });
 
 const paginaPartners = (image: ImageFn) => z.object({
@@ -201,6 +234,21 @@ const paginaPartners = (image: ImageFn) => z.object({
   })),
 });
 
+// paginaTermini: stessa forma minimale di paginaPrivacy (PR #30) — prosa
+// legale lunga e sequenziale senza struttura ricorrente (niente array/card),
+// come `progetti` (ADR-0004). Il corpo vive nel body Markdown dell'entry, non
+// in campi frontmatter; il frontmatter resta solo meta + i due pezzi che il
+// layout interpola fuori dal flusso di prosa (titolo H1, data aggiornamento).
+const paginaTermini = z.object({
+  type: z.literal('termini'),
+  // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
+  title: z.string(),
+  metaTitle: z.string(),
+  metaDescription: z.string(),
+  pageTitle: z.string(),
+  updatedDate: z.string(),
+});
+
 const paginaServizi = z.object({
   type: z.literal('servizi-index'),
   // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
@@ -213,10 +261,36 @@ const paginaServizi = z.object({
   headerIntro2: z.string(),
   metodoEyebrow: z.string(),
   metodoTitle: z.string(),
-  // Passi del metodo come ARRAY di oggetti { titolo, descrizione }.
+  // Passi del metodo come ARRAY di oggetti { titolo, descrizione }. Riusato
+  // anche dalla home (Metodo.astro): l'icona per tappa resta config di
+  // design nel componente (come sdgStyle in chi-siamo), non nello schema.
   metodo: z.array(z.object({
     title: z.string(),
     description: z.string(),
+  })),
+  // Card servizio: link "Scopri di più →" (uguale per tutte le card).
+  cardCtaLabel: z.string(),
+  // CTA finale
+  ctaTitle: z.string(),
+  ctaPrimaryLabel: z.string(),
+  ctaPrimaryHref: z.string(),
+  ctaSecondaryLabel: z.string(),
+  ctaSecondaryHref: z.string(),
+});
+
+const paginaTestimonials = z.object({
+  type: z.literal('testimonials'),
+  // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
+  title: z.string(),
+  eyebrow: z.string(),
+  sectionTitle: z.string(),
+  // Testimonianze condivise: riusate identiche da home (index.astro) e
+  // chi-siamo.astro tramite lo stesso componente Testimonials.astro.
+  testimonials: z.array(z.object({
+    rating: z.number(),
+    quote: z.string(),
+    name: z.string(),
+    role: z.string(),
   })),
 });
 
@@ -232,6 +306,8 @@ const pagineCollection = defineCollection({
     paginaContatti,
     paginaPartners(image),
     paginaServizi,
+    paginaTestimonials,
+    paginaTermini,
   ]),
 });
 

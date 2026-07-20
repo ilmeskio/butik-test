@@ -108,6 +108,54 @@
           "defaultValue": ""
         }
       ]
+    },
+    {
+      "name": "cardCtaLabel",
+      "label": "CardCtaLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaTitle",
+      "label": "CtaTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaPrimaryLabel",
+      "label": "CtaPrimaryLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaPrimaryHref",
+      "label": "CtaPrimaryHref",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaSecondaryLabel",
+      "label": "CtaSecondaryLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaSecondaryHref",
+      "label": "CtaSecondaryHref",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
     }
   ]
 }

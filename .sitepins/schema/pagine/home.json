@@ -176,6 +176,54 @@
       ]
     },
     {
+      "name": "ctaBanner1Title",
+      "label": "CtaBanner1Title",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaBanner1Body",
+      "label": "CtaBanner1Body",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaBanner1PrimaryLabel",
+      "label": "CtaBanner1PrimaryLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaBanner1PrimaryHref",
+      "label": "CtaBanner1PrimaryHref",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaBanner1SecondaryLabel",
+      "label": "CtaBanner1SecondaryLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaBanner1SecondaryHref",
+      "label": "CtaBanner1SecondaryHref",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
       "name": "aboutTitle",
       "label": "AboutTitle",
       "type": "string",
@@ -226,6 +274,46 @@
     {
       "name": "aboutImageAlt",
       "label": "AboutImageAlt",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaBanner2Title",
+      "label": "CtaBanner2Title",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaBanner2PrimaryLabel",
+      "label": "CtaBanner2PrimaryLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaBanner2PrimaryHref",
+      "label": "CtaBanner2PrimaryHref",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaBanner2SecondaryLabel",
+      "label": "CtaBanner2SecondaryLabel",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "ctaBanner2SecondaryHref",
+      "label": "CtaBanner2SecondaryHref",
       "type": "string",
       "value": "",
       "isIgnored": false,

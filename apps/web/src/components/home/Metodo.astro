@@ -4,19 +4,38 @@
 // rosso (~290°), icona line-style al centro e badge numerato; le tappe sono in
 // fila orizzontale collegate da frecce tratteggiate. Su mobile diventa una
 // colonna verticale con rail tratteggiato a sinistra.
-// Dati e copy: src/data/metodo.ts (reference/copy/site-copy-source.md).
-import { tappe } from '../../data/metodo';
+//
+// Copy (eyebrow/title/tappe) content-driven via Sitepins (ADR-0004): riusa la
+// stessa entry `pagine/servizi` di /servizi (issue #26 — prima duplicata in
+// src/data/metodo.ts, ora unica source of truth). L'icona per tappa resta
+// config di design passata come prop dal chiamante (come sdgStyle in
+// chi-siamo.astro): non è editoriale, non vive nello schema Sitepins.
+import type { MetodoIconName } from '../../data/metodo';
 import MetodoIcon from './MetodoIcon.astro';
+
+interface Tappa {
+  title: string;
+  description: string;
+}
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  tappe: Tappa[];
+  icons: MetodoIconName[];
+}
+
+const { eyebrow, title, tappe, icons } = Astro.props;
 ---
 
 <section class="bg-white py-12 md:py-20 overflow-hidden">
   <div class="max-w-7xl mx-auto px-6">
     <div class="text-center mb-12 md:mb-16">
       <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
-        Come lavoriamo
+        {eyebrow}
       </p>
       <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark">
-        Il nostro metodo
+        {title}
       </h2>
     </div>
 
@@ -40,7 +59,7 @@ import MetodoIcon from './MetodoIcon.astro';
                 />
               </svg>
               <span class="metodo-num font-display">{String(i + 1).padStart(2, '0')}</span>
-              <MetodoIcon name={tappa.icon} size={30} class="metodo-icon" />
+              <MetodoIcon name={icons[i % icons.length]} size={30} class="metodo-icon" />
             </div>
             <div class="metodo-content">
               <h3 class="metodo-title font-heading text-lg font-bold text-butik-dark">

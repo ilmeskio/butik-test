@@ -53,30 +53,30 @@ const inputClass =
 
           <div>
             <label for="name" class="block font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-2">
-              Nome *
+              {c.formNameLabel}
             </label>
-            <input id="name" name="name" type="text" required autocomplete="name" class={inputClass} placeholder="Il tuo nome" />
+            <input id="name" name="name" type="text" required autocomplete="name" class={inputClass} placeholder={c.formNamePlaceholder} />
           </div>
 
           <div>
             <label for="email" class="block font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-2">
-              Email *
+              {c.formEmailLabel}
             </label>
-            <input id="email" name="email" type="email" required autocomplete="email" class={inputClass} placeholder="nome@esempio.com" />
+            <input id="email" name="email" type="email" required autocomplete="email" class={inputClass} placeholder={c.formEmailPlaceholder} />
           </div>
 
           <div>
             <label for="organizzazione" class="block font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-2">
-              Organizzazione / Ente
+              {c.formOrgLabel}
             </label>
-            <input id="organizzazione" name="organizzazione" type="text" autocomplete="organization" class={inputClass} placeholder="Comune, DMO, associazione… (opzionale)" />
+            <input id="organizzazione" name="organizzazione" type="text" autocomplete="organization" class={inputClass} placeholder={c.formOrgPlaceholder} />
           </div>
 
           <div>
             <label for="message" class="block font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-2">
-              Messaggio *
+              {c.formMessageLabel}
             </label>
-            <textarea id="message" name="message" rows="6" required class={inputClass} placeholder="Raccontaci la tua idea o la tua esigenza"></textarea>
+            <textarea id="message" name="message" rows="6" required class={inputClass} placeholder={c.formMessagePlaceholder}></textarea>
           </div>
 
           <button
@@ -84,10 +84,20 @@ const inputClass =
             id="contact-submit"
             class="w-full md:w-auto bg-butik-dark text-white px-8 py-3 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-red transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Invia messaggio
+            {c.formSubmitLabel}
           </button>
 
-          <p id="form-result" class="font-sans text-sm hidden" role="status" aria-live="polite"></p>
+          <p
+            id="form-result"
+            class="font-sans text-sm hidden"
+            role="status"
+            aria-live="polite"
+            data-missing-key={c.formMissingKeyMessage}
+            data-loading={c.formSubmitLoadingLabel}
+            data-success={c.formSuccessMessage}
+            data-error={c.formErrorMessage}
+            data-network-error={c.formNetworkErrorMessage}
+          ></p>
         </form>
       </div>
 
@@ -143,6 +153,7 @@ const inputClass =
 
   // Aggancia il form. Idempotente: con ClientRouter astro:page-load rifà girare
   // questa init ad ogni navigazione, ma il binding avviene una volta per elemento.
+  // Messaggi di stato content-driven (issue #26): letti dai data-* di #form-result.
   function initContactForm() {
     const form = document.getElementById('contact-form') as HTMLFormElement | null;
     if (!form || form.dataset.bound === 'true') return;
@@ -150,6 +161,12 @@ const inputClass =
     const submit = document.getElementById('contact-submit') as HTMLButtonElement | null;
     if (!result || !submit) return;
     form.dataset.bound = 'true';
+
+    const formMissingKeyMessage = result.dataset.missingKey ?? '';
+    const formSubmitLoadingLabel = result.dataset.loading ?? '';
+    const formSuccessMessage = result.dataset.success ?? '';
+    const formErrorMessage = result.dataset.error ?? '';
+    const formNetworkErrorMessage = result.dataset.networkError ?? '';
 
     const showMessage = (text: string, ok: boolean) => {
       result.textContent = text;
@@ -163,13 +180,13 @@ const inputClass =
 
       const accessKey = (form.elements.namedItem('access_key') as HTMLInputElement)?.value;
       if (!accessKey) {
-        showMessage('Form non ancora configurato: manca la access key di Web3Forms. Scrivici intanto a info@wearebutik.com.', false);
+        showMessage(formMissingKeyMessage, false);
         return;
       }
 
       submit.disabled = true;
       const originalLabel = submit.textContent;
-      submit.textContent = 'Invio in corso…';
+      submit.textContent = formSubmitLoadingLabel;
 
       try {
         const formData = new FormData(form);
@@ -182,14 +199,14 @@ const inputClass =
 
         if (response.ok && data.success) {
           form.reset();
-          showMessage('Grazie! Il tuo messaggio è stato inviato. Ti risponderemo al più presto.', true);
+          showMessage(formSuccessMessage, true);
           trackEvent('contact_form_submitted');
         } else {
-          showMessage(data.message || 'Qualcosa è andato storto. Riprova o scrivici a info@wearebutik.com.', false);
+          showMessage(data.message || formErrorMessage, false);
           trackEvent('contact_form_error', { error_message: data.message });
         }
       } catch {
-        showMessage('Errore di rete. Riprova o scrivici a info@wearebutik.com.', false);
+        showMessage(formNetworkErrorMessage, false);
         trackEvent('contact_form_error', { error_message: 'network_error' });
       } finally {
         submit.disabled = false;

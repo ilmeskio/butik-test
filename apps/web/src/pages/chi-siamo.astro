@@ -17,18 +17,44 @@ if (!entry || entry.data.type !== 'chi-siamo') {
 }
 const c = entry.data;
 
+// Testimonianze: entry condivisa `pagine/testimonials`, riusata identica da
+// index.astro (issue #26 — prima duplicata inline nel componente).
+const testimonialsEntry = await getEntry('pagine', 'testimonials');
+if (!testimonialsEntry || testimonialsEntry.data.type !== 'testimonials') {
+  throw new Error('Contenuto pagina "testimonials" mancante o non valido (collezione pagine).');
+}
+const testimonials = testimonialsEntry.data;
+
 // Founder come ARRAY dalla collezione: nome/ruolo/bio/email/linkedin + foto
 // (media risolto a build-time da `image()`).
 const founders = c.founders;
 
 // Obiettivi di Sviluppo Sostenibile (Agenda ONU 2030): num + titolo sono copy
 // editoriale (array in collezione); colore/icona restano config di design qui —
-// i colori sono quelli ufficiali SDG, mappati per numero obiettivo.
+// i colori sono quelli ufficiali SDG (tutti e 17), mappati per numero obiettivo.
+// Fallback neutro per qualsiasi num fuori range 1-17 (refuso in Sitepins):
+// niente stile mancante silenzioso (issue #26 — W4).
 const sdgStyle: Record<number, { color: string; icon: string }> = {
+  1: { color: '#E5243B', icon: '🚫' },
+  2: { color: '#DDA63A', icon: '🌾' },
+  3: { color: '#4C9F38', icon: '🩺' },
+  4: { color: '#C5192D', icon: '📚' },
+  5: { color: '#FF3A21', icon: '♀️' },
+  6: { color: '#26BDE2', icon: '💧' },
+  7: { color: '#FCC30B', icon: '⚡' },
   8: { color: '#A21942', icon: '🎯' },
+  9: { color: '#FD6925', icon: '🏗️' },
+  10: { color: '#DD1367', icon: '⚖️' },
   11: { color: '#FD9D24', icon: '🏙️' },
+  12: { color: '#BF8B2E', icon: '♻️' },
+  13: { color: '#3F7E44', icon: '🌍' },
+  14: { color: '#0A97D9', icon: '🐟' },
+  15: { color: '#56C02B', icon: '🌳' },
+  16: { color: '#00689D', icon: '🕊️' },
+  17: { color: '#19486A', icon: '🤝' },
 };
-const sdg = c.sdg.map((o) => ({ ...o, ...sdgStyle[o.num] }));
+const sdgFallbackStyle = { color: '#6B7280', icon: '🌐' };
+const sdg = c.sdg.map((o) => ({ ...o, ...(sdgStyle[o.num] ?? sdgFallbackStyle) }));
 ---
 
 <BaseLayout
@@ -83,7 +109,7 @@ const sdg = c.sdg.map((o) => ({ ...o, ...sdgStyle[o.num] }));
               </span>
               <div>
                 <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red">
-                  Obiettivo {o.num}
+                  {c.sdgObiettivoLabel} {o.num}
                 </p>
                 <p class="font-heading text-base md:text-lg font-bold text-butik-dark leading-snug mt-1">
                   {o.title}
@@ -134,7 +160,7 @@ const sdg = c.sdg.map((o) => ({ ...o, ...sdgStyle[o.num] }));
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
               </svg>
-              LinkedIn
+              {c.linkedinLabel}
             </a>
             <a
               href={`mailto:${f.email}`}
@@ -164,7 +190,11 @@ const sdg = c.sdg.map((o) => ({ ...o, ...sdgStyle[o.num] }));
   </section>
 
   <!-- Testimonianze -->
-  <Testimonials />
+  <Testimonials
+    eyebrow={testimonials.eyebrow}
+    sectionTitle={testimonials.sectionTitle}
+    testimonials={testimonials.testimonials}
+  />
 
   <!-- CTA finale -->
   <CtaBanner

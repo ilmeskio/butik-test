@@ -57,7 +57,7 @@ const metodo = c.metodo;
             {s.data.subtitle}
           </p>
           <span class="mt-4 inline-block font-display text-xs font-bold tracking-widest uppercase text-butik-dark border-b-2 border-butik-red pb-0.5 group-hover:text-butik-red transition-colors">
-            Scopri di più →
+            {c.cardCtaLabel}
           </span>
         </a>
       ))}
@@ -89,9 +89,9 @@ const metodo = c.metodo;
 
   <!-- CTA finale -->
   <CtaBanner
-    title="Vuoi vedere i nostri servizi in azione?"
-    primaryCta={{ label: 'Visiona il nostro portfolio', href: '/progetti' }}
-    secondaryCta={{ label: 'Scopri i nostri format', href: '/formats' }}
+    title={c.ctaTitle}
+    primaryCta={{ label: c.ctaPrimaryLabel, href: c.ctaPrimaryHref }}
+    secondaryCta={{ label: c.ctaSecondaryLabel, href: c.ctaSecondaryHref }}
   />
 
   <ServiziPageSwitcher current="orig" />
