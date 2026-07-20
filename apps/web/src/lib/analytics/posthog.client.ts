@@ -13,6 +13,12 @@
 // a `memory` e fa `reset()` — ma pageview/web-vitals continuano, perché non
 // hanno mai avuto bisogno del consenso che si sta revocando.
 //
+// Session recording (replay DOM/mouse via rrweb) NON fa parte del livello
+// cookieless: a differenza di pageview/web-vitals può catturare testo digitato
+// e comportamento utente, quindi resta dietro consenso esplicito come le altre
+// identificazioni persistenti. `disable_session_recording: true` la tiene
+// spenta all'init; parte/si ferma solo in optIn/optOutPostHog.
+//
 // La chiave si legge da `PUBLIC_POSTHOG_KEY` e l'host da `PUBLIC_POSTHOG_HOST`
 // (default: cloud EU). Se la chiave manca, tutto è un no-op: il sito continua a
 // funzionare e a fare build senza PostHog.
@@ -47,6 +53,8 @@ function ensureInit(): boolean {
     capture_pageview: 'history_change',
     capture_pageleave: true,
     capture_performance: { web_vitals: true },
+    // Spenta all'init: il livello cookieless non la include (vedi sopra).
+    disable_session_recording: true,
   });
   initialized = true;
   return true;
@@ -58,17 +66,20 @@ export function initPostHogCookieless(): void {
   ensureInit();
 }
 
-// Consenso concesso: upgrade a persistenza durevole + autocapture.
+// Consenso concesso: upgrade a persistenza durevole + autocapture + session
+// recording.
 export function optInPostHog(): void {
   if (!ensureInit()) return;
   posthog.set_config({ persistence: 'localStorage+cookie', autocapture: true });
+  posthog.startSessionRecording();
 }
 
 // Consenso negato/revocato: torna al livello cookieless. Pageview e web vitals
 // NON si fermano — non hanno mai avuto bisogno del consenso che si sta
-// revocando; solo la persistenza durevole e l'autocapture si spengono.
+// revocando; persistenza durevole, autocapture e session recording si spengono.
 export function optOutPostHog(): void {
   if (!KEY || !initialized) return;
+  posthog.stopSessionRecording();
   posthog.set_config({ persistence: 'memory', autocapture: false });
   posthog.reset();
 }
