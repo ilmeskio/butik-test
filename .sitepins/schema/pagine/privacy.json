@@ -1,0 +1,256 @@
+{
+  "file": "apps/web/src/content/pagine/privacy.md",
+  "name": "privacy",
+  "fileType": "md",
+  "fmType": "yaml",
+  "template": [
+    {
+      "name": "type",
+      "label": "Type",
+      "type": "string",
+      "value": "privacy",
+      "isIgnored": true,
+      "defaultValue": "privacy"
+    },
+    {
+      "name": "title",
+      "label": "Title",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "metaTitle",
+      "label": "MetaTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "metaDescription",
+      "label": "MetaDescription",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "pageTitle",
+      "label": "PageTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "updatedDate",
+      "label": "UpdatedDate",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "titolareTitle",
+      "label": "TitolareTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "titolareText",
+      "label": "TitolareText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "datiRaccoltiTitle",
+      "label": "DatiRaccoltiTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "datiFormText",
+      "label": "DatiFormText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "datiAnalisiCookielessText",
+      "label": "DatiAnalisiCookielessText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "datiAnalisiCookieText",
+      "label": "DatiAnalisiCookieText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "terzePartiTitle",
+      "label": "TerzePartiTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "terzePartiPosthogText",
+      "label": "TerzePartiPosthogText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "terzePartiWeb3formsText",
+      "label": "TerzePartiWeb3formsText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "terzePartiNote",
+      "label": "TerzePartiNote",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "conservazioneTitle",
+      "label": "ConservazioneTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "conservazioneText",
+      "label": "ConservazioneText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "dirittiTitle",
+      "label": "DirittiTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "dirittiText",
+      "label": "DirittiText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "cookiePolicyTitle",
+      "label": "CookiePolicyTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "cookieIntroText",
+      "label": "CookieIntroText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "cookieTecniciTitle",
+      "label": "CookieTecniciTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "cookieTecniciText",
+      "label": "CookieTecniciText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "cookieTecniciListText",
+      "label": "CookieTecniciListText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "cookieAnalisiTitle",
+      "label": "CookieAnalisiTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "cookieAnalisiText",
+      "label": "CookieAnalisiText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "cookieAnalisiListText",
+      "label": "CookieAnalisiListText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "consensoTitle",
+      "label": "ConsensoTitle",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "consensoText",
+      "label": "ConsensoText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    },
+    {
+      "name": "terminiLinkText",
+      "label": "TerminiLinkText",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": ""
+    }
+  ]
+}

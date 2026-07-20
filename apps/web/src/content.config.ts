@@ -218,6 +218,41 @@ const paginaContatti = z.object({
   formNetworkErrorMessage: z.string(),
 });
 
+const paginaPrivacy = z.object({
+  type: z.literal('privacy'),
+  // Etichetta della voce nell'elenco Sitepins (non renderizzata sul sito).
+  title: z.string(),
+  metaTitle: z.string(),
+  metaDescription: z.string(),
+  pageTitle: z.string(),
+  updatedDate: z.string(),
+  titolareTitle: z.string(),
+  titolareText: z.string(),
+  datiRaccoltiTitle: z.string(),
+  datiFormText: z.string(),
+  datiAnalisiCookielessText: z.string(),
+  datiAnalisiCookieText: z.string(),
+  terzePartiTitle: z.string(),
+  terzePartiPosthogText: z.string(),
+  terzePartiWeb3formsText: z.string(),
+  terzePartiNote: z.string(),
+  conservazioneTitle: z.string(),
+  conservazioneText: z.string(),
+  dirittiTitle: z.string(),
+  dirittiText: z.string(),
+  cookiePolicyTitle: z.string(),
+  cookieIntroText: z.string(),
+  cookieTecniciTitle: z.string(),
+  cookieTecniciText: z.string(),
+  cookieTecniciListText: z.string(),
+  cookieAnalisiTitle: z.string(),
+  cookieAnalisiText: z.string(),
+  cookieAnalisiListText: z.string(),
+  consensoTitle: z.string(),
+  consensoText: z.string(),
+  terminiLinkText: z.string(),
+});
+
 const paginaPartners = (image: ImageFn) => z.object({
   type: z.literal('partners'),
   metaTitle: z.string(),
@@ -308,6 +343,7 @@ const pagineCollection = defineCollection({
     paginaServizi,
     paginaTestimonials,
     paginaTermini,
+    paginaPrivacy,
   ]),
 });
 
