@@ -134,12 +134,16 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID as string | undefined;
     </main>
     <Footer />
 
-    {/* Cookie consent (ADR-0006): nessun tracciamento prima del consenso.
-        Rieseguito a ogni astro:page-load perché le view transition rimpiazzano
-        il DOM; CookieConsent.run è idempotente. */}
+    {/* Cookie consent (ADR-0006): nessun *cookie* prima del consenso — il
+        livello cookieless di PostHog (pageview, web vitals) parte comunque,
+        indipendentemente dalla risposta al banner. Rieseguito a ogni
+        astro:page-load perché le view transition rimpiazzano il DOM;
+        CookieConsent.run e initPostHogCookieless sono idempotenti. */}
     <script>
       import { initCookieConsent } from '#lib/consent/init.client';
+      import { initPostHogCookieless } from '#lib/analytics/posthog.client';
       document.addEventListener('astro:page-load', () => {
+        initPostHogCookieless();
         initCookieConsent();
       });
     </script>
