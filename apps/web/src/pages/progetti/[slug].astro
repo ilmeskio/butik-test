@@ -33,3 +33,11 @@ const { Content } = await render(entry);
 >
   <Content components={{ ImageBlock, ImageCarousel, ImageLeft, ImageRight }} />
 </ContentLayout>
+
+<script>
+  import { captureEvent } from '#lib/analytics/posthog.client';
+  document.addEventListener('astro:page-load', () => {
+    const slug = window.location.pathname.split('/').filter(Boolean).pop() ?? '';
+    captureEvent('project_viewed', { slug });
+  });
+</script>

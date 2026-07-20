@@ -29,14 +29,31 @@ const { title, body, primaryCta, secondaryCta } = Astro.props;
     </div>
 
     <div class={styles.actions}>
-      <a href={primaryCta.href} class={`${styles.cta} ${styles.primary}`}>
+      <a href={primaryCta.href} class={`${styles.cta} ${styles.primary}`} data-cta-label={primaryCta.label} data-cta-type="primary">
         {primaryCta.label}
       </a>
       {secondaryCta && (
-        <a href={secondaryCta.href} class={`${styles.cta} ${styles.secondary}`}>
+        <a href={secondaryCta.href} class={`${styles.cta} ${styles.secondary}`} data-cta-label={secondaryCta.label} data-cta-type="secondary">
           {secondaryCta.label}
         </a>
       )}
     </div>
   </div>
 </section>
+
+<script>
+  import { captureEvent } from '#lib/analytics/posthog.client';
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLAnchorElement>('[data-cta-label]').forEach((el) => {
+      if (el.dataset.ctaBound) return;
+      el.dataset.ctaBound = 'true';
+      el.addEventListener('click', () => {
+        captureEvent('cta_clicked', {
+          label: el.dataset.ctaLabel,
+          type: el.dataset.ctaType,
+          href: el.getAttribute('href') ?? '',
+        });
+      });
+    });
+  });
+</script>

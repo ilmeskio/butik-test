@@ -139,6 +139,8 @@ const inputClass =
 </BaseLayout>
 
 <script>
+  import { captureEvent } from '#lib/analytics/posthog.client';
+
   // Aggancia il form. Idempotente: con ClientRouter astro:page-load rifà girare
   // questa init ad ogni navigazione, ma il binding avviene una volta per elemento.
   function initContactForm() {
@@ -181,11 +183,14 @@ const inputClass =
         if (response.ok && data.success) {
           form.reset();
           showMessage('Grazie! Il tuo messaggio è stato inviato. Ti risponderemo al più presto.', true);
+          captureEvent('contact_form_submitted');
         } else {
           showMessage(data.message || 'Qualcosa è andato storto. Riprova o scrivici a info@wearebutik.com.', false);
+          captureEvent('contact_form_error', { reason: data.message ?? 'api_error' });
         }
       } catch {
         showMessage('Errore di rete. Riprova o scrivici a info@wearebutik.com.', false);
+        captureEvent('contact_form_error', { reason: 'network_error' });
       } finally {
         submit.disabled = false;
         submit.textContent = originalLabel;

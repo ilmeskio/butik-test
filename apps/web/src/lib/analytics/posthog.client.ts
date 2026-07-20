@@ -46,3 +46,14 @@ export function optOutPostHog(): void {
   posthog.opt_out_capturing();
   posthog.reset();
 }
+
+// Cattura un evento nominato. No-op se PostHog non è inizializzato o il
+// consenso non è stato concesso (opt_out_capturing_by_default garantisce che
+// anche in questo caso non vengano inviate richieste di rete).
+export function captureEvent(
+  name: string,
+  properties?: Record<string, unknown>,
+): void {
+  if (!initialized) return;
+  posthog.capture(name, properties);
+}

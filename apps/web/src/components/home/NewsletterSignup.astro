@@ -75,6 +75,8 @@ const { title, body, placeholder, button, privacy, success } = Astro.props;
 </section>
 
 <script>
+  import { captureEvent } from '#lib/analytics/posthog.client';
+
   const container = document.getElementById('newsletter-container');
   const status = document.getElementById('newsletter-status');
   const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
@@ -91,6 +93,7 @@ const { title, body, placeholder, button, privacy, success } = Astro.props;
       container.classList.add('hidden');
       status.textContent = status.dataset.success ?? '';
       status.classList.remove('hidden');
+      captureEvent('newsletter_signup');
     });
   }
 </script>
