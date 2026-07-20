@@ -21,7 +21,24 @@ interface Props {
 const { title, body, primaryCta, secondaryCta } = Astro.props;
 ---
 
-<section class={styles.banner}>
+<script>
+  import { trackEvent } from '#lib/analytics/posthog.client';
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('[data-cta-banner] a').forEach((link) => {
+      if ((link as HTMLElement).dataset.phBound) return;
+      (link as HTMLElement).dataset.phBound = 'true';
+      link.addEventListener('click', () => {
+        trackEvent('cta_clicked', {
+          label: link.textContent?.trim(),
+          href: (link as HTMLAnchorElement).href,
+        });
+      });
+    });
+  });
+</script>
+
+<section class={styles.banner} data-cta-banner>
   <div class={styles.inner}>
     <div class={styles.content}>
       <h2 class={styles.title}>{title}</h2>

@@ -46,3 +46,12 @@ export function optOutPostHog(): void {
   posthog.opt_out_capturing();
   posthog.reset();
 }
+
+// Punto d'ingresso unico per gli eventi custom. Gated esplicitamente su
+// `initialized`: se il consenso non è mai stato concesso, `ensureInit()` non è
+// mai girato e questa funzione è un no-op, indipendentemente da come il
+// singleton di posthog-js si comporta internamente.
+export function trackEvent(event: string, properties?: Record<string, unknown>): void {
+  if (!initialized) return;
+  posthog.capture(event, properties);
+}
