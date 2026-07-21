@@ -149,3 +149,11 @@ section above. `packages/ui/package.json` `exports` map one entry per
 component regardless of folder, so consumer import paths
 (`@butik/ui/ComponentName`) are unaffected by which subfolder a component
 lives in.
+
+### Related product decision
+
+Connecting `Button` to production pages for the first time surfaced a visual
+discrepancy (pill-shaped pilot vs. rectangular CTAs sitewide) — that is a
+design/brand call, not an architecture one, and is recorded separately in
+[PDR-0001](../product/decisions/0001-cta-pill-shape.md), not folded into this
+amendment.
