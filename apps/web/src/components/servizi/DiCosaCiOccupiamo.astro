@@ -1,5 +1,7 @@
 ---
 // Lista puntata "Di cosa ci occupiamo".
+import Eyebrow from '@butik/ui/Eyebrow';
+
 interface Props {
   items: string[];
   eyebrow?: string;
@@ -9,9 +11,7 @@ const { items, eyebrow = 'Di cosa ci occupiamo' } = Astro.props;
 ---
 
 <section class="not-prose my-10">
-  <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
-    {eyebrow}
-  </p>
+  <Eyebrow>{eyebrow}</Eyebrow>
   <ul class="space-y-3">
     {items.map((item) => (
       <li class="flex gap-3 font-sans text-base text-butik-body leading-relaxed">

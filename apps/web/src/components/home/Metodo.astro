@@ -12,6 +12,7 @@
 // chi-siamo.astro): non è editoriale, non vive nello schema Sitepins.
 import type { MetodoIconName } from '../../data/metodo';
 import MetodoIcon from './MetodoIcon.astro';
+import Eyebrow from '@butik/ui/Eyebrow';
 
 interface Tappa {
   title: string;
@@ -31,9 +32,7 @@ const { eyebrow, title, tappe, icons } = Astro.props;
 <section class="bg-white py-12 md:py-20 overflow-hidden">
   <div class="max-w-7xl mx-auto px-6">
     <div class="text-center mb-12 md:mb-16">
-      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
-        {eyebrow}
-      </p>
+      <Eyebrow>{eyebrow}</Eyebrow>
       <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark">
         {title}
       </h2>

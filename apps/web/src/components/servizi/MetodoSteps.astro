@@ -2,6 +2,8 @@
 // "Il nostro metodo" — step numerati, con eventuale paragrafo introduttivo.
 // `description` di ogni step è opzionale (il servizio Formazione ha step di
 // solo titolo preceduti da un'introduzione).
+import Eyebrow from '@butik/ui/Eyebrow';
+
 interface Step {
   title: string;
   description?: string;
@@ -17,9 +19,7 @@ const { steps, intro, eyebrow = 'Il nostro metodo' } = Astro.props;
 ---
 
 <section class="not-prose my-10">
-  <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
-    {eyebrow}
-  </p>
+  <Eyebrow>{eyebrow}</Eyebrow>
   {intro && (
     <p class="font-sans text-base md:text-lg text-butik-body leading-relaxed mb-6">{intro}</p>
   )}

@@ -1,5 +1,7 @@
 ---
 // "Bandi vinti" — elenco bando/anno (usato dal servizio Progettazione culturale).
+import Eyebrow from '@butik/ui/Eyebrow';
+
 interface Bando {
   nome: string;
   anno: string;
@@ -14,9 +16,7 @@ const { bandi, eyebrow = 'Bandi vinti' } = Astro.props;
 ---
 
 <section class="not-prose my-10">
-  <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
-    {eyebrow}
-  </p>
+  <Eyebrow>{eyebrow}</Eyebrow>
   <ul class="border-t border-butik-dark/10">
     {bandi.map((b) => (
       <li class="flex items-baseline justify-between gap-4 border-b border-butik-dark/10 py-3">
