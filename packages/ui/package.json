@@ -13,7 +13,8 @@
     "./Eyebrow": "./src/atoms/Eyebrow.tsx",
     "./NumberBadge": "./src/atoms/NumberBadge.tsx",
     "./SocialLinks": "./src/atoms/SocialLinks.tsx",
-    "./Logo": "./src/atoms/Logo.tsx"
+    "./Logo": "./src/atoms/Logo.tsx",
+    "./CtaBanner": "./src/molecules/CtaBanner.tsx"
   },
   "dependencies": {
     "@butik/ui-tokens": "workspace:*"

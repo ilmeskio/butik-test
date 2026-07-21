@@ -1,10 +1,13 @@
 ---
 /*
- * CtaBanner — migrato da Tailwind a CSS Modules + token (ADR-0005 #css-modules).
- * Prima prova del pattern di migrazione: stile co-locato in CtaBanner.module.css,
- * valori dai token semantici di @butik/ui-tokens. Parità visiva mantenuta.
+ * CtaBanner — wrapper sottile app-side. La presentazione (titolo, body, CTA)
+ * vive in @butik/ui/CtaBanner, isola React condivisa (ADR-0008 amendment
+ * 2026-07-21: CtaBanner ha 6 punti di consumo reali, supera la soglia di
+ * riuso). Questo wrapper resta .astro solo per il tracking PostHog dei
+ * click, che usa un alias app-only (#lib/analytics/posthog.client,
+ * ADR-0007) non risolvibile da packages/ui.
  */
-import styles from './CtaBanner.module.css';
+import CtaBanner from '@butik/ui/CtaBanner';
 
 interface CtaLink {
   label: string;
@@ -38,22 +41,4 @@ const { title, body, primaryCta, secondaryCta } = Astro.props;
   });
 </script>
 
-<section class={styles.banner} data-cta-banner>
-  <div class={styles.inner}>
-    <div class={styles.content}>
-      <h2 class={styles.title}>{title}</h2>
-      {body && <p class={styles.body}>{body}</p>}
-    </div>
-
-    <div class={styles.actions}>
-      <a href={primaryCta.href} class={`${styles.cta} ${styles.primary}`}>
-        {primaryCta.label}
-      </a>
-      {secondaryCta && (
-        <a href={secondaryCta.href} class={`${styles.cta} ${styles.secondary}`}>
-          {secondaryCta.label}
-        </a>
-      )}
-    </div>
-  </div>
-</section>
+<CtaBanner title={title} body={body} primaryCta={primaryCta} secondaryCta={secondaryCta} />
