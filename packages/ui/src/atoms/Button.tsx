@@ -20,13 +20,21 @@ export interface ButtonProps {
    * `dark` (solo `primary`): sfondo `--color-fg` invece dell'accent rosso —
    * CTA su header/hero chiari. `invert` (solo `ghost`): bordo/testo
    * `--color-fg-invert` — outline leggibile su sfondi scuri (hero fotografici).
-   * Omessa: colori classici (primary = accent, ghost = foreground scuro).
+   * `accent` (solo `ghost`): bordo/testo colore accent invece del foreground
+   * scuro — outline colorato su sfondo chiaro (es. CtaProgetti). Omessa:
+   * colori classici (primary = accent, ghost = foreground scuro).
    */
-  tone?: 'dark' | 'invert';
+  tone?: 'accent' | 'dark' | 'invert';
   /** Tipo del <button> (ignorato quando c'è `href`). */
   type?: 'button' | 'submit' | 'reset';
   /** Contenuto del bottone (testo, icona + testo, ...). */
   children?: ReactNode;
+  /**
+   * Classe aggiuntiva, unita (non sostituita) a quelle interne. Escape hatch
+   * per i chiamanti app-side che devono agganciare un hook locale (es. lo
+   * stato overlay-su-scroll dell'header) senza reimplementare il bottone.
+   */
+  className?: string;
 }
 
 export default function Button({
@@ -35,9 +43,10 @@ export default function Button({
   tone,
   type = 'button',
   children,
+  className,
 }: ButtonProps) {
   const toneKey = tone ? `${variant}_${tone}` : variant;
-  const cls = `${styles.button} ${styles[toneKey] ?? styles[variant]}`;
+  const cls = [styles.button, styles[toneKey] ?? styles[variant], className].filter(Boolean).join(' ');
 
   return href ? (
     <a className={cls} href={href}>

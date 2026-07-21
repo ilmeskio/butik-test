@@ -3,6 +3,7 @@ import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import type { ServiceHeroContent } from '../../data/serviziHero';
 import Eyebrow from '@butik/ui/Eyebrow';
+import Button from '@butik/ui/Button';
 
 interface Props {
   content: ServiceHeroContent;
@@ -33,12 +34,7 @@ const _unused = Image;
           </p>
 
           <div class="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
-            <a
-              href={content.ctaPrimary.href}
-              class="inline-flex items-center justify-center bg-butik-dark text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-red transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-butik-red"
-            >
-              {content.ctaPrimary.label}
-            </a>
+            <Button href={content.ctaPrimary.href} tone="dark">{content.ctaPrimary.label}</Button>
 
             {content.ctaSecondary && (
               <a

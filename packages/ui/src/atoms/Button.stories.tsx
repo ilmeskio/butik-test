@@ -16,9 +16,9 @@ const meta = {
     },
     tone: {
       control: 'inline-radio',
-      options: [undefined, 'dark', 'invert'],
+      options: [undefined, 'accent', 'dark', 'invert'],
       description:
-        'Tonalità: "dark" (solo primary, sfondo scuro invece di accent) o "invert" (solo ghost, outline bianco per sfondi scuri).',
+        'Tonalità: "dark" (solo primary, sfondo scuro invece di accent), "invert" (solo ghost, outline bianco per sfondi scuri) o "accent" (solo ghost, outline colorato su sfondo chiaro).',
     },
     href: {
       control: 'text',
@@ -95,7 +95,7 @@ export const DarkTone: Story = {
 };
 
 // tone="invert": outline bianco leggibile su sfondi scuri/fotografici
-// (ServiceHero A/C, CtaProgetti). Il decorator simula lo sfondo scuro reale.
+// (ServiceHero A). Il decorator simula lo sfondo scuro reale.
 export const InvertTone: Story = {
   args: { variant: 'ghost', tone: 'invert', children: 'Scopri il progetto' },
   decorators: [
@@ -105,4 +105,9 @@ export const InvertTone: Story = {
       </div>
     ),
   ],
+};
+
+// tone="accent": outline colorato su sfondo chiaro (CtaProgetti).
+export const AccentGhostTone: Story = {
+  args: { variant: 'ghost', tone: 'accent', children: 'Vedi tutti i progetti' },
 };

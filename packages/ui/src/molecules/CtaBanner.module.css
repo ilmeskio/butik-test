@@ -93,6 +93,7 @@
   display: inline-block;
   width: 100%;
   padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-full); /* allineato al linguaggio pillola di @butik/ui/Button */
   font-family: var(--font-display);
   font-size: var(--font-size-xs);
   font-weight: 700;

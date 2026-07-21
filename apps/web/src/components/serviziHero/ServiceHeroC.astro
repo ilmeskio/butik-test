@@ -3,6 +3,7 @@ import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import type { ServiceHeroContent } from '../../data/serviziHero';
 import Eyebrow from '@butik/ui/Eyebrow';
+import Button from '@butik/ui/Button';
 
 interface Props {
   content: ServiceHeroContent;
@@ -88,19 +89,9 @@ const { eyebrow, headline, outcomes, ctaPrimary, ctaSecondary } = content;
 
       <!-- 4) Doppia CTA -->
       <div class="mt-6 md:mt-8 flex flex-col sm:flex-row gap-3">
-        <a
-          href={ctaPrimary.href}
-          class="inline-flex items-center justify-center bg-butik-red text-white px-7 py-3.5 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-dark hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-butik-red"
-        >
-          {ctaPrimary.label}
-        </a>
+        <Button href={ctaPrimary.href}>{ctaPrimary.label}</Button>
         {ctaSecondary && (
-          <a
-            href={ctaSecondary.href}
-            class="inline-flex items-center justify-center border-2 border-butik-dark text-butik-dark px-7 py-3.5 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-dark hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-butik-dark"
-          >
-            {ctaSecondary.label}
-          </a>
+          <Button href={ctaSecondary.href} variant="ghost">{ctaSecondary.label}</Button>
         )}
       </div>
     </div>

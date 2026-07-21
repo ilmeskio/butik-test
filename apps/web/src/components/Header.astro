@@ -2,6 +2,7 @@
 import { getImage } from 'astro:assets';
 import logo from '../assets/logos/bollo-rosso.svg';
 import Logo from '@butik/ui/Logo';
+import Button from '@butik/ui/Button';
 
 // getImage() (non <Image>) perché il risultato alimenta l'atomo React Logo di
 // @butik/ui — vedi ADR-0008 amendment 2026-07-21 sul vincolo immagini Astro
@@ -70,12 +71,9 @@ function isActive(href: string) {
     </div>
 
     <!-- Right: CTA -->
-    <a
-      href={ctaHref}
-      class="header-cta hidden md:inline-block bg-butik-dark text-white px-5 py-3 font-display text-xs font-bold tracking-widest uppercase hover:bg-butik-red transition-colors"
-    >
-      {ctaLabel}
-    </a>
+    <span class="hidden md:inline-block">
+      <Button href={ctaHref} tone="dark" className="header-cta">{ctaLabel}</Button>
+    </span>
 
     <!-- Mobile hamburger -->
     <button
@@ -104,12 +102,7 @@ function isActive(href: string) {
           {link.label}
         </a>
       ))}
-      <a
-        href={ctaHref}
-        class="block w-full text-center bg-butik-dark text-white px-5 py-4 mt-3 font-display text-xs font-bold tracking-widest uppercase"
-      >
-        {ctaLabel}
-      </a>
+      <Button href={ctaHref} tone="dark" className="w-full mt-3">{ctaLabel}</Button>
     </nav>
   </div>
 </header>

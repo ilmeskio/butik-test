@@ -3,6 +3,7 @@ import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import type { ServiceHeroContent } from '../../data/serviziHero';
 import Eyebrow from '@butik/ui/Eyebrow';
+import Button from '@butik/ui/Button';
 
 interface Props {
   content: ServiceHeroContent;
@@ -72,20 +73,12 @@ const isLocalImage = typeof image !== 'string';
 
       <!-- CTA -->
       <div class="mt-10 flex flex-col sm:flex-row sm:items-center gap-4">
-        <a
-          href={content.ctaPrimary.href}
-          class="inline-flex items-center justify-center bg-butik-red text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-butik-dark transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-        >
-          {content.ctaPrimary.label}
-        </a>
+        <Button href={content.ctaPrimary.href}>{content.ctaPrimary.label}</Button>
 
         {content.ctaSecondary && (
-          <a
-            href={content.ctaSecondary.href}
-            class="inline-flex items-center justify-center border border-white/40 text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-butik-dark transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
+          <Button href={content.ctaSecondary.href} variant="ghost" tone="invert">
             {content.ctaSecondary.label}
-          </a>
+          </Button>
         )}
       </div>
     </div>

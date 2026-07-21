@@ -5,6 +5,7 @@ import { partners } from '../../data/partners';
 import ServiceCard from '../serviziCards/ServiceCard.astro';
 import ServiceLauncher from '../serviziCards/ServiceLauncher.astro';
 import { serviziCards } from '../../data/serviziCards';
+import Button from '@butik/ui/Button';
 
 import imgA from '../../assets/servizi/template-servizio/gallery-1.jpg';
 import imgB from '../../assets/servizi/template-servizio/img-right.jpg';
@@ -223,12 +224,7 @@ const proofLogos = partners.filter((p) => proofLogoNames.includes(p.name));
         )}
 
         <div class="hero-cta relative mt-8">
-          <a
-            href={ctaHref}
-            class="inline-flex items-center justify-center bg-butik-red text-white px-8 py-4 font-display text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-butik-dark transition-colors"
-          >
-            {ctaLabel}
-          </a>
+          <Button href={ctaHref}>{ctaLabel}</Button>
         </div>
       </div>
     </div>
