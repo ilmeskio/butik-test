@@ -1,7 +1,14 @@
 ---
-import { Image } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import logo from '../assets/logos/bollo-rosso.svg';
 import { socials } from '../data/socials';
+import SocialLinks from '@butik/ui/SocialLinks';
+import Logo from '@butik/ui/Logo';
+
+// getImage() (non <Image>) perché il risultato alimenta l'atomo React Logo di
+// @butik/ui — vedi ADR-0008 amendment 2026-07-21 sul vincolo immagini Astro
+// dentro le isole.
+const logoImg = await getImage({ src: logo, width: 72, height: 72 });
 
 const linksColumn1 = [
   { href: '/chi-siamo', label: 'Chi siamo' },
@@ -29,7 +36,7 @@ const year = new Date().getFullYear();
         <!-- Col 1: Logo + info aziendale -->
         <div class="flex flex-col">
           <a href="/" class="flex items-center flex-shrink-0">
-            <Image src={logo} alt="Butik" width={72} height={72} class="h-[4.5rem] w-auto" />
+            <Logo src={logoImg.src} width={72} height={72} className="h-[4.5rem] w-auto" />
           </a>
 
           <address class="not-italic font-sans text-sm text-butik-dark/70 leading-relaxed mt-4">
@@ -48,23 +55,9 @@ const year = new Date().getFullYear();
             </p>
           </div>
 
-          <ul class="flex items-center gap-4 mt-4">
-            {socials.map(s => (
-              <li>
-                <a
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  class="text-butik-dark hover:text-butik-red transition-colors inline-block"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d={s.path} />
-                  </svg>
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div class="mt-4">
+            <SocialLinks socials={socials} />
+          </div>
         </div>
 
         <!-- Col 3: link 1 (allineata al top del row) -->

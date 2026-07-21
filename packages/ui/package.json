@@ -11,7 +11,9 @@
   "exports": {
     "./Button": "./src/atoms/Button.tsx",
     "./Eyebrow": "./src/atoms/Eyebrow.tsx",
-    "./NumberBadge": "./src/atoms/NumberBadge.tsx"
+    "./NumberBadge": "./src/atoms/NumberBadge.tsx",
+    "./SocialLinks": "./src/atoms/SocialLinks.tsx",
+    "./Logo": "./src/atoms/Logo.tsx"
   },
   "dependencies": {
     "@butik/ui-tokens": "workspace:*"

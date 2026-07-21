@@ -1,0 +1,9 @@
+/*
+ * Solo il display: block (evita il gap inline sotto l'immagine). Niente
+ * height/width qui — i chiamanti .astro passano già i vincoli di dimensione
+ * via `className` (oggi utility Tailwind residue, fuori scope di questa PR)
+ * e le HTML width/height attributes bastano come fallback.
+ */
+.logo {
+  display: block;
+}

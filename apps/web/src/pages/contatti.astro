@@ -2,6 +2,7 @@
 import { getEntry } from 'astro:content';
 import BaseLayout from '#layouts/BaseLayout.astro';
 import { socials } from '#data/socials';
+import SocialLinks from '@butik/ui/SocialLinks';
 
 // Copy editoriale content-driven via collezione `pagine` (ADR-0004): il testo
 // attorno al form è editabile da Sitepins. La logica del form Web3Forms qui
@@ -124,23 +125,7 @@ const inputClass =
 
           <div>
             <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-dark mb-2">{c.seguiciLabel}</p>
-            <ul class="flex items-center gap-4">
-              {socials.map((s) => (
-                <li>
-                  <a
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.label}
-                    class="text-butik-dark hover:text-butik-red transition-colors inline-block"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d={s.path} />
-                    </svg>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <SocialLinks socials={socials} />
           </div>
         </div>
       </aside>
