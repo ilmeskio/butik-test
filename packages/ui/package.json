@@ -10,7 +10,8 @@
   },
   "exports": {
     "./Button": "./src/atoms/Button.tsx",
-    "./Eyebrow": "./src/atoms/Eyebrow.tsx"
+    "./Eyebrow": "./src/atoms/Eyebrow.tsx",
+    "./NumberBadge": "./src/atoms/NumberBadge.tsx"
   },
   "dependencies": {
     "@butik/ui-tokens": "workspace:*"
