@@ -34,7 +34,8 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
     const track = trackRef.current;
     if (!track) return;
     const clamped = Math.max(0, Math.min(index, images.length - 1));
-    track.scrollTo({ left: clamped * track.clientWidth, behavior: 'smooth' });
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    track.scrollTo({ left: clamped * track.clientWidth, behavior: reducedMotion ? 'auto' : 'smooth' });
     setCurrent(clamped);
   };
 
