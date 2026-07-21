@@ -1,8 +1,9 @@
 ---
 // LAB · WORKSHOP — anteprima leggera in-site del Button di @butik/ui. Il workshop
-// ufficiale del catalogo è ora Storybook (ADR-0008): questa pagina resta come
-// smoke-test veloce, per vedere il componente reso a HTML statico dentro il sito,
-// senza avviare Storybook. La nota storica del confronto è in ./readme.
+// ufficiale del catalogo, con TUTTI i componenti (atoms/molecules/organisms) e le
+// loro varianti/stati, è Storybook (ADR-0008) — questa pagina non lo insegue: resta
+// solo come smoke-test veloce per vedere un componente reso a HTML statico dentro
+// il sito, senza avviare Storybook. La nota storica del confronto è in ./readme.
 import BaseLayout from '#layouts/BaseLayout.astro';
 import Button from '@butik/ui/Button';
 
@@ -84,12 +85,14 @@ const buttonVariants = [
     </section>
 
     <section class="ws__section ws__section--empty">
-      <h2 class="ws__section-title">Prossimi componenti</h2>
+      <h2 class="ws__section-title">Il resto del catalogo</h2>
       <p class="ws__section-desc">
-        Il catalogo cresce man mano che i componenti vengono migrati a CSS Modules
-        + token (sweep Tailwind→CSS Modules). Ogni componente aggiunto qui va
-        rappresentato con tutte le sue varianti e i suoi stati
-        (cfr. skill <code>story-check</code>).
+        Dalla catalogazione per issue #38, <code>@butik/ui</code> ha altri 10
+        componenti (atoms: Eyebrow, Logo, SocialLinks, NumberBadge; molecules:
+        CtaBanner, ImageBlock, ImageLeft, ImageRight, ImageCarousel; organisms:
+        HeroBanner) oltre a Button. Questa pagina non li replica — è un
+        smoke-test in-site, non il catalogo. Varianti e stati di ognuno vivono
+        in Storybook, la fonte di verità che <code>story-check</code> verifica.
       </p>
     </section>
   </main>
