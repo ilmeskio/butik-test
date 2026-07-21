@@ -1,0 +1,123 @@
+.carousel {
+  margin-block: var(--space-12);
+}
+
+.track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: var(--space-4);
+  border-radius: var(--radius-sm);
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+}
+
+.figure {
+  position: relative;
+  margin: 0;
+}
+
+.image {
+  width: 100%;
+  height: 20rem; /* ex h-80 */
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .image {
+    height: 500px; /* ex md:h-[500px]: valore letterale, non un token di design */
+  }
+}
+
+.caption {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--color-fg-invert);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  font-style: italic;
+  text-align: center;
+  padding: var(--space-2) var(--space-4);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-4);
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-fg);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.navButton:hover {
+  color: var(--color-accent);
+}
+
+.navButton:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.navIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.dots {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radius-full);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--color-fg) 25%, transparent);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.dot:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.dotActive {
+  background: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navButton,
+  .dot {
+    transition: none;
+  }
+}

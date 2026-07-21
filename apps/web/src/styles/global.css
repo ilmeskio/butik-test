@@ -107,22 +107,3 @@ h3, h4, h5, h6 {
   color: var(--color-butik-red);
   text-decoration: underline;
 }
-
-/* Carousel */
-.carousel-track {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  gap: 1rem;
-}
-
-.carousel-track::-webkit-scrollbar {
-  display: none;
-}
-
-.carousel-slide {
-  flex: 0 0 100%;
-  scroll-snap-align: start;
-}
