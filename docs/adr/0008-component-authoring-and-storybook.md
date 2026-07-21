@@ -86,7 +86,10 @@ shifts.
   dependency in the site and the `@butik/ui` package.
 - Shared components are **no longer pure `.astro`**; contributors author `.tsx`
   islands. App-level page composition stays `.astro` (e.g. `CtaBanner` remains an
-  app `.astro` component — not everything migrates to React).
+  app `.astro` component — not everything migrates to React). **Superseded for
+  `CtaBanner` specifically** — see [Amendment
+  2026-07-21](#amendment-2026-07-21-ctabanner-revisit-and-atomic-design-foldering)
+  below; the general principle (page composition stays `.astro`) still holds.
 - The island runtime is opt-in per component; forgetting that a component is an
   island (and needs a client directive for interactivity) is a new footgun.
 
@@ -96,3 +99,53 @@ shifts.
   new ADR.
 - Storybook's maintenance cost outweighs its value for a still-small catalogue →
   reconsider a lighter surface.
+
+## Amendment (2026-07-21): CtaBanner revisit and atomic-design foldering
+
+Issue #38 (cataloguing shared components in Storybook) prompted a fresh
+reuse audit of `apps/web/src/components/**`. Two additions to the original
+decision:
+
+### CtaBanner qualifies as a shared island after all
+
+The "Negative / accepted risks" example above named `CtaBanner` as page
+composition that stays `.astro`. That was true at the time of writing
+(single consumer). It no longer is: `CtaBanner` now has **6 real consumption
+points across 6 distinct pages** (home ×2, chi-siamo, servizi/index, plus the
+servizi-a/b/c comparison prototypes) with varying props (with/without a
+secondary CTA). That crosses the same reuse bar already applied to `Button`.
+
+`@butik/ui/CtaBanner` becomes a React island like any other shared component.
+Its PostHog click-tracking (`#lib/analytics/posthog.client`, an app-only
+subpath import — ADR-0007) cannot live inside `packages/ui` without breaking
+the monorepo boundary, so `apps/web/src/components/CtaBanner.astro` stays as
+a **thin wrapper**: same public Props, renders the island, keeps the tracking
+`<script>`. This is consistent with the still-valid general principle above —
+app-specific concerns (analytics wiring) stay at the app layer even when the
+presentational component moves to `@butik/ui`.
+
+The general example is superseded; the general principle ("app-level page
+composition stays `.astro`") is not.
+
+### `packages/ui/src` adopts atomic-design foldering
+
+As the catalogue grows past a single pilot component, components are grouped
+by composition level to keep the workshop navigable:
+
+```
+packages/ui/src/{atoms,molecules,organisms}/Component.{tsx,module.css,stories.tsx}
+```
+
+- **atoms** — smallest reusable primitives with no internal composition
+  (`Button`, `Eyebrow`, `Logo`, `SocialIcon`, `NumberBadge`).
+- **molecules** — small compositions of atoms/markup serving one purpose
+  (`CtaBanner`, the `mdx/Image*` family).
+- **organisms** — larger sections composed of molecules/atoms (`HeroBanner`).
+
+This is filesystem organisation only — it does not change the authoring
+format (`.tsx` + CSS Modules + tokens), the Storybook setup (the stories glob
+is already recursive), or the `client:` directive rules from the Decision
+section above. `packages/ui/package.json` `exports` map one entry per
+component regardless of folder, so consumer import paths
+(`@butik/ui/ComponentName`) are unaffected by which subfolder a component
+lives in.
