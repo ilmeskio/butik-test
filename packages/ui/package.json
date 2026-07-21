@@ -14,7 +14,8 @@
     "./NumberBadge": "./src/atoms/NumberBadge.tsx",
     "./SocialLinks": "./src/atoms/SocialLinks.tsx",
     "./Logo": "./src/atoms/Logo.tsx",
-    "./CtaBanner": "./src/molecules/CtaBanner.tsx"
+    "./CtaBanner": "./src/molecules/CtaBanner.tsx",
+    "./HeroBanner": "./src/organisms/HeroBanner.tsx"
   },
   "dependencies": {
     "@butik/ui-tokens": "workspace:*"
