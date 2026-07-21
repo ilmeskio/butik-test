@@ -14,6 +14,12 @@ const meta = {
       options: ['primary', 'ghost'],
       description: 'Variante visiva del bottone.',
     },
+    tone: {
+      control: 'inline-radio',
+      options: [undefined, 'dark', 'invert'],
+      description:
+        'Tonalità: "dark" (solo primary, sfondo scuro invece di accent) o "invert" (solo ghost, outline bianco per sfondi scuri).',
+    },
     href: {
       control: 'text',
       description: 'Se valorizzato rende un <a>, altrimenti un <button>.',
@@ -80,4 +86,23 @@ export const LongLabel: Story = {
 // Etichetta corta: verifica il bottone compatto.
 export const ShortLabel: Story = {
   args: { variant: 'ghost', children: 'Ok' },
+};
+
+// tone="dark": CTA primaria su sfondo chiaro con colore scuro invece di accent
+// (Header, Hero home).
+export const DarkTone: Story = {
+  args: { variant: 'primary', tone: 'dark', children: 'Lavoriamo insieme' },
+};
+
+// tone="invert": outline bianco leggibile su sfondi scuri/fotografici
+// (ServiceHero A/C, CtaProgetti). Il decorator simula lo sfondo scuro reale.
+export const InvertTone: Story = {
+  args: { variant: 'ghost', tone: 'invert', children: 'Scopri il progetto' },
+  decorators: [
+    (Story) => (
+      <div style={{ background: '#071108', padding: '2rem' }}>
+        <Story />
+      </div>
+    ),
+  ],
 };

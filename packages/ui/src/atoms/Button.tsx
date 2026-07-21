@@ -1,5 +1,5 @@
 /**
- * Button — componente pilota del catalogo @butik/ui.
+ * Button — atomo del catalogo @butik/ui.
  *
  * Island React (ADR-0008): stesso contratto della vecchia versione .astro, ma
  * autorabile in Storybook. Stile in CSS Modules + token di @butik/ui-tokens
@@ -15,6 +15,14 @@ export interface ButtonProps {
   href?: string;
   /** Variante visiva: piena (primary) o contorno (ghost). */
   variant?: 'primary' | 'ghost';
+  /**
+   * Tonalità di colore, per l'uso su sfondi diversi dal default.
+   * `dark` (solo `primary`): sfondo `--color-fg` invece dell'accent rosso —
+   * CTA su header/hero chiari. `invert` (solo `ghost`): bordo/testo
+   * `--color-fg-invert` — outline leggibile su sfondi scuri (hero fotografici).
+   * Omessa: colori classici (primary = accent, ghost = foreground scuro).
+   */
+  tone?: 'dark' | 'invert';
   /** Tipo del <button> (ignorato quando c'è `href`). */
   type?: 'button' | 'submit' | 'reset';
   /** Contenuto del bottone (testo, icona + testo, ...). */
@@ -24,10 +32,12 @@ export interface ButtonProps {
 export default function Button({
   href,
   variant = 'primary',
+  tone,
   type = 'button',
   children,
 }: ButtonProps) {
-  const cls = `${styles.button} ${styles[variant]}`;
+  const toneKey = tone ? `${variant}_${tone}` : variant;
+  const cls = `${styles.button} ${styles[toneKey] ?? styles[variant]}`;
 
   return href ? (
     <a className={cls} href={href}>

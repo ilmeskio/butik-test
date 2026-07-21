@@ -9,7 +9,7 @@
     "chromatic": "chromatic --exit-zero-on-changes"
   },
   "exports": {
-    "./Button": "./src/Button.tsx"
+    "./Button": "./src/atoms/Button.tsx"
   },
   "dependencies": {
     "@butik/ui-tokens": "workspace:*"
