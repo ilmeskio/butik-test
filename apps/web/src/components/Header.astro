@@ -31,14 +31,29 @@ function isActive(href: string) {
 }
 ---
 
+{/*
+  Header senza JavaScript (ADR-0002, static-first).
+
+  Lo stato "scrolled" della home era gestito da uno <script> che aggiungeva
+  data-scrolled e le classi di sfondo. Con <ClientRouter /> quello script gira
+  una volta sola per sessione: dopo una view transition il <header> è un nodo
+  nuovo, il listener resta agganciato al vecchio nodo staccato dal DOM e
+  l'header resta trasparente anche da scrollato (stesso motivo per cui
+  l'hamburger smetteva di aprirsi).
+
+  Ora lo stato è CSS puro:
+  - il colore è guidato da una scroll-driven animation su --header-solid
+    (0 = overlay sull'hero, 1 = solido), custom property registrata e
+    ereditata, così i discendenti la leggono senza bisogno di un attributo;
+  - il menu mobile è un <details>, disclosure nativa con semantica accessibile.
+  Niente stato JS = niente da re-inizializzare a ogni navigazione.
+*/}
 <header
   id="site-header"
   data-overlay={isHome ? 'true' : 'false'}
   class:list={[
-    'site-header sticky top-0 z-50 transition-colors duration-300',
-    isHome
-      ? 'bg-transparent'
-      : 'bg-butik-light border-b border-butik-dark/10',
+    'site-header sticky top-0 z-50',
+    isHome ? '' : 'bg-butik-light border-b border-butik-dark/10',
   ]}
 >
   <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -75,109 +90,133 @@ function isActive(href: string) {
       <Button href={ctaHref} tone="dark" className="header-cta">{ctaLabel}</Button>
     </span>
 
-    <!-- Mobile hamburger -->
-    <button
-      id="mobile-menu-btn"
-      class="mobile-toggle md:hidden p-3 transition-colors"
-      aria-label="Menu"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
-  </div>
-
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden md:hidden border-t border-butik-dark/10 bg-butik-light">
-    <nav class="flex flex-col px-6 py-4 gap-1" aria-label="Navigazione principale mobile">
-      {navLinks.map(link => (
-        <a
-          href={link.href}
-          class={`font-display text-xs font-bold tracking-widest uppercase py-3 ${
-            isActive(link.href) ? 'text-butik-red' : 'text-butik-dark'
-          }`}
-        >
-          {link.label}
-        </a>
-      ))}
-      <Button href={ctaHref} tone="dark" className="w-full mt-3">{ctaLabel}</Button>
-    </nav>
+    <!-- Mobile menu: <details> nativo, nessun listener -->
+    <details id="mobile-menu" class="mobile-nav md:hidden">
+      <summary class="mobile-toggle p-3" aria-label="Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </summary>
+      <div class="mobile-panel border-t border-butik-dark/10 bg-butik-light">
+        <nav class="flex flex-col px-6 py-4 gap-1" aria-label="Navigazione principale mobile">
+          {navLinks.map(link => (
+            <a
+              href={link.href}
+              class={`font-display text-xs font-bold tracking-widest uppercase py-3 ${
+                isActive(link.href) ? 'text-butik-red' : 'text-butik-dark'
+              }`}
+            >
+              {link.label}
+            </a>
+          ))}
+          <Button href={ctaHref} tone="dark" className="w-full mt-3">{ctaLabel}</Button>
+        </nav>
+      </div>
+    </details>
   </div>
 </header>
 
 <style>
-  /* In modalità overlay (homepage) sopra l'hero — ora vale a tutti i breakpoint
-     perché l'hero è uniformemente scuro anche su desktop. */
-  .site-header[data-overlay="true"]:not([data-scrolled="true"]) .mobile-toggle {
-    color: #ffffff;
-    filter: drop-shadow(0 1px 4px rgba(7, 17, 8, 0.45));
+  /* --header-solid: 0 sopra l'hero (overlay), 1 da scrollato. Registrata con
+     @property perché serve interpolabile (<number>) ed ereditata: una sola
+     animazione sull'header, tutti i discendenti la leggono. */
+  @property --header-solid {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
   }
-  .site-header[data-overlay="true"]:not([data-scrolled="true"]) .site-logo {
-    filter: drop-shadow(0 1px 4px rgba(7, 17, 8, 0.45));
+
+  @keyframes header-scroll {
+    to { --header-solid: 1; }
   }
-  .site-header[data-overlay="true"]:not([data-scrolled="true"]) .nav-link {
-    color: #ffffff;
-    text-shadow: 0 1px 4px rgba(7, 17, 8, 0.45);
+
+  /* Solo la home è in overlay sopra l'hero. Longhand e non la shorthand
+     `animation`: la shorthand azzera animation-timeline e imporrebbe
+     duration: 0s, che con una timeline di scroll non funziona. */
+  .site-header[data-overlay='true'] {
+    animation-name: header-scroll;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root block);
+    /* Crossfade legato allo scroll: trasparente fino a 60px, solido a 120px
+       (prima erano 60px + una transizione a tempo di 300ms). */
+    animation-range: 60px 120px;
+
+    background-color: color-mix(
+      in srgb, var(--color-butik-light) calc(var(--header-solid) * 100%), transparent
+    );
+    border-bottom: 1px solid color-mix(
+      in srgb, rgb(7 17 8 / 0.1) calc(var(--header-solid) * 100%), transparent
+    );
   }
-  .site-header[data-overlay="true"]:not([data-scrolled="true"]) .nav-link:hover {
+
+  /* Fallback: senza scroll-driven animations (oggi Firefox — animation-timeline
+     non è ancora Baseline) l'header della home è solido da subito. Si perde
+     l'overlay sull'hero, non la leggibilità. */
+  @supports not (animation-timeline: scroll(root block)) {
+    .site-header[data-overlay='true'] { --header-solid: 1; }
+  }
+
+  /* Con motion ridotto niente crossfade progressivo: switch netto alla soglia. */
+  @media (prefers-reduced-motion: reduce) {
+    .site-header[data-overlay='true'] { animation-timing-function: steps(1, end); }
+  }
+
+  /* Elementi interni: interpolano fra la resa chiara (sopra l'hero scuro) e
+     quella scura (header solido). Vale a tutti i breakpoint perché l'hero è
+     uniformemente scuro anche su desktop. */
+  .site-header[data-overlay='true'] .site-logo {
+    filter: drop-shadow(0 1px 4px rgb(7 17 8 / calc((1 - var(--header-solid)) * 0.45)));
+  }
+
+  .site-header[data-overlay='true'] .nav-link {
+    color: color-mix(in srgb, var(--color-butik-dark) calc(var(--header-solid) * 100%), #ffffff);
+    text-shadow: 0 1px 4px rgb(7 17 8 / calc((1 - var(--header-solid)) * 0.45));
+  }
+  .site-header[data-overlay='true'] .nav-link:hover {
     color: var(--color-butik-red);
   }
-  .site-header[data-overlay="true"]:not([data-scrolled="true"]) .header-cta {
-    background-color: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(4px);
+
+  .site-header[data-overlay='true'] .mobile-toggle {
+    color: color-mix(in srgb, var(--color-butik-dark) calc(var(--header-solid) * 100%), #ffffff);
+    filter: drop-shadow(0 1px 4px rgb(7 17 8 / calc((1 - var(--header-solid)) * 0.45)));
   }
-  .site-header[data-overlay="true"]:not([data-scrolled="true"]) .header-cta:hover {
+
+  .site-header[data-overlay='true'] .header-cta {
+    background-color: color-mix(
+      in srgb, var(--color-butik-dark) calc(var(--header-solid) * 100%), rgb(255 255 255 / 0.12)
+    );
+    color: #ffffff;
+    border: 1px solid color-mix(
+      in srgb, var(--color-butik-dark) calc(var(--header-solid) * 100%), rgb(255 255 255 / 0.45)
+    );
+    backdrop-filter: blur(calc((1 - var(--header-solid)) * 4px));
+  }
+  .site-header[data-overlay='true'] .header-cta:hover {
     background-color: var(--color-butik-red);
     border-color: var(--color-butik-red);
   }
 
-  /* Transizione smooth quando il header passa da overlay a solido. */
-  .site-logo,
-  .mobile-toggle,
-  .nav-link,
-  .header-cta {
-    transition: filter 300ms ease, color 300ms ease, background-color 300ms ease,
-      border-color 300ms ease, text-shadow 300ms ease;
+  /* Menu mobile — <details> nativo. Il pannello è in absolute sotto la barra:
+     l'header è sticky (quindi posizionato) e fa da containing block. */
+  .mobile-nav > summary {
+    list-style: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+  }
+  .mobile-nav > summary::-webkit-details-marker { display: none; }
+  .mobile-nav > summary::marker { content: ''; }
+  .mobile-nav > summary:focus-visible {
+    outline: 2px solid var(--color-butik-red);
+    outline-offset: 2px;
+  }
+
+  .mobile-panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
   }
 </style>
-
-<script>
-  const btn = document.getElementById('mobile-menu-btn');
-  const menu = document.getElementById('mobile-menu');
-  btn?.addEventListener('click', () => {
-    const open = menu?.classList.toggle('hidden') === false;
-    btn.setAttribute('aria-expanded', String(open));
-  });
-
-  // Toggle stato "scrolled" del header in base alla posizione di scroll.
-  // Sopra l'hero (scroll < 80px) → overlay trasparente con elementi chiari.
-  // Appena si scrolla → header solido bg-butik-light con elementi scuri.
-  const header = document.getElementById('site-header');
-  if (header && header.dataset.overlay === 'true') {
-    let ticking = false;
-    const updateHeader = () => {
-      const scrolled = window.scrollY > 60;
-      header.dataset.scrolled = scrolled ? 'true' : 'false';
-      if (scrolled) {
-        header.classList.add('bg-butik-light', 'border-b', 'border-butik-dark/10');
-        header.classList.remove('bg-transparent');
-      } else {
-        header.classList.remove('bg-butik-light', 'border-b', 'border-butik-dark/10');
-        header.classList.add('bg-transparent');
-      }
-      ticking = false;
-    };
-    const onScroll = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(updateHeader);
-      }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    updateHeader();
-  }
-</script>
