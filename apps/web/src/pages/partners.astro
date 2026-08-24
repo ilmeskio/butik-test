@@ -2,7 +2,7 @@
 import BaseLayout from '#layouts/BaseLayout.astro';
 import { Image } from 'astro:assets';
 import { getEntry } from 'astro:content';
-import Eyebrow from '@butik/ui/Eyebrow';
+import SectionHeading from '@butik/ui/SectionHeading';
 
 // Copy + lista partner content-driven (ADR-0004): collezione `pagine` (entry
 // `partners`), con i loghi come media risolti a build-time da `image()`.
@@ -19,9 +19,8 @@ const partners = c.partners;
   description={c.metaDescription}
 >
   <!-- Page header -->
-  <div class="pt-20 pb-12 text-center">
-    <Eyebrow>{c.eyebrow}</Eyebrow>
-    <h1 class="font-heading text-5xl font-bold text-butik-dark">{c.title}</h1>
+  <div class="pt-20 pb-12">
+    <SectionHeading as="h1" eyebrow={c.eyebrow} title={c.title} />
   </div>
 
   <!-- Lista logo · partner -->

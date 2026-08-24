@@ -2,7 +2,7 @@
 // Testimonianze content-driven via Sitepins (ADR-0004): entry condivisa
 // `pagine/testimonials`, riusata identica da home (index.astro) e
 // chi-siamo.astro — entrambe passano le stesse props a questo componente.
-import Eyebrow from '@butik/ui/Eyebrow';
+import SectionHeading from '@butik/ui/SectionHeading';
 
 type Testimonial = {
   rating: number;
@@ -22,10 +22,9 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
 
 <section class="bg-butik-light py-12 md:py-16">
   <div class="max-w-7xl mx-auto px-6">
-    <Eyebrow align="center">{eyebrow}</Eyebrow>
-    <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark text-center mb-8 md:mb-10">
-      {sectionTitle}
-    </h2>
+    <div class="mb-8 md:mb-10">
+      <SectionHeading eyebrow={eyebrow} title={sectionTitle} />
+    </div>
 
     <div
       id="testimonials-track"

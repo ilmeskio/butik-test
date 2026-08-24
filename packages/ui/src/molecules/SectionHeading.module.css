@@ -1,0 +1,18 @@
+.wrapper {
+  text-align: center;
+}
+
+.left {
+  text-align: left;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  /* Scala fluida continua: un solo token invece della catena di tre taglie
+     Tailwind per breakpoint. */
+  font-size: var(--font-size-section-title);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-fg);
+}
