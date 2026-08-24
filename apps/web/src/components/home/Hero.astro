@@ -6,6 +6,7 @@ import ServiceCard from '../serviziCards/ServiceCard.astro';
 import ServiceLauncher from '../serviziCards/ServiceLauncher.astro';
 import { serviziCards } from '../../data/serviziCards';
 import Button from '@butik/ui/Button';
+import ArrowLink from '@butik/ui/ArrowLink';
 
 import imgA from '../../assets/servizi/template-servizio/gallery-1.jpg';
 import imgB from '../../assets/servizi/template-servizio/img-right.jpg';
@@ -326,12 +327,7 @@ const proofLogos = partners.filter((p) => proofLogoNames.includes(p.name));
       )}
 
       <div class="text-center mt-4 md:mt-5">
-        <a
-          href={exploreHref}
-          class="font-display text-xs font-bold tracking-widest uppercase text-white/90 hover:text-white inline-flex items-center gap-2 underline underline-offset-4 decoration-white/30 hover:decoration-white"
-        >
-          {exploreLabel} <span aria-hidden="true">→</span>
-        </a>
+        <ArrowLink href={exploreHref} tone="invert">{exploreLabel}</ArrowLink>
       </div>
     </div>
   </div>
