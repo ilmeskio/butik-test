@@ -32,23 +32,23 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Sezione: Story = {
+export const Section: Story = {
   args: { as: 'h2', align: 'center' },
 };
 
-export const Allineato: Story = {
+export const AlignLeft: Story = {
   args: { as: 'h2', align: 'left' },
 };
 
-export const TitoloDiPagina: Story = {
+export const PageTitle: Story = {
   args: { as: 'h1', align: 'center', eyebrow: 'Partner', title: 'Con chi lavoriamo' },
 };
 
-export const SenzaEyebrow: Story = {
+export const NoEyebrow: Story = {
   args: { as: 'h2', align: 'center', eyebrow: undefined },
 };
 
-export const TitoloLungo: Story = {
+export const LongTitle: Story = {
   args: {
     as: 'h2',
     align: 'center',

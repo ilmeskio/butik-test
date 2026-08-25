@@ -26,13 +26,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const SuFondoChiaro: Story = {
+export const OnLight: Story = {
   args: { tone: 'default' },
 };
 
-export const SuFondoScuro: Story = {
+export const OnDark: Story = {
   args: { tone: 'invert', children: 'Esplora tutti i servizi' },
-  parameters: { backgrounds: { default: 'scuro' } },
   decorators: [
     (Story) => (
       <div style={{ background: 'var(--color-bg-invert)', padding: 'var(--space-8)' }}>
@@ -42,13 +41,47 @@ export const SuFondoScuro: Story = {
   ],
 };
 
+// L'uso reale del tono invert (Hero della home) non è sopra un fondo pieno ma
+// sopra un mosaico fotografico: su fondo pieno l'audit a11y darebbe verde su
+// un caso che in produzione non esiste.
+export const OnPhoto: Story = {
+  args: { tone: 'invert', children: 'Esplora tutti i servizi' },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          padding: 'var(--space-8)',
+          backgroundColor: 'var(--color-bg-invert)',
+          backgroundImage:
+            'linear-gradient(0deg, rgba(7,17,8,0.55), rgba(7,17,8,0.55)), repeating-linear-gradient(45deg, #8a8a8a 0 24px, #d8d8d8 24px 48px)',
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
+};
+
 // Il tono default eredita --accent dal contesto: è così che le card dei
 // servizi danno a ogni categoria il proprio colore senza toccare l'atomo.
-export const AccentoDalContesto: Story = {
+export const AccentFromContext: Story = {
   args: { tone: 'default', children: 'Scopri il turismo musicale' },
   decorators: [
     (Story) => (
       <div style={{ ['--accent' as string]: 'var(--color-accent-2)' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+// --arrow-link-accent è il primo hook della catena di fallback e l'unico
+// pensato per il componente: --accent lo si eredita per caso, questo no.
+export const AccentViaComponentHook: Story = {
+  args: { tone: 'default', children: 'Scopri la formazione' },
+  decorators: [
+    (Story) => (
+      <div style={{ ['--arrow-link-accent' as string]: 'var(--color-highlight)' }}>
         <Story />
       </div>
     ),

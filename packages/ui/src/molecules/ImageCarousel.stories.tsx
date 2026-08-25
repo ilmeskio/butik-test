@@ -32,3 +32,15 @@ export const ThreeSlides: Story = {};
 export const TwoSlides: Story = {
   args: { images: sampleImages.slice(0, 2) },
 };
+
+// Una sola immagine: Prev e Next sono entrambi agli estremi, quindi disabled.
+// Prima restavano abilitati e inerti — `goTo` clampava in silenzio.
+export const SingleSlide: Story = {
+  args: { images: sampleImages.slice(0, 1) },
+};
+
+// Limite noto: senza una `play` function le storie rendono sempre lo slide 0,
+// quindi Chromatic non fotografa mai un dot attivo diverso dal primo né lo
+// stato disabled di Prev. Coprirlo richiede @storybook/test, che il pacchetto
+// oggi non installa.
+

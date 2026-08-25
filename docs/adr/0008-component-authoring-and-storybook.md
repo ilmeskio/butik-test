@@ -137,9 +137,9 @@ packages/ui/src/{atoms,molecules,organisms}/Component.{tsx,module.css,stories.ts
 ```
 
 - **atoms** — smallest reusable primitives with no internal composition
-  (`Button`, `Eyebrow`, `Logo`, `SocialIcon`, `NumberBadge`).
+  (`Button`, `Eyebrow`, `Logo`, `SocialLinks`, `NumberBadge`, `ArrowLink`).
 - **molecules** — small compositions of atoms/markup serving one purpose
-  (`CtaBanner`, the `mdx/Image*` family).
+  (`CtaBanner`, `SectionHeading`, the `mdx/Image*` family).
 - **organisms** — larger sections composed of molecules/atoms (`HeroBanner`).
 
 This is filesystem organisation only — it does not change the authoring
@@ -149,6 +149,35 @@ section above. `packages/ui/package.json` `exports` map one entry per
 component regardless of folder, so consumer import paths
 (`@butik/ui/ComponentName`) are unaffected by which subfolder a component
 lives in.
+
+### The Astro ↔ island boundary {#astro-island-boundary}
+
+Moving presentational components into `@butik/ui` draws a line that the
+original decision left implicit. Two Astro features do not cross it, and the
+wrapper has to resolve them before handing data to the island. Seven files
+already cite this amendment for these rules; here they are on the record.
+
+**Images.** `astro:assets` (`<Image>`, `getImage()`) is a build-time Astro/Vite
+concern: it runs in neither React nor Storybook. The `.astro` wrapper resolves
+the asset with `getImage()` and passes **primitives** (`src`, `srcSet`,
+`sizes`, `width`, `height`) to the island, which renders a plain `<img>`. This
+keeps the island renderable in the workshop, where no Astro pipeline exists.
+See `Logo`, the `mdx/Image*` family, `HeroBanner`.
+
+**View transitions.** The `transition:name` directive is compiled by Astro and
+is not available inside an island. Components that need to participate in a
+view transition take the name as a prop and apply it as an inline
+`view-transition-name` style instead. See `HeroBanner`.
+
+**Scoped styles.** Astro's scoped `<style>` stamps `data-astro-cid-*` only on
+the markup Astro itself compiles. A scoped selector therefore **never reaches
+an island's DOM**: a rule written that way is dead CSS. When a wrapper must
+style an element rendered by an island — the header does, for its overlay
+state — the descendant part of the selector goes through `:global()`, with the
+Astro-owned element staying as the scoped pivot.
+
+The general rule behind all three: **anything Astro compiles stays in the
+wrapper; the island receives plain data and renders plain DOM.**
 
 ### Related product decision
 

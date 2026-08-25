@@ -1,6 +1,6 @@
 # PDR-0001: CTA a forma di pillola sito-wide
 
-- Status: proposed
+- Status: accepted
 - Date: 2026-07-21
 - Reviewers: Gabriele Consiglio
 

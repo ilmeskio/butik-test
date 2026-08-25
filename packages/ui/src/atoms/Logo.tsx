@@ -5,9 +5,11 @@
  * risolti dal chiamante `.astro` (via `getImage()` di `astro:assets`, non
  * `<Image>` — quest'ultimo è un componente Astro-only, non eseguibile dentro
  * un'isola React né in Storybook). Vedi ADR-0008 amendment 2026-07-21.
- * `className` è passata così com'è (non unita a classi interne) per
- * permettere ai chiamanti app-side di agganciare effetti locali (es. il
- * filtro drop-shadow dell'header in modalità overlay).
+ * `className` è **unita** alle classi interne (non le sostituisce): serve ai
+ * chiamanti app-side per agganciare effetti locali — es. il filtro
+ * drop-shadow dell'header in modalità overlay — senza perdere lo stile
+ * dell'atomo. Nota: una regola `.astro` scoped non raggiunge questo <img>
+ * (l'attributo di scoping non arriva dentro l'isola), serve `:global()`.
  */
 import styles from './Logo.module.css';
 
