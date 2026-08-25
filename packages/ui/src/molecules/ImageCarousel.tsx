@@ -30,21 +30,28 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState(0);
 
-  const atStart = current === 0;
-  const atEnd = current >= images.length - 1;
-
   const goTo = (index: number) => {
     const track = trackRef.current;
     if (!track) return;
-    // aria-disabled e non `disabled`: un bottone che si disabilita mentre lo
-    // si tiene a fuoco (l'ultimo Next della sequenza) scarica il focus sul
-    // body e il Tab successivo riparte da capo. Resta focusabile e annunciato
-    // come non disponibile; l'azione la blocchiamo qui.
-    if (index < 0 || index > images.length - 1) return;
-    const clamped = Math.max(0, Math.min(index, images.length - 1));
+
+    // La galleria è circolare: Prev dalla prima porta all'ultima e Next
+    // dall'ultima torna alla prima. Così nessuno dei due bottoni è mai in uno
+    // stato speciale — niente `disabled` (che scarica il focus sul body
+    // proprio mentre lo si sta usando) e niente `aria-disabled` da annunciare.
+    const wrapped = (index + images.length) % images.length;
+
+    // Il giro di ritorno è istantaneo. Il track è uno scroller nativo: con
+    // `smooth` il browser scorrerebbe all'indietro attraverso tutte le
+    // immagini in mezzo, che legge come "indietro di tre" invece che "torna
+    // all'inizio". Lo stacco netto comunica il giro.
+    const isWrap = index < 0 || index > images.length - 1;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    track.scrollTo({ left: clamped * track.clientWidth, behavior: reducedMotion ? 'auto' : 'smooth' });
-    setCurrent(clamped);
+
+    track.scrollTo({
+      left: wrapped * track.clientWidth,
+      behavior: isWrap || reducedMotion ? 'auto' : 'smooth',
+    });
+    setCurrent(wrapped);
   };
 
   const handleScroll = () => {
@@ -90,13 +97,18 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
       </div>
 
       {images.length > 1 && (
+      <>
+      {/* Sostituisce il segnale che dava `aria-disabled`: in una galleria
+          circolare non esistono più estremi, quindi la posizione va detta. */}
+      <p aria-live="polite" className={styles.status}>
+        Immagine {current + 1} di {images.length}
+      </p>
       <div className={styles.controls}>
         <button
           type="button"
           aria-label="Immagine precedente"
           className={styles.navButton}
           onClick={() => goTo(current - 1)}
-          aria-disabled={atStart || undefined}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className={styles.navIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -124,7 +136,6 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
           aria-label="Immagine successiva"
           className={styles.navButton}
           onClick={() => goTo(current + 1)}
-          aria-disabled={atEnd || undefined}
         >
           Next
           <svg xmlns="http://www.w3.org/2000/svg" className={styles.navIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -132,6 +143,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
           </svg>
         </button>
       </div>
+      </>
       )}
     </div>
   );

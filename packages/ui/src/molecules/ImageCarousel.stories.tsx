@@ -34,8 +34,8 @@ export const TwoSlides: Story = {
   args: { images: sampleImages.slice(0, 2) },
 };
 
-// Una sola immagine: la barra di controllo non viene resa affatto — prima
-// mostrava Prev/Next abilitati e inerti su un carosello che non scorre.
+// Una sola immagine: la barra di controllo non viene resa affatto — non ci
+// sarebbe nulla fra cui girare.
 export const SingleSlide: Story = {
   args: { images: sampleImages.slice(0, 1) },
 };
@@ -49,6 +49,35 @@ export const MidSequence: Story = {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByLabelText('Immagine successiva'));
     await expect(canvas.getByLabelText('Vai all\'immagine 2')).toHaveAttribute(
+      'aria-current',
+      'true'
+    );
+  },
+};
+
+// La galleria è circolare: dall'ultima immagine Next torna alla prima, e
+// Prev dalla prima porta all'ultima. Nessuno dei due bottoni è mai in uno
+// stato speciale, quindi non c'è nulla da disabilitare né da annunciare come
+// non disponibile.
+export const WrapsAround: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const next = canvas.getByLabelText('Immagine successiva');
+    // dalla prima all'ultima, poi ancora avanti
+    await userEvent.click(next);
+    await userEvent.click(next);
+    await expect(canvas.getByLabelText('Vai all\'immagine 3')).toHaveAttribute(
+      'aria-current',
+      'true'
+    );
+    await userEvent.click(next);
+    await expect(canvas.getByLabelText('Vai all\'immagine 1')).toHaveAttribute(
+      'aria-current',
+      'true'
+    );
+    // e all'indietro dalla prima si torna in fondo
+    await userEvent.click(canvas.getByLabelText('Immagine precedente'));
+    await expect(canvas.getByLabelText('Vai all\'immagine 3')).toHaveAttribute(
       'aria-current',
       'true'
     );
