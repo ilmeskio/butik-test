@@ -58,8 +58,9 @@ const metodo = c.metodo;
           <p class="font-sans text-base text-butik-body leading-relaxed" transition:name={`servizio-${s.id}-subtitle`}>
             {s.data.subtitle}
           </p>
-          <span class="mt-4 inline-block font-display text-xs font-bold tracking-widest uppercase text-butik-dark border-b-2 border-butik-red pb-0.5 group-hover:text-butik-red transition-colors">
+          <span class="mt-4 inline-flex items-center gap-2 font-display text-xs font-bold tracking-widest uppercase text-butik-dark border-b-2 border-butik-red pb-0.5 group-hover:text-butik-red transition-colors">
             {c.cardCtaLabel}
+            <span aria-hidden="true">→</span>
           </span>
         </a>
       ))}
