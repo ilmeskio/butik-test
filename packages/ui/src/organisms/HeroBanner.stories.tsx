@@ -11,7 +11,7 @@ const placeholderSrc =
   );
 
 const meta = {
-  title: 'UI/HeroBanner',
+  title: 'Organisms/HeroBanner',
   component: HeroBanner,
   tags: ['autodocs'],
   args: {

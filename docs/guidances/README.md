@@ -15,5 +15,6 @@ opening with a banner that says which:
 | [Functions](./functions.md) | per-feature choice | Where dynamic logic goes: Cloudflare Workers, Supabase, managed services |
 | [Design approach](./design-approach.md) | recommended | Tokens as source of truth, CSS Modules, AA accessibility, motion |
 | [Product decisions](./product-decisions.md) | recommended | How to write PDRs in `docs/product/` and take them to review |
+| [Client scripts](./client-scripts.md) | recommended | Component `<script>` under `<ClientRouter />`: re-init on `astro:page-load`, idempotence, when to drop the script |
 
 See [ADR-0001](../adr/0001-recording-decisions.md) for how guidances relate to ADRs.

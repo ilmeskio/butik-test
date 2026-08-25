@@ -11,7 +11,7 @@ const placeholderSrc =
   );
 
 const meta = {
-  title: 'UI/Logo',
+  title: 'Atoms/Logo',
   component: Logo,
   tags: ['autodocs'],
   args: {

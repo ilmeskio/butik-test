@@ -8,7 +8,7 @@ const placeholderSrc =
   );
 
 const meta = {
-  title: 'UI/ImageRight',
+  title: 'Molecules/ImageRight',
   component: ImageRight,
   tags: ['autodocs'],
   args: {

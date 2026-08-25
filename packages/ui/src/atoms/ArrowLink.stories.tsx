@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import ArrowLink from './ArrowLink';
 
 const meta = {
-  title: 'UI/ArrowLink',
+  title: 'Atoms/ArrowLink',
   component: ArrowLink,
   tags: ['autodocs'],
   argTypes: {
@@ -81,7 +81,7 @@ export const AccentViaComponentHook: Story = {
   args: { tone: 'default', children: 'Scopri la formazione' },
   decorators: [
     (Story) => (
-      <div style={{ ['--arrow-link-accent' as string]: 'var(--color-highlight)' }}>
+      <div style={{ ['--arrow-link-accent' as string]: 'var(--color-accent-2)' }}>
         <Story />
       </div>
     ),

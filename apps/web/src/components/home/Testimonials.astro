@@ -137,6 +137,15 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
 
     cards.forEach((card) => observer.observe(card));
 
+    // L'observer va sganciato prima che la view transition porti via i nodi:
+    // senza, a ogni navigazione ne resta uno che osserva un sottoalbero
+    // staccato (vedi docs/guidances/client-scripts.md).
+    document.addEventListener(
+      'astro:before-swap',
+      () => observer.disconnect(),
+      { once: true }
+    );
+
     dots.forEach((dot, i) => {
       dot.addEventListener('click', () => {
         const card = cards[i];
@@ -156,7 +165,7 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
 
 <style>
   .testimonial-dot:focus-visible {
-    outline: 2px solid var(--color-butik-red);
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
   }
 </style>

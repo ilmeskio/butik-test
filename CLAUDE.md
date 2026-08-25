@@ -55,6 +55,11 @@ Read the ADRs before making an architectural change. Cite them by file + anchor
   so static-first (ADR-0002) holds. The **workshop is Storybook**
   (`@storybook/react-vite`, scoped to `packages/ui`); it's a dev tool and never runs
   in the site build. App-level page composition stays `.astro` (e.g. `CtaBanner`).
+- **Client scripts run under view transitions**: `BaseLayout` renders
+  `<ClientRouter />`, so a component `<script>` executes once per session while
+  the DOM is swapped on every navigation. Wire behaviour up in an idempotent
+  `init()` on `astro:page-load`, or drop the script for CSS/native HTML — see
+  `docs/guidances/client-scripts.md`.
 - **No tracking before consent** (ADR-0006): analytics gated by
   `vanilla-cookieconsent`; PostHog opt-out-by-default; Google Consent Mode wired.
 - **Monorepo** (ADR-0007): `apps/*` + `packages/*`, pnpm + turbo. Cross-package

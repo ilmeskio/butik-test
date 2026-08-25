@@ -30,9 +30,17 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [current, setCurrent] = useState(0);
 
+  const atStart = current === 0;
+  const atEnd = current >= images.length - 1;
+
   const goTo = (index: number) => {
     const track = trackRef.current;
     if (!track) return;
+    // aria-disabled e non `disabled`: un bottone che si disabilita mentre lo
+    // si tiene a fuoco (l'ultimo Next della sequenza) scarica il focus sul
+    // body e il Tab successivo riparte da capo. Resta focusabile e annunciato
+    // come non disponibile; l'azione la blocchiamo qui.
+    if (index < 0 || index > images.length - 1) return;
     const clamped = Math.max(0, Math.min(index, images.length - 1));
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     track.scrollTo({ left: clamped * track.clientWidth, behavior: reducedMotion ? 'auto' : 'smooth' });
@@ -60,10 +68,11 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
         ref={trackRef}
         onScroll={handleScroll}
         tabIndex={0}
+        role="group"
         aria-label="Immagini, scorrevole"
       >
         {images.map((img, i) => (
-          <div className={styles.slide} key={img.src}>
+          <div className={styles.slide} key={`${img.src}-${i}`}>
             <figure className={styles.figure}>
               <img
                 src={img.src}
@@ -80,13 +89,14 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
         ))}
       </div>
 
+      {images.length > 1 && (
       <div className={styles.controls}>
         <button
           type="button"
           aria-label="Immagine precedente"
           className={styles.navButton}
           onClick={() => goTo(current - 1)}
-          disabled={current === 0}
+          aria-disabled={atStart || undefined}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className={styles.navIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -97,7 +107,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
         <div className={styles.dots}>
           {images.map((img, i) => (
             <button
-              key={img.src}
+              key={`${img.src}-${i}`}
               type="button"
               aria-label={`Vai all'immagine ${i + 1}`}
               /* Lo stato attivo era veicolato dal solo colore: senza
@@ -114,7 +124,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
           aria-label="Immagine successiva"
           className={styles.navButton}
           onClick={() => goTo(current + 1)}
-          disabled={current === images.length - 1}
+          aria-disabled={atEnd || undefined}
         >
           Next
           <svg xmlns="http://www.w3.org/2000/svg" className={styles.navIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -122,6 +132,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
           </svg>
         </button>
       </div>
+      )}
     </div>
   );
 }

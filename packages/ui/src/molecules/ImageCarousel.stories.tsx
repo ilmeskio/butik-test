@@ -2,6 +2,7 @@
 // consumato in Astro): in Storybook è già hydratato di default, la
 // navigazione prev/next/dots è provabile dal vivo.
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import ImageCarousel from './ImageCarousel';
 
 const colors = ['#8a6d3b', '#2f5233', '#3b5a8a'];
@@ -16,7 +17,7 @@ const sampleImages = colors.map((fill, i) => ({
 }));
 
 const meta = {
-  title: 'UI/ImageCarousel',
+  title: 'Molecules/ImageCarousel',
   component: ImageCarousel,
   tags: ['autodocs'],
   args: {
@@ -33,14 +34,24 @@ export const TwoSlides: Story = {
   args: { images: sampleImages.slice(0, 2) },
 };
 
-// Una sola immagine: Prev e Next sono entrambi agli estremi, quindi disabled.
-// Prima restavano abilitati e inerti — `goTo` clampava in silenzio.
+// Una sola immagine: la barra di controllo non viene resa affatto — prima
+// mostrava Prev/Next abilitati e inerti su un carosello che non scorre.
 export const SingleSlide: Story = {
   args: { images: sampleImages.slice(0, 1) },
 };
 
-// Limite noto: senza una `play` function le storie rendono sempre lo slide 0,
-// quindi Chromatic non fotografa mai un dot attivo diverso dal primo né lo
-// stato disabled di Prev. Coprirlo richiede @storybook/test, che il pacchetto
-// oggi non installa.
+// Stato intermedio: dopo un click su Next il dot attivo non è il primo e Prev
+// è disponibile. Senza questa `play` ogni snapshot Chromatic fotograferebbe
+// solo lo slide 0. `storybook/test` è nel core dalla 9 — nessuna dipendenza
+// in più rispetto a `storybook` che il pacchetto già installa.
+export const MidSequence: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByLabelText('Immagine successiva'));
+    await expect(canvas.getByLabelText('Vai all\'immagine 2')).toHaveAttribute(
+      'aria-current',
+      'true'
+    );
+  },
+};
 

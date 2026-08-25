@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import CtaBanner from './CtaBanner';
 
 const meta = {
-  title: 'UI/CtaBanner',
+  title: 'Molecules/CtaBanner',
   component: CtaBanner,
   tags: ['autodocs'],
   args: {

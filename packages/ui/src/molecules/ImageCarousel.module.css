@@ -129,12 +129,12 @@
   background: var(--color-accent);
 }
 
-.navButton:disabled {
+.navButton[aria-disabled='true'] {
   opacity: 0.4;
   cursor: default;
 }
 
-.navButton:disabled:hover {
+.navButton[aria-disabled='true']:hover {
   color: var(--color-fg);
 }
 

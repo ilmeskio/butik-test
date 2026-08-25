@@ -21,6 +21,10 @@ const ctaHref = '/contatti';
 const ctaLabel = 'Lavoriamo insieme';
 
 const currentPath = Astro.url.pathname;
+// Solo la home va in overlay sopra l'hero. Vincolo da rispettare se un giorno
+// si estende: l'overlay è guidato da una scroll-driven animation, che ha
+// bisogno di un range di scroll — su una pagina più corta del viewport la
+// timeline non avanza e l'header resterebbe fermo sullo stato trasparente.
 const isHome = currentPath === '/';
 
 function isActive(href: string) {
@@ -123,7 +127,9 @@ function isActive(href: string) {
      Colori dai token di @butik/ui-tokens (ADR-0005) e non dai --color-butik-*
      del @theme Tailwind: l'isola Button che l'header contiene consuma già
      quelli, e tenere due scale con gli stessi hex nello stesso componente è
-     drift che aspetta di succedere. */
+     drift che aspetta di succedere. Vale per questo blocco <style>; gli
+     attributi class del markup usano ancora le utility Tailwind e cadranno
+     con la rimozione di Tailwind (ADR-0005 #design-tokens). */
   @property --header-solid {
     syntax: '<number>';
     inherits: true;
@@ -154,11 +160,11 @@ function isActive(href: string) {
     animation-range: 60px 61px;
 
     background-color: color-mix(
-      in srgb, var(--color-light) calc(var(--header-solid) * 100%), transparent
+      in srgb, var(--color-bg) calc(var(--header-solid) * 100%), transparent
     );
     border-bottom: 1px solid color-mix(
       in srgb,
-      color-mix(in srgb, var(--color-dark) 10%, transparent) calc(var(--header-solid) * 100%),
+      color-mix(in srgb, var(--color-fg) 10%, transparent) calc(var(--header-solid) * 100%),
       transparent
     );
     transition: background-color 300ms ease, border-bottom-color 300ms ease;
@@ -182,17 +188,17 @@ function isActive(href: string) {
      discendente no. */
   .site-header[data-overlay='true'] :global(.site-logo) {
     filter: drop-shadow(0 1px 4px color-mix(
-      in srgb, var(--color-dark) calc((1 - var(--header-solid)) * 45%), transparent
+      in srgb, var(--color-fg) calc((1 - var(--header-solid)) * 45%), transparent
     ));
     transition: filter 300ms ease;
   }
 
   .site-header[data-overlay='true'] .nav-link {
     color: color-mix(
-      in srgb, var(--color-dark) calc(var(--header-solid) * 100%), var(--color-fg-invert)
+      in srgb, var(--color-fg) calc(var(--header-solid) * 100%), var(--color-fg-invert)
     );
     text-shadow: 0 1px 4px color-mix(
-      in srgb, var(--color-dark) calc((1 - var(--header-solid)) * 45%), transparent
+      in srgb, var(--color-fg) calc((1 - var(--header-solid)) * 45%), transparent
     );
     transition: color 300ms ease, text-shadow 300ms ease;
   }
@@ -202,24 +208,30 @@ function isActive(href: string) {
 
   .site-header[data-overlay='true'] .mobile-toggle {
     color: color-mix(
-      in srgb, var(--color-dark) calc(var(--header-solid) * 100%), var(--color-fg-invert)
+      in srgb, var(--color-fg) calc(var(--header-solid) * 100%), var(--color-fg-invert)
     );
     filter: drop-shadow(0 1px 4px color-mix(
-      in srgb, var(--color-dark) calc((1 - var(--header-solid)) * 45%), transparent
+      in srgb, var(--color-fg) calc((1 - var(--header-solid)) * 45%), transparent
     ));
     transition: color 300ms ease, filter 300ms ease;
   }
 
+  /* Il riempimento in overlay è uno scrim SCURO, non chiaro. Con il vetro
+     bianco al 12% il testo stava a ~4.2:1 e il bordo a 2.1:1 sopra le tile
+     chiare dell'hero (c'è un cielo quasi bianco sotto la barra): il vetro
+     schiariva ulteriormente un fondo già chiaro. Invertendo il verso l'effetto
+     "vetro sopra la foto" resta, ma il testo bianco sale a ~10.9:1 e il bordo
+     a ~3.6:1 sul proprio riempimento. */
   .site-header[data-overlay='true'] :global(.header-cta) {
     background-color: color-mix(
       in srgb,
-      var(--color-dark) calc(var(--header-solid) * 100%),
-      color-mix(in srgb, var(--color-fg-invert) 12%, transparent)
+      var(--color-fg) calc(var(--header-solid) * 100%),
+      color-mix(in srgb, var(--color-fg) 45%, transparent)
     );
     color: var(--color-fg-invert);
     border: 1px solid color-mix(
       in srgb,
-      var(--color-dark) calc(var(--header-solid) * 100%),
+      var(--color-fg) calc(var(--header-solid) * 100%),
       color-mix(in srgb, var(--color-fg-invert) 45%, transparent)
     );
     backdrop-filter: blur(calc((1 - var(--header-solid)) * 4px));

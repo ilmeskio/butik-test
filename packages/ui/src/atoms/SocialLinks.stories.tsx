@@ -22,7 +22,7 @@ const sampleSocials = [
 ];
 
 const meta = {
-  title: 'UI/SocialLinks',
+  title: 'Atoms/SocialLinks',
   component: SocialLinks,
   tags: ['autodocs'],
   args: {

@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import Button from './Button';
 
 const meta = {
-  title: 'UI/Button',
+  title: 'Atoms/Button',
   component: Button,
   tags: ['autodocs'],
   argTypes: {
@@ -100,7 +100,7 @@ export const InvertTone: Story = {
   args: { variant: 'ghost', tone: 'invert', children: 'Scopri il progetto' },
   decorators: [
     (Story) => (
-      <div style={{ background: '#071108', padding: '2rem' }}>
+      <div style={{ background: 'var(--color-bg-invert)', padding: 'var(--space-8)' }}>
         <Story />
       </div>
     ),
