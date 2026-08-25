@@ -46,8 +46,22 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
   };
 
   return (
-    <div className={styles.carousel}>
-      <div className={styles.track} ref={trackRef} onScroll={handleScroll}>
+    <div
+      className={styles.carousel}
+      role="group"
+      aria-roledescription="carosello"
+      aria-label="Galleria immagini"
+    >
+      {/* tabIndex sul track: è una regione scrollabile, e senza essere
+          focusabile non sarebbe raggiungibile da tastiera (SC 2.1.1) da chi
+          non usa i bottoni. */}
+      <div
+        className={styles.track}
+        ref={trackRef}
+        onScroll={handleScroll}
+        tabIndex={0}
+        aria-label="Immagini, scorrevole"
+      >
         {images.map((img, i) => (
           <div className={styles.slide} key={img.src}>
             <figure className={styles.figure}>
@@ -72,6 +86,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
           aria-label="Immagine precedente"
           className={styles.navButton}
           onClick={() => goTo(current - 1)}
+          disabled={current === 0}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className={styles.navIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -85,6 +100,9 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
               key={img.src}
               type="button"
               aria-label={`Vai all'immagine ${i + 1}`}
+              /* Lo stato attivo era veicolato dal solo colore: senza
+                 aria-current non arrivava alle tecnologie assistive. */
+              aria-current={i === current ? 'true' : undefined}
               className={`${styles.dot} ${i === current ? styles.dotActive : ''}`}
               onClick={() => goTo(i)}
             />
@@ -96,6 +114,7 @@ export default function ImageCarousel({ images }: ImageCarouselProps) {
           aria-label="Immagine successiva"
           className={styles.navButton}
           onClick={() => goTo(current + 1)}
+          disabled={current === images.length - 1}
         >
           Next
           <svg xmlns="http://www.w3.org/2000/svg" className={styles.navIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

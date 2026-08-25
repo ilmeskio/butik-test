@@ -30,15 +30,19 @@ export default function ImageBlock({
 }: ImageBlockProps) {
   return (
     <figure className={styles.figure}>
-      <img
-        src={src}
-        srcSet={srcSet}
-        sizes={sizes}
-        width={width}
-        height={height}
-        alt={alt}
-        className={styles.image}
-      />
+      {/* Il ritaglio ad altezza fissa vive sul contenitore dell'immagine, non
+          sulla figure: sulla figure ritagliava via anche la didascalia. */}
+      <div className={styles.frame}>
+        <img
+          src={src}
+          srcSet={srcSet}
+          sizes={sizes}
+          width={width}
+          height={height}
+          alt={alt}
+          className={styles.image}
+        />
+      </div>
       {caption && <figcaption className={styles.caption}>{caption}</figcaption>}
     </figure>
   );

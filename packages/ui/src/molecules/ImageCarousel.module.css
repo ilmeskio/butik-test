@@ -95,14 +95,28 @@
   gap: var(--space-2);
 }
 
+/* Il bottone è 24×24 (WCAG 2.2 SC 2.5.8) mentre il pallino disegnato resta
+   8px: il target cresce, la grafica no. Prima il bottone stesso era 8×8. */
 .dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: var(--radius-full);
+  width: 1.5rem;
+  height: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
   border: 0;
   padding: 0;
   cursor: pointer;
-  background: color-mix(in srgb, var(--color-fg) 25%, transparent);
+}
+
+.dot::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radius-full);
+  /* 55% e non 25%: a 25 il pallino inattivo dava 1.76:1, sotto il 3:1 che
+     WCAG 1.4.11 chiede ai controlli — non si percepiva come cliccabile. */
+  background: color-mix(in srgb, var(--color-fg) 55%, transparent);
   transition: background-color var(--duration-fast) var(--ease-out);
 }
 
@@ -111,13 +125,22 @@
   outline-offset: 2px;
 }
 
-.dotActive {
+.dotActive::before {
   background: var(--color-accent);
+}
+
+.navButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.navButton:disabled:hover {
+  color: var(--color-fg);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .navButton,
-  .dot {
+  .dot::before {
     transition: none;
   }
 }

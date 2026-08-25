@@ -65,20 +65,26 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
       }
     </div>
 
+    {/* role="group" e non "tablist": non ci sono tab né tabpanel: è uno
+        scroller con indicatori. Dichiarare tablist senza role="tab",
+        aria-selected e pannelli associati è un pattern ARIA rotto (4.1.2).
+        Stesso trattamento dei dot di @butik/ui ImageCarousel. */}
     <div
       id="testimonials-dots"
       class="flex justify-center gap-2 mt-6 md:hidden"
-      role="tablist"
+      role="group"
       aria-label="Navigazione testimonianze"
     >
       {
         testimonials.map((_, i) => (
           <button
             type="button"
-            class="testimonial-dot w-2 h-2 rounded-full bg-butik-dark/20 transition-colors"
+            class="testimonial-dot w-6 h-6 inline-flex items-center justify-center"
             data-dot-index={i}
             aria-label={`Vai alla testimonianza ${i + 1}`}
-          />
+          >
+            <span class="testimonial-dot__mark w-2 h-2 rounded-full bg-butik-dark/55 transition-colors"></span>
+          </button>
         ))
       }
     </div>
@@ -86,12 +92,16 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
 </section>
 
 <script>
-  const track = document.getElementById('testimonials-track');
-  const dots = Array.from(
-    document.querySelectorAll<HTMLButtonElement>('#testimonials-dots .testimonial-dot')
-  );
+  // Rieseguito a ogni astro:page-load: con <ClientRouter /> il modulo gira una
+  // volta sola per sessione, ma la view transition sostituisce il DOM — senza
+  // re-init i dot restano agganciati a nodi staccati e smettono di funzionare.
+  function initTestimonials() {
+    const track = document.getElementById('testimonials-track');
+    const dots = Array.from(
+      document.querySelectorAll<HTMLButtonElement>('#testimonials-dots .testimonial-dot')
+    );
+    if (!track || !dots.length) return;
 
-  if (track && dots.length) {
     const cards = Array.from(
       track.querySelectorAll<HTMLElement>('[data-testimonial-index]')
     );
@@ -99,8 +109,13 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
     const setActive = (index: number) => {
       dots.forEach((dot, i) => {
         const active = i === index;
-        dot.classList.toggle('bg-butik-red', active);
-        dot.classList.toggle('bg-butik-dark/20', !active);
+        const mark = dot.querySelector('.testimonial-dot__mark');
+        mark?.classList.toggle('bg-butik-red', active);
+        mark?.classList.toggle('bg-butik-dark/55', !active);
+        // Lo stato attivo era veicolato dal solo colore: senza aria-current
+        // non arrivava alle tecnologie assistive.
+        if (active) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
       });
     };
 
@@ -135,4 +150,13 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
       });
     });
   }
+
+  document.addEventListener('astro:page-load', initTestimonials);
 </script>
+
+<style>
+  .testimonial-dot:focus-visible {
+    outline: 2px solid var(--color-butik-red);
+    outline-offset: 2px;
+  }
+</style>

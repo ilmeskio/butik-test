@@ -33,7 +33,10 @@
   padding-bottom: 0;
   text-decoration: underline;
   text-underline-offset: 4px;
-  text-decoration-color: color-mix(in srgb, var(--color-fg-invert) 30%, transparent);
+  /* 60% e non 30%: a 30 la sottolineatura compositava a ~2.3:1 sul fondo,
+     sotto il 3:1 di WCAG 1.4.11, ed era l'unica decorazione persistente
+     del link. Il 100% resta all'hover come rinforzo. */
+  text-decoration-color: color-mix(in srgb, var(--color-fg-invert) 60%, transparent);
   transition: color var(--duration-fast) var(--ease-out),
     text-decoration-color var(--duration-fast) var(--ease-out);
 }
