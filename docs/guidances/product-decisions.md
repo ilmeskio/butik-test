@@ -22,9 +22,17 @@ workshop question ADR-0005 left open was settled by
 [ADR-0008](../adr/0008-component-authoring-and-storybook.md), which supersedes
 `ADR-0005#workshop`.
 
-Review a PDR next to the component it is about, in the published Storybook —
-Chromatic publishes a browsable build per branch, so a stakeholder can open the
-prototype without running anything locally. Link that build from the PDR.
+Review a PDR next to the component it is about, in the published Storybook.
+Chromatic publishes a browsable build on every PR **and on every merge to
+`main`**, so there is always a current catalogue to point at — not only a
+snapshot of some branch that has since been deleted:
+
+- while the decision is open → link the **PR build** from the PDR. It shows the
+  proposal, and Chromatic's UI Review lets a stakeholder comment on the visual
+  change without touching the repo (this is what the `main` build enables:
+  UI Review needs two builds to produce a changeset);
+- once merged → the **`main` build** is the catalogue as it stands, and is what
+  a later reader of the PDR should be sent to.
 
 `lab/` pages remain available for throwaway explorations that have no component
 in the catalogue yet (a whole-page layout, a direction not yet extracted).

@@ -3,6 +3,11 @@ name: CI
 on:
   pull_request:
     branches: [main]
+  # Anche su main: senza un build sul branch base, UI Review non ha i due build
+  # che le servono per generare un changeset, e non esiste uno Storybook
+  # "corrente" da linkare — solo build legati a branch di PR ormai chiusi.
+  push:
+    branches: [main]
 
 jobs:
   # Pubblica Storybook su Chromatic: review/commenti su ogni PR (link in fondo
@@ -31,3 +36,8 @@ jobs:
         with:
           workingDir: packages/ui
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          # Su main gli snapshot sono già stati approvati nella PR: senza
+          # questo, ogni merge ne chiederebbe di nuovo l'approvazione — le
+          # stesse identiche modifiche, una seconda volta. Vale solo per main;
+          # sulle PR i cambiamenti restano da rivedere a mano.
+          autoAcceptChanges: main
