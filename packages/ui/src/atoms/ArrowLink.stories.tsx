@@ -1,0 +1,89 @@
+// Storie di ArrowLink per il workshop @butik/ui. Coprono i due toni reali —
+// fondo chiaro (ServiceExpanded) e fondo scuro (Hero della home) — e il
+// ritono per contesto via --accent, che le card dei servizi già impostano.
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import ArrowLink from './ArrowLink';
+
+const meta = {
+  title: 'Atoms/ArrowLink',
+  component: ArrowLink,
+  tags: ['autodocs'],
+  argTypes: {
+    tone: {
+      control: 'inline-radio',
+      options: ['default', 'invert'],
+      description: 'Tonalità: default su fondo chiaro, invert su fondo scuro.',
+    },
+    href: { control: 'text', description: 'Destinazione del link.' },
+    children: { control: 'text', description: 'Testo del link (la freccia la aggiunge il componente).' },
+  },
+  args: {
+    href: '#',
+    children: 'Scopri la progettazione culturale',
+  },
+} satisfies Meta<typeof ArrowLink>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const OnLight: Story = {
+  args: { tone: 'default' },
+};
+
+export const OnDark: Story = {
+  args: { tone: 'invert', children: 'Esplora tutti i servizi' },
+  decorators: [
+    (Story) => (
+      <div style={{ background: 'var(--color-bg-invert)', padding: 'var(--space-8)' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+// L'uso reale del tono invert (Hero della home) non è sopra un fondo pieno ma
+// sopra un mosaico fotografico: su fondo pieno l'audit a11y darebbe verde su
+// un caso che in produzione non esiste.
+export const OnPhoto: Story = {
+  args: { tone: 'invert', children: 'Esplora tutti i servizi' },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          padding: 'var(--space-8)',
+          backgroundColor: 'var(--color-bg-invert)',
+          backgroundImage:
+            'linear-gradient(0deg, rgba(7,17,8,0.55), rgba(7,17,8,0.55)), repeating-linear-gradient(45deg, #8a8a8a 0 24px, #d8d8d8 24px 48px)',
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+// Il tono default eredita --accent dal contesto: è così che le card dei
+// servizi danno a ogni categoria il proprio colore senza toccare l'atomo.
+export const AccentFromContext: Story = {
+  args: { tone: 'default', children: 'Scopri il turismo musicale' },
+  decorators: [
+    (Story) => (
+      <div style={{ ['--accent' as string]: 'var(--color-accent-2)' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+// --arrow-link-accent è il primo hook della catena di fallback e l'unico
+// pensato per il componente: --accent lo si eredita per caso, questo no.
+export const AccentViaComponentHook: Story = {
+  args: { tone: 'default', children: 'Scopri la formazione' },
+  decorators: [
+    (Story) => (
+      <div style={{ ['--arrow-link-accent' as string]: 'var(--color-accent-2)' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};

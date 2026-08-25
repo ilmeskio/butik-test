@@ -30,10 +30,34 @@
   color: var(--color-fg-invert);
 }
 
+.primary_dark {
+  background: var(--color-fg);
+  color: var(--color-fg-invert);
+}
+
 .ghost {
   background: transparent;
   color: var(--color-fg);
   box-shadow: inset 0 0 0 1px var(--color-fg);
+}
+
+.ghost_invert {
+  background: transparent;
+  color: var(--color-fg-invert);
+  box-shadow: inset 0 0 0 1px var(--color-fg-invert);
+}
+
+/* Outline focus coerente col tono: l'accent rosso fisso non è leggibile su
+   ogni sfondo scuro possibile (es. un'immagine fotografica) quanto lo è il
+   bianco che il resto della variante già usa. */
+.ghost_invert:focus-visible {
+  outline-color: var(--color-fg-invert);
+}
+
+.ghost_accent {
+  background: transparent;
+  color: var(--color-accent);
+  box-shadow: inset 0 0 0 1px var(--color-accent);
 }
 
 @media (prefers-reduced-motion: reduce) {

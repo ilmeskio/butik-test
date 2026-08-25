@@ -5,6 +5,7 @@ import gallery1 from '../../assets/servizi/template-servizio/gallery-1.jpg';
 import gallery2 from '../../assets/servizi/template-servizio/gallery-2.jpg';
 import gallery3 from '../../assets/servizi/template-servizio/gallery-3.jpg';
 import imgBlock from '../../assets/servizi/template-servizio/img-block.jpg';
+import SectionHeading from '@butik/ui/SectionHeading';
 
 interface ServizioCard {
   title: string;
@@ -56,12 +57,7 @@ const servizi: ServizioCard[] = [
 <section class="bg-gradient-to-b from-butik-light via-white to-butik-light">
   <div class="max-w-7xl mx-auto px-6 py-16 md:py-24">
     <div class="text-center mb-10 md:mb-12">
-      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
-        Servizi
-      </p>
-      <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark max-w-3xl mx-auto">
-        Cosa facciamo
-      </h2>
+      <SectionHeading eyebrow="Servizi" title="Cosa facciamo" />
     </div>
 
     <div class="grid gap-3 md:gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-5">

@@ -34,6 +34,26 @@
 - Always respect `prefers-reduced-motion`.
 - Animation logic stays in `src/lib/motion` / `src/components/motion`, not
   scattered across components ([ADR-0005](../adr/0005-design-system.md#motion)).
+  Exception: motion that belongs to a shared component lives with it — in the
+  component's CSS Module under `packages/ui`, or in the `.astro` that owns the
+  behaviour. Co-location is the point of CSS Modules; `lib/motion` is for
+  motion shared across unrelated components.
+
+## Browser support
+
+There is no fixed baseline. A CSS feature that is not yet Baseline may be used
+when it degrades cleanly:
+
+- the fallback must preserve **legibility and interaction** — losing a visual
+  effect is acceptable, losing readable text or a working control is not;
+- gate it explicitly with `@supports`, don't rely on the browser ignoring the
+  declaration;
+- state in a comment what is lost and where.
+
+Example: the home header's overlay state uses a scroll-driven animation
+(`animation-timeline`, not Baseline — Firefox lacks it). Under
+`@supports not (…)` the header is simply solid from the start: the overlay
+over the hero is lost, nothing else is.
 
 ## Simplicity
 

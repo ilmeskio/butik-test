@@ -17,14 +17,14 @@ Product/design choices are many and frequent: they get their own granular log in
 
 ## Reviewing a PDR (with non-technical stakeholders)
 
-The `.md` is the source of truth. The **review surface** depends on the
-still-open component-workshop choice in
-[ADR-0005](../adr/0005-design-system.md#workshop):
+The `.md` is the source of truth. The **review surface** is Storybook: the
+workshop question ADR-0005 left open was settled by
+[ADR-0008](../adr/0008-component-authoring-and-storybook.md), which supersedes
+`ADR-0005#workshop`.
 
-- if the **Astro gallery** is chosen → the PDR is reviewed on a `lab/` page that
-  puts the prototype next to the "before";
-- if **Storybook** is chosen → a `Product/*` page that imports the markdown and
-  renders it next to the prototype.
+Review a PDR next to the component it is about, in the published Storybook —
+Chromatic publishes a browsable build per branch, so a stakeholder can open the
+prototype without running anything locally. Link that build from the PDR.
 
-Until the workshop is decided, attach a direct link to the prototype (a `lab/` page
-or a screenshot) to the PDR, so the stakeholder can review without reading markdown.
+`lab/` pages remain available for throwaway explorations that have no component
+in the catalogue yet (a whole-page layout, a direction not yet extracted).

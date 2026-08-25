@@ -4,6 +4,7 @@
 // scroll. Dati reali da serviziHero (target, sub, outcomes) + serviziCards.
 import { serviziHero } from '../../data/serviziHero';
 import { serviziCards } from '../../data/serviziCards';
+import ArrowLink from '@butik/ui/ArrowLink';
 
 interface Props {
   slug: string;
@@ -65,13 +66,9 @@ const icons: Record<string, string> = {
     ))}
   </ul>
 
-  <a
-    href={href}
-    class="svc-exp__cta group inline-flex items-center gap-2 mt-6 font-display text-xs font-bold tracking-widest uppercase text-butik-dark border-b-2 pb-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
-  >
-    Scopri {title}
-    <span class="svc-exp__arrow transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
-  </a>
+  <div class="mt-6">
+    <ArrowLink href={href}>Scopri {title}</ArrowLink>
+  </div>
 </article>
 
 <style>
@@ -162,16 +159,6 @@ const icons: Record<string, string> = {
   .svc-exp__check {
     color: var(--accent);
   }
-  .svc-exp__cta {
-    border-color: var(--accent);
-  }
-  .svc-exp__cta:hover {
-    color: var(--accent);
-  }
-  .svc-exp__cta:focus-visible {
-    outline-color: var(--accent);
-  }
-
   /* Neutralizza lo stile globale di h3 (uppercase/rosso/tracking). */
   .svc-exp__title {
     text-transform: none !important;
@@ -183,9 +170,6 @@ const icons: Record<string, string> = {
     .svc-exp[data-reveal] {
       opacity: 1;
       transform: none;
-      transition: none;
-    }
-    .svc-exp__arrow {
       transition: none;
     }
     .svc-exp:hover .svc-exp__eq i {

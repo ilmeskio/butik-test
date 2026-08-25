@@ -1,0 +1,45 @@
+/**
+ * Logo — atomo del catalogo @butik/ui.
+ *
+ * Componente puramente presentazionale: riceve `src`/`width`/`height` già
+ * risolti dal chiamante `.astro` (via `getImage()` di `astro:assets`, non
+ * `<Image>` — quest'ultimo è un componente Astro-only, non eseguibile dentro
+ * un'isola React né in Storybook). Vedi ADR-0008 amendment 2026-07-21.
+ * `className` è **unita** alle classi interne (non le sostituisce): serve ai
+ * chiamanti app-side per agganciare effetti locali — es. il filtro
+ * drop-shadow dell'header in modalità overlay — senza perdere lo stile
+ * dell'atomo. Nota: una regola `.astro` scoped non raggiunge questo <img>
+ * (l'attributo di scoping non arriva dentro l'isola), serve `:global()`.
+ */
+import styles from './Logo.module.css';
+
+export interface LogoProps {
+  src: string;
+  width: number;
+  height: number;
+  alt?: string;
+  loading?: 'eager' | 'lazy';
+  className?: string;
+}
+
+export default function Logo({
+  src,
+  width,
+  height,
+  alt = 'Butik',
+  loading = 'lazy',
+  className,
+}: LogoProps) {
+  const cls = className ? `${styles.logo} ${className}` : styles.logo;
+
+  return (
+    <img
+      src={src}
+      width={width}
+      height={height}
+      alt={alt}
+      loading={loading}
+      className={cls}
+    />
+  );
+}

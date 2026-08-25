@@ -43,6 +43,11 @@
   --font-size-3xl: 3rem;
   --font-size-4xl: 4.5rem;
 
+  /* Titolo di sezione: scala fluida continua, senza salti tra breakpoint.
+     Sostituisce la catena Tailwind `text-3xl md:text-4xl lg:text-5xl`
+     ripetuta a mano nei titoli di sezione (vedi @butik/ui SectionHeading). */
+  --font-size-section-title: clamp(1.6rem, 0.75rem + 3.5vw, 3rem);
+
   /* ── Spacing scale ──────────────────────────────────────────────────── */
   --space-1: 0.25rem;
   --space-2: 0.5rem;

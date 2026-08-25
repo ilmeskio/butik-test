@@ -285,7 +285,8 @@ const paginaServizi = z.object({
     title: z.string(),
     description: z.string(),
   })),
-  // Card servizio: link "Scopri di più →" (uguale per tutte le card).
+  // Card servizio: etichetta del richiamo, uguale per tutte le card. Solo
+  // testo: la freccia è decorazione del markup, non copy editoriale.
   cardCtaLabel: z.string(),
   // CTA finale
   ctaTitle: z.string(),

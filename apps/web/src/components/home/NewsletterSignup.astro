@@ -77,11 +77,22 @@ const { title, body, placeholder, button, privacy, success } = Astro.props;
 <script>
   import { trackEvent } from '#lib/analytics/posthog.client';
 
-  const container = document.getElementById('newsletter-container');
-  const status = document.getElementById('newsletter-status');
-  const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
+  // Rieseguito a ogni astro:page-load: con <ClientRouter /> il modulo gira una
+  // volta sola per sessione, ma la view transition sostituisce il DOM. Senza
+  // re-init, dopo una navigazione il submit non veniva più intercettato: il
+  // form partiva in navigazione nativa e `newsletter_subscribed` non veniva
+  // mai emesso, bucando il funnel PostHog.
+  function initNewsletter() {
+    const container = document.getElementById('newsletter-container');
+    const status = document.getElementById('newsletter-status');
+    const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
+    if (!container || !status || !form) return;
 
-  if (container && status && form) {
+    // Guardia di idempotenza: se il nodo è lo stesso di prima (nessuna view
+    // transition, solo un secondo evento) non raddoppiamo il listener.
+    if (form.dataset.bound === 'true') return;
+    form.dataset.bound = 'true';
+
     form.addEventListener('submit', (event) => {
       event.preventDefault();
 
@@ -97,4 +108,6 @@ const { title, body, placeholder, button, privacy, success } = Astro.props;
       trackEvent('newsletter_subscribed');
     });
   }
+
+  document.addEventListener('astro:page-load', initNewsletter);
 </script>

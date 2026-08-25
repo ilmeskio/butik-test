@@ -1,5 +1,7 @@
 ---
 // Box evidenziato "Adatto a": destinatari del servizio.
+import Eyebrow from '@butik/ui/Eyebrow';
+
 interface Props {
   text: string;
   eyebrow?: string;
@@ -9,8 +11,6 @@ const { text, eyebrow = 'Adatto a' } = Astro.props;
 ---
 
 <aside class="not-prose my-10 border-l-4 border-butik-red bg-butik-light/70 px-6 py-5">
-  <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-2">
-    {eyebrow}
-  </p>
+  <Eyebrow spacing="sm">{eyebrow}</Eyebrow>
   <p class="font-sans text-base md:text-lg text-butik-dark leading-relaxed">{text}</p>
 </aside>

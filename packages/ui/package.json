@@ -9,7 +9,19 @@
     "chromatic": "chromatic --exit-zero-on-changes"
   },
   "exports": {
-    "./Button": "./src/Button.tsx"
+    "./ArrowLink": "./src/atoms/ArrowLink.tsx",
+    "./Button": "./src/atoms/Button.tsx",
+    "./Eyebrow": "./src/atoms/Eyebrow.tsx",
+    "./NumberBadge": "./src/atoms/NumberBadge.tsx",
+    "./SocialLinks": "./src/atoms/SocialLinks.tsx",
+    "./Logo": "./src/atoms/Logo.tsx",
+    "./CtaBanner": "./src/molecules/CtaBanner.tsx",
+    "./SectionHeading": "./src/molecules/SectionHeading.tsx",
+    "./HeroBanner": "./src/organisms/HeroBanner.tsx",
+    "./ImageBlock": "./src/molecules/ImageBlock.tsx",
+    "./ImageLeft": "./src/molecules/ImageLeft.tsx",
+    "./ImageRight": "./src/molecules/ImageRight.tsx",
+    "./ImageCarousel": "./src/molecules/ImageCarousel.tsx"
   },
   "dependencies": {
     "@butik/ui-tokens": "workspace:*"

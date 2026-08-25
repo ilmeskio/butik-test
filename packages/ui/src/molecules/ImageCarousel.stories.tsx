@@ -1,0 +1,86 @@
+// Storia dell'ImageCarousel. Componente interattivo (client:visible quando
+// consumato in Astro): in Storybook è già hydratato di default, la
+// navigazione prev/next/dots è provabile dal vivo.
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
+import ImageCarousel from './ImageCarousel';
+
+const colors = ['#8a6d3b', '#2f5233', '#3b5a8a'];
+const sampleImages = colors.map((fill, i) => ({
+  src:
+    'data:image/svg+xml;utf8,' +
+    encodeURIComponent(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"><rect width="1600" height="900" fill="${fill}"/></svg>`
+    ),
+  alt: '',
+  caption: i === 1 ? 'Una didascalia per la seconda immagine.' : undefined,
+}));
+
+const meta = {
+  title: 'Molecules/ImageCarousel',
+  component: ImageCarousel,
+  tags: ['autodocs'],
+  args: {
+    images: sampleImages,
+  },
+} satisfies Meta<typeof ImageCarousel>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const ThreeSlides: Story = {};
+
+export const TwoSlides: Story = {
+  args: { images: sampleImages.slice(0, 2) },
+};
+
+// Una sola immagine: la barra di controllo non viene resa affatto — non ci
+// sarebbe nulla fra cui girare.
+export const SingleSlide: Story = {
+  args: { images: sampleImages.slice(0, 1) },
+};
+
+// Stato intermedio: dopo un click su Next il dot attivo non è il primo e Prev
+// è disponibile. Senza questa `play` ogni snapshot Chromatic fotograferebbe
+// solo lo slide 0. `storybook/test` è nel core dalla 9 — nessuna dipendenza
+// in più rispetto a `storybook` che il pacchetto già installa.
+export const MidSequence: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByLabelText('Immagine successiva'));
+    await expect(canvas.getByLabelText('Vai all\'immagine 2')).toHaveAttribute(
+      'aria-current',
+      'true'
+    );
+  },
+};
+
+// La galleria è circolare: dall'ultima immagine Next torna alla prima, e
+// Prev dalla prima porta all'ultima. Nessuno dei due bottoni è mai in uno
+// stato speciale, quindi non c'è nulla da disabilitare né da annunciare come
+// non disponibile.
+export const WrapsAround: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const next = canvas.getByLabelText('Immagine successiva');
+    // dalla prima all'ultima, poi ancora avanti
+    await userEvent.click(next);
+    await userEvent.click(next);
+    await expect(canvas.getByLabelText('Vai all\'immagine 3')).toHaveAttribute(
+      'aria-current',
+      'true'
+    );
+    await userEvent.click(next);
+    await expect(canvas.getByLabelText('Vai all\'immagine 1')).toHaveAttribute(
+      'aria-current',
+      'true'
+    );
+    // e all'indietro dalla prima si torna in fondo
+    await userEvent.click(canvas.getByLabelText('Immagine precedente'));
+    await expect(canvas.getByLabelText('Vai all\'immagine 3')).toHaveAttribute(
+      'aria-current',
+      'true'
+    );
+  },
+};
+

@@ -1,0 +1,37 @@
+/* L'altezza fissa + overflow:hidden stavano sulla <figure>, che contiene
+   anche la <figcaption>: la didascalia finiva fuori dal box e veniva
+   ritagliata via — testo non percepibile da nessuno. Il ritaglio appartiene
+   al contenitore dell'immagine, non alla figure. Difetto ereditato dal
+   componente .astro originale, non introdotto dalla migrazione. */
+.figure {
+  margin-block: var(--space-12);
+  width: 100%;
+}
+
+.frame {
+  width: 100%;
+  height: 20rem; /* ex h-80 */
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+
+@media (min-width: 768px) {
+  .frame {
+    height: 500px; /* ex md:h-[500px]: valore letterale, non un token di design */
+  }
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.caption {
+  margin-top: var(--space-3);
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  font-style: italic;
+  color: var(--color-fg);
+}

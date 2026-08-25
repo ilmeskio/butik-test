@@ -1,0 +1,81 @@
+/*
+ * HeroBanner — CSS Modules + token (ADR-0005). Il solo step senza token
+ * equivalente è il terzo del titolo (3.75rem: tra --font-size-3xl 3rem e
+ * --font-size-4xl 4.5rem, troppo grande) e il secondo del sottotitolo
+ * (1.25rem: tra --font-size-lg 1.125rem e --font-size-xl 1.5rem) — restano
+ * letterali con questo commento a spiegarli, stesso approccio di
+ * CtaBanner.module.css.
+ */
+
+.hero {
+  position: relative;
+  height: 70vh;
+  min-height: 400px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.imageWrap {
+  position: absolute;
+  inset: 0;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gradient {
+  position: absolute;
+  inset: 0;
+  /* Nero puro intenzionale (non --color-dark): overlay fotografico, non un
+     colore di brand. */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.3) 50%, transparent);
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  max-width: 80rem; /* ex max-w-7xl: vincolo di layout, non un token di design */
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+  padding-bottom: var(--space-16);
+  width: 100%;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-fg-invert);
+  max-width: 48rem; /* ex max-w-3xl */
+  font-size: var(--font-size-2xl);
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .title {
+    font-size: 3.75rem;
+  }
+}
+
+.subtitle {
+  margin-top: var(--space-4);
+  font-family: var(--font-sans);
+  color: color-mix(in srgb, var(--color-fg-invert) 80%, transparent);
+  max-width: 42rem; /* ex max-w-2xl */
+  font-size: var(--font-size-lg);
+}
+
+@media (min-width: 768px) {
+  .subtitle {
+    font-size: 1.25rem;
+  }
+}

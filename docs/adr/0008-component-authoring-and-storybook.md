@@ -86,7 +86,10 @@ shifts.
   dependency in the site and the `@butik/ui` package.
 - Shared components are **no longer pure `.astro`**; contributors author `.tsx`
   islands. App-level page composition stays `.astro` (e.g. `CtaBanner` remains an
-  app `.astro` component — not everything migrates to React).
+  app `.astro` component — not everything migrates to React). **Superseded for
+  `CtaBanner` specifically** — see [Amendment
+  2026-07-21](#amendment-2026-07-21-ctabanner-revisit-and-atomic-design-foldering)
+  below; the general principle (page composition stays `.astro`) still holds.
 - The island runtime is opt-in per component; forgetting that a component is an
   island (and needs a client directive for interactivity) is a new footgun.
 
@@ -96,3 +99,90 @@ shifts.
   new ADR.
 - Storybook's maintenance cost outweighs its value for a still-small catalogue →
   reconsider a lighter surface.
+
+## Amendment (2026-07-21): CtaBanner revisit and atomic-design foldering
+
+Issue #38 (cataloguing shared components in Storybook) prompted a fresh
+reuse audit of `apps/web/src/components/**`. Two additions to the original
+decision:
+
+### CtaBanner qualifies as a shared island after all
+
+The "Negative / accepted risks" example above named `CtaBanner` as page
+composition that stays `.astro`. That was true at the time of writing
+(single consumer). It no longer is: `CtaBanner` now has **6 real consumption
+points across 6 distinct pages** (home ×2, chi-siamo, servizi/index, plus the
+servizi-a/b/c comparison prototypes) with varying props (with/without a
+secondary CTA). That crosses the same reuse bar already applied to `Button`.
+
+`@butik/ui/CtaBanner` becomes a React island like any other shared component.
+Its PostHog click-tracking (`#lib/analytics/posthog.client`, an app-only
+subpath import — ADR-0007) cannot live inside `packages/ui` without breaking
+the monorepo boundary, so `apps/web/src/components/CtaBanner.astro` stays as
+a **thin wrapper**: same public Props, renders the island, keeps the tracking
+`<script>`. This is consistent with the still-valid general principle above —
+app-specific concerns (analytics wiring) stay at the app layer even when the
+presentational component moves to `@butik/ui`.
+
+The general example is superseded; the general principle ("app-level page
+composition stays `.astro`") is not.
+
+### `packages/ui/src` adopts atomic-design foldering
+
+As the catalogue grows past a single pilot component, components are grouped
+by composition level to keep the workshop navigable:
+
+```
+packages/ui/src/{atoms,molecules,organisms}/Component.{tsx,module.css,stories.tsx}
+```
+
+- **atoms** — smallest reusable primitives with no internal composition
+  (`Button`, `Eyebrow`, `Logo`, `SocialLinks`, `NumberBadge`, `ArrowLink`).
+- **molecules** — small compositions of atoms/markup serving one purpose
+  (`CtaBanner`, `SectionHeading`, the `mdx/Image*` family).
+- **organisms** — larger sections composed of molecules/atoms (`HeroBanner`).
+
+This is filesystem organisation only — it does not change the authoring
+format (`.tsx` + CSS Modules + tokens), the Storybook setup (the stories glob
+is already recursive), or the `client:` directive rules from the Decision
+section above. `packages/ui/package.json` `exports` map one entry per
+component regardless of folder, so consumer import paths
+(`@butik/ui/ComponentName`) are unaffected by which subfolder a component
+lives in.
+
+### The Astro ↔ island boundary {#astro-island-boundary}
+
+Moving presentational components into `@butik/ui` draws a line that the
+original decision left implicit. Two Astro features do not cross it, and the
+wrapper has to resolve them before handing data to the island. Seven files
+already cite this amendment for these rules; here they are on the record.
+
+**Images.** `astro:assets` (`<Image>`, `getImage()`) is a build-time Astro/Vite
+concern: it runs in neither React nor Storybook. The `.astro` wrapper resolves
+the asset with `getImage()` and passes **primitives** (`src`, `srcSet`,
+`sizes`, `width`, `height`) to the island, which renders a plain `<img>`. This
+keeps the island renderable in the workshop, where no Astro pipeline exists.
+See `Logo`, the `mdx/Image*` family, `HeroBanner`.
+
+**View transitions.** The `transition:name` directive is compiled by Astro and
+is not available inside an island. Components that need to participate in a
+view transition take the name as a prop and apply it as an inline
+`view-transition-name` style instead. See `HeroBanner`.
+
+**Scoped styles.** Astro's scoped `<style>` stamps `data-astro-cid-*` only on
+the markup Astro itself compiles. A scoped selector therefore **never reaches
+an island's DOM**: a rule written that way is dead CSS. When a wrapper must
+style an element rendered by an island — the header does, for its overlay
+state — the descendant part of the selector goes through `:global()`, with the
+Astro-owned element staying as the scoped pivot.
+
+The general rule behind all three: **anything Astro compiles stays in the
+wrapper; the island receives plain data and renders plain DOM.**
+
+### Related product decision
+
+Connecting `Button` to production pages for the first time surfaced a visual
+discrepancy (pill-shaped pilot vs. rectangular CTAs sitewide) — that is a
+design/brand call, not an architecture one, and is recorded separately in
+[PDR-0001](../product/decisions/0001-cta-pill-shape.md), not folded into this
+amendment.

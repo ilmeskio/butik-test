@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import Button from './Button';
 
 const meta = {
-  title: 'UI/Button',
+  title: 'Atoms/Button',
   component: Button,
   tags: ['autodocs'],
   argTypes: {
@@ -13,6 +13,12 @@ const meta = {
       control: 'inline-radio',
       options: ['primary', 'ghost'],
       description: 'Variante visiva del bottone.',
+    },
+    tone: {
+      control: 'inline-radio',
+      options: [undefined, 'accent', 'dark', 'invert'],
+      description:
+        'Tonalità: "dark" (solo primary, sfondo scuro invece di accent), "invert" (solo ghost, outline bianco per sfondi scuri) o "accent" (solo ghost, outline colorato su sfondo chiaro).',
     },
     href: {
       control: 'text',
@@ -80,4 +86,28 @@ export const LongLabel: Story = {
 // Etichetta corta: verifica il bottone compatto.
 export const ShortLabel: Story = {
   args: { variant: 'ghost', children: 'Ok' },
+};
+
+// tone="dark": CTA primaria su sfondo chiaro con colore scuro invece di accent
+// (Header, Hero home).
+export const DarkTone: Story = {
+  args: { variant: 'primary', tone: 'dark', children: 'Lavoriamo insieme' },
+};
+
+// tone="invert": outline bianco leggibile su sfondi scuri/fotografici
+// (ServiceHero A). Il decorator simula lo sfondo scuro reale.
+export const InvertTone: Story = {
+  args: { variant: 'ghost', tone: 'invert', children: 'Scopri il progetto' },
+  decorators: [
+    (Story) => (
+      <div style={{ background: 'var(--color-bg-invert)', padding: 'var(--space-8)' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+// tone="accent": outline colorato su sfondo chiaro (CtaProgetti).
+export const AccentGhostTone: Story = {
+  args: { variant: 'ghost', tone: 'accent', children: 'Vedi tutti i progetti' },
 };

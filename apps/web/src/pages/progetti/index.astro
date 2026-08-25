@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import SectionHeading from '@butik/ui/SectionHeading';
 
 const progetti = (await getCollection('progetti', e => !e.data.draft))
   .sort((a, b) => a.data.order - b.data.order);
@@ -13,8 +14,7 @@ const progetti = (await getCollection('progetti', e => !e.data.draft))
 >
   <!-- Page header -->
   <div class="pt-20 pb-12 text-center">
-    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Portfolio</p>
-    <h1 class="font-heading text-5xl font-bold text-butik-dark">Progetti</h1>
+    <SectionHeading as="h1" eyebrow="Portfolio" title="Progetti" />
   </div>
 
   <!-- Grid -->

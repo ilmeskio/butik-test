@@ -1,0 +1,17 @@
+.eyebrow {
+  margin: 0 0 var(--space-4) 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.center {
+  text-align: center;
+}
+
+.spacingSm {
+  margin-bottom: var(--space-2);
+}

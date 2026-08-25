@@ -2,6 +2,8 @@
 // Testimonianze content-driven via Sitepins (ADR-0004): entry condivisa
 // `pagine/testimonials`, riusata identica da home (index.astro) e
 // chi-siamo.astro — entrambe passano le stesse props a questo componente.
+import SectionHeading from '@butik/ui/SectionHeading';
+
 type Testimonial = {
   rating: number;
   quote: string;
@@ -20,12 +22,9 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
 
 <section class="bg-butik-light py-12 md:py-16">
   <div class="max-w-7xl mx-auto px-6">
-    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4 text-center">
-      {eyebrow}
-    </p>
-    <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-butik-dark text-center mb-8 md:mb-10">
-      {sectionTitle}
-    </h2>
+    <div class="mb-8 md:mb-10">
+      <SectionHeading eyebrow={eyebrow} title={sectionTitle} />
+    </div>
 
     <div
       id="testimonials-track"
@@ -66,20 +65,26 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
       }
     </div>
 
+    {/* role="group" e non "tablist": non ci sono tab né tabpanel: è uno
+        scroller con indicatori. Dichiarare tablist senza role="tab",
+        aria-selected e pannelli associati è un pattern ARIA rotto (4.1.2).
+        Stesso trattamento dei dot di @butik/ui ImageCarousel. */}
     <div
       id="testimonials-dots"
       class="flex justify-center gap-2 mt-6 md:hidden"
-      role="tablist"
+      role="group"
       aria-label="Navigazione testimonianze"
     >
       {
         testimonials.map((_, i) => (
           <button
             type="button"
-            class="testimonial-dot w-2 h-2 rounded-full bg-butik-dark/20 transition-colors"
+            class="testimonial-dot w-6 h-6 inline-flex items-center justify-center"
             data-dot-index={i}
             aria-label={`Vai alla testimonianza ${i + 1}`}
-          />
+          >
+            <span class="testimonial-dot__mark w-2 h-2 rounded-full bg-butik-dark/55 transition-colors"></span>
+          </button>
         ))
       }
     </div>
@@ -87,12 +92,16 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
 </section>
 
 <script>
-  const track = document.getElementById('testimonials-track');
-  const dots = Array.from(
-    document.querySelectorAll<HTMLButtonElement>('#testimonials-dots .testimonial-dot')
-  );
+  // Rieseguito a ogni astro:page-load: con <ClientRouter /> il modulo gira una
+  // volta sola per sessione, ma la view transition sostituisce il DOM — senza
+  // re-init i dot restano agganciati a nodi staccati e smettono di funzionare.
+  function initTestimonials() {
+    const track = document.getElementById('testimonials-track');
+    const dots = Array.from(
+      document.querySelectorAll<HTMLButtonElement>('#testimonials-dots .testimonial-dot')
+    );
+    if (!track || !dots.length) return;
 
-  if (track && dots.length) {
     const cards = Array.from(
       track.querySelectorAll<HTMLElement>('[data-testimonial-index]')
     );
@@ -100,8 +109,13 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
     const setActive = (index: number) => {
       dots.forEach((dot, i) => {
         const active = i === index;
-        dot.classList.toggle('bg-butik-red', active);
-        dot.classList.toggle('bg-butik-dark/20', !active);
+        const mark = dot.querySelector('.testimonial-dot__mark');
+        mark?.classList.toggle('bg-butik-red', active);
+        mark?.classList.toggle('bg-butik-dark/55', !active);
+        // Lo stato attivo era veicolato dal solo colore: senza aria-current
+        // non arrivava alle tecnologie assistive.
+        if (active) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
       });
     };
 
@@ -123,6 +137,15 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
 
     cards.forEach((card) => observer.observe(card));
 
+    // L'observer va sganciato prima che la view transition porti via i nodi:
+    // senza, a ogni navigazione ne resta uno che osserva un sottoalbero
+    // staccato (vedi docs/guidances/client-scripts.md).
+    document.addEventListener(
+      'astro:before-swap',
+      () => observer.disconnect(),
+      { once: true }
+    );
+
     dots.forEach((dot, i) => {
       dot.addEventListener('click', () => {
         const card = cards[i];
@@ -136,4 +159,13 @@ const { eyebrow, sectionTitle, testimonials } = Astro.props;
       });
     });
   }
+
+  document.addEventListener('astro:page-load', initTestimonials);
 </script>
+
+<style>
+  .testimonial-dot:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+</style>

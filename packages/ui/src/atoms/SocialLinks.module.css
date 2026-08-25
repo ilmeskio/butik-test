@@ -1,0 +1,41 @@
+.list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* inline-flex + padding: l'icona è 20px, senza padding il target restava
+   sotto i 24×24 richiesti da WCAG 2.2 SC 2.5.8. Il margine negativo tiene
+   l'allineamento ottico invariato rispetto al bordo del contenitore. */
+.link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-1);
+  margin: calc(var(--space-1) * -1);
+  color: var(--color-fg);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.link:hover {
+  color: var(--color-accent);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
+}
