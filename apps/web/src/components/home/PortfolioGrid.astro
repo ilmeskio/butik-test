@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import SectionHeading from '@butik/ui/SectionHeading';
 
 interface Props {
   progetti: CollectionEntry<'progetti'>[];
@@ -13,10 +14,7 @@ const { progetti } = Astro.props;
   <section class="py-12 md:py-16">
     <div class="max-w-7xl mx-auto px-6">
       <div class="mb-8 md:mb-10">
-        <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">Progetti</p>
-        <h2 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark">
-          Storie di trasformazione territoriale
-        </h2>
+        <SectionHeading eyebrow="Progetti" title="Storie di trasformazione territoriale" />
         <p class="font-sans text-sm md:text-base text-butik-dark/70 max-w-2xl mt-4">
           Quello che abbiamo costruito insieme ai nostri partner
         </p>

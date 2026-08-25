@@ -7,6 +7,7 @@ import Testimonials from '#components/home/Testimonials.astro';
 import { Image } from 'astro:assets';
 
 import heroImg from '#assets/hero-home.jpg';
+import Eyebrow from '@butik/ui/Eyebrow';
 
 // Copy editoriale content-driven via collezione `pagine` (ADR-0004): il testo è
 // editabile da Sitepins, la presentazione resta qui. Alcuni paragrafi contengono
@@ -70,7 +71,7 @@ const sdg = c.sdg.map((o) => ({ ...o, ...(sdgStyle[o.num] ?? sdgFallbackStyle) }
 
   <!-- Chi siamo -->
   <section class="max-w-3xl mx-auto px-6 py-16 md:py-20">
-    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-6">{c.introEyebrow}</p>
+    <Eyebrow align="left">{c.introEyebrow}</Eyebrow>
     <div class="space-y-5 font-sans text-base md:text-lg text-butik-body leading-relaxed">
       <p set:html={c.introP1}></p>
       <p set:html={c.introP2}></p>
@@ -83,16 +84,14 @@ const sdg = c.sdg.map((o) => ({ ...o, ...(sdgStyle[o.num] ?? sdgFallbackStyle) }
   <section class="bg-white py-16 md:py-20">
     <div class="max-w-5xl mx-auto px-6">
       <div class="max-w-3xl">
-        <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">{c.missionEyebrow}</p>
+        <Eyebrow align="left">{c.missionEyebrow}</Eyebrow>
         <p class="font-heading text-2xl md:text-3xl font-bold text-butik-dark leading-snug">
           {c.missionStatement}
         </p>
       </div>
 
       <div class="mt-12 md:mt-16">
-        <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">
-          {c.sdgEyebrow}
-        </p>
+        <Eyebrow align="left">{c.sdgEyebrow}</Eyebrow>
         <p class="font-sans text-base text-butik-body leading-relaxed max-w-3xl">
           {c.sdgIntro}
         </p>
@@ -125,7 +124,7 @@ const sdg = c.sdg.map((o) => ({ ...o, ...(sdgStyle[o.num] ?? sdgFallbackStyle) }
   <!-- Il nostro team -->
   <section class="max-w-6xl mx-auto px-6 py-16 md:py-20">
     <div class="max-w-3xl">
-      <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-6">{c.teamEyebrow}</p>
+      <Eyebrow align="left">{c.teamEyebrow}</Eyebrow>
       <div class="space-y-5 font-sans text-base md:text-lg text-butik-body leading-relaxed">
         <p set:html={c.teamP1}></p>
         <p set:html={c.teamP2}></p>

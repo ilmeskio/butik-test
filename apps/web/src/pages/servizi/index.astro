@@ -27,8 +27,9 @@ const metodo = c.metodo;
 >
   <!-- Page header -->
   <div class="max-w-4xl mx-auto px-6 pt-20 md:pt-24 pb-12 text-center">
-    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">{c.headerEyebrow}</p>
-    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark mb-6">{c.headerTitle}</h1>
+    <div class="mb-6">
+      <SectionHeading as="h1" eyebrow={c.headerEyebrow} title={c.headerTitle} />
+    </div>
     <p class="font-sans text-base md:text-lg text-butik-body leading-relaxed">
       {c.headerIntro1}
     </p>

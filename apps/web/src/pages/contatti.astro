@@ -3,6 +3,8 @@ import { getEntry } from 'astro:content';
 import BaseLayout from '#layouts/BaseLayout.astro';
 import { socials } from '#data/socials';
 import SocialLinks from '@butik/ui/SocialLinks';
+import SectionHeading from '@butik/ui/SectionHeading';
+import Eyebrow from '@butik/ui/Eyebrow';
 
 // Copy editoriale content-driven via collezione `pagine` (ADR-0004): il testo
 // attorno al form è editabile da Sitepins. La logica del form Web3Forms qui
@@ -34,8 +36,9 @@ const inputClass =
 >
   <!-- Header -->
   <div class="max-w-3xl mx-auto px-6 pt-20 md:pt-24 pb-10 text-center">
-    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">{c.headerEyebrow}</p>
-    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark mb-5">{c.headerTitle}</h1>
+    <div class="mb-5">
+      <SectionHeading as="h1" eyebrow={c.headerEyebrow} title={c.headerTitle} />
+    </div>
     <p class="font-sans text-base md:text-lg text-butik-body leading-relaxed">
       {c.headerIntro}
     </p>
@@ -104,7 +107,7 @@ const inputClass =
 
       <!-- Recapiti -->
       <aside class="lg:border-l lg:border-butik-dark/15 lg:pl-12">
-        <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-6">{c.recapitiEyebrow}</p>
+        <Eyebrow align="left">{c.recapitiEyebrow}</Eyebrow>
 
         <div class="space-y-6 font-sans text-base text-butik-body">
           <div>
