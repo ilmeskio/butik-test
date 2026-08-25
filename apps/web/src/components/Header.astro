@@ -117,7 +117,12 @@ function isActive(href: string) {
 <style>
   /* --header-solid: 0 sopra l'hero (overlay), 1 da scrollato. Registrata con
      @property perché serve interpolabile (<number>) ed ereditata: una sola
-     animazione sull'header, tutti i discendenti la leggono. */
+     animazione sull'header, tutti i discendenti la leggono.
+
+     Colori dai token di @butik/ui-tokens (ADR-0005) e non dai --color-butik-*
+     del @theme Tailwind: l'isola Button che l'header contiene consuma già
+     quelli, e tenere due scale con gli stessi hex nello stesso componente è
+     drift che aspetta di succedere. */
   @property --header-solid {
     syntax: '<number>';
     inherits: true;
@@ -130,23 +135,32 @@ function isActive(href: string) {
 
   /* Solo la home è in overlay sopra l'hero. Longhand e non la shorthand
      `animation`: la shorthand azzera animation-timeline e imporrebbe
-     duration: 0s, che con una timeline di scroll non funziona. */
+     duration: 0s, che con una timeline di scroll non funziona.
+
+     `steps(1, end)` su un range di 1px: lo stato è binario, mai intermedio.
+     Un crossfade legato allo scroll produrrebbe posizioni di riposo a metà
+     strada — e a metà strada testo e sfondo si incontrano intorno allo stesso
+     livello di luminanza (~1:1 di contrasto). Non è un frame di transizione:
+     è una posizione di scroll dove l'utente può fermarsi e restare. La
+     morbidezza torna sotto forma di `transition` a tempo, che dura 300ms e
+     poi finisce. */
   .site-header[data-overlay='true'] {
     animation-name: header-scroll;
     animation-duration: auto;
-    animation-timing-function: linear;
+    animation-timing-function: steps(1, end);
     animation-fill-mode: both;
     animation-timeline: scroll(root block);
-    /* Crossfade legato allo scroll: trasparente fino a 60px, solido a 120px
-       (prima erano 60px + una transizione a tempo di 300ms). */
-    animation-range: 60px 120px;
+    animation-range: 60px 61px;
 
     background-color: color-mix(
-      in srgb, var(--color-butik-light) calc(var(--header-solid) * 100%), transparent
+      in srgb, var(--color-light) calc(var(--header-solid) * 100%), transparent
     );
     border-bottom: 1px solid color-mix(
-      in srgb, rgb(7 17 8 / 0.1) calc(var(--header-solid) * 100%), transparent
+      in srgb,
+      color-mix(in srgb, var(--color-dark) 10%, transparent) calc(var(--header-solid) * 100%),
+      transparent
     );
+    transition: background-color 300ms ease, border-bottom-color 300ms ease;
   }
 
   /* Fallback: senza scroll-driven animations (oggi Firefox — animation-timeline
@@ -156,44 +170,76 @@ function isActive(href: string) {
     .site-header[data-overlay='true'] { --header-solid: 1; }
   }
 
-  /* Con motion ridotto niente crossfade progressivo: switch netto alla soglia. */
-  @media (prefers-reduced-motion: reduce) {
-    .site-header[data-overlay='true'] { animation-timing-function: steps(1, end); }
-  }
-
-  /* Elementi interni: interpolano fra la resa chiara (sopra l'hero scuro) e
+  /* Elementi interni: commutano fra la resa chiara (sopra l'hero scuro) e
      quella scura (header solido). Vale a tutti i breakpoint perché l'hero è
-     uniformemente scuro anche su desktop. */
-  .site-header[data-overlay='true'] .site-logo {
-    filter: drop-shadow(0 1px 4px rgb(7 17 8 / calc((1 - var(--header-solid)) * 0.45)));
+     uniformemente scuro anche su desktop.
+
+     `:global()` sui due elementi resi da isole React (@butik/ui Logo e
+     Button): Astro applica l'attributo di scoping solo al markup che compila
+     lui, quindi un selettore scoped non raggiunge mai il DOM di un'isola —
+     le regole sarebbero CSS morto. L'header resta il pivot scoped, il
+     discendente no. */
+  .site-header[data-overlay='true'] :global(.site-logo) {
+    filter: drop-shadow(0 1px 4px color-mix(
+      in srgb, var(--color-dark) calc((1 - var(--header-solid)) * 45%), transparent
+    ));
+    transition: filter 300ms ease;
   }
 
   .site-header[data-overlay='true'] .nav-link {
-    color: color-mix(in srgb, var(--color-butik-dark) calc(var(--header-solid) * 100%), #ffffff);
-    text-shadow: 0 1px 4px rgb(7 17 8 / calc((1 - var(--header-solid)) * 0.45));
+    color: color-mix(
+      in srgb, var(--color-dark) calc(var(--header-solid) * 100%), var(--color-fg-invert)
+    );
+    text-shadow: 0 1px 4px color-mix(
+      in srgb, var(--color-dark) calc((1 - var(--header-solid)) * 45%), transparent
+    );
+    transition: color 300ms ease, text-shadow 300ms ease;
   }
   .site-header[data-overlay='true'] .nav-link:hover {
-    color: var(--color-butik-red);
+    color: var(--color-accent);
   }
 
   .site-header[data-overlay='true'] .mobile-toggle {
-    color: color-mix(in srgb, var(--color-butik-dark) calc(var(--header-solid) * 100%), #ffffff);
-    filter: drop-shadow(0 1px 4px rgb(7 17 8 / calc((1 - var(--header-solid)) * 0.45)));
+    color: color-mix(
+      in srgb, var(--color-dark) calc(var(--header-solid) * 100%), var(--color-fg-invert)
+    );
+    filter: drop-shadow(0 1px 4px color-mix(
+      in srgb, var(--color-dark) calc((1 - var(--header-solid)) * 45%), transparent
+    ));
+    transition: color 300ms ease, filter 300ms ease;
   }
 
-  .site-header[data-overlay='true'] .header-cta {
+  .site-header[data-overlay='true'] :global(.header-cta) {
     background-color: color-mix(
-      in srgb, var(--color-butik-dark) calc(var(--header-solid) * 100%), rgb(255 255 255 / 0.12)
+      in srgb,
+      var(--color-dark) calc(var(--header-solid) * 100%),
+      color-mix(in srgb, var(--color-fg-invert) 12%, transparent)
     );
-    color: #ffffff;
+    color: var(--color-fg-invert);
     border: 1px solid color-mix(
-      in srgb, var(--color-butik-dark) calc(var(--header-solid) * 100%), rgb(255 255 255 / 0.45)
+      in srgb,
+      var(--color-dark) calc(var(--header-solid) * 100%),
+      color-mix(in srgb, var(--color-fg-invert) 45%, transparent)
     );
     backdrop-filter: blur(calc((1 - var(--header-solid)) * 4px));
+    transition: background-color 300ms ease, border-color 300ms ease;
   }
-  .site-header[data-overlay='true'] .header-cta:hover {
-    background-color: var(--color-butik-red);
-    border-color: var(--color-butik-red);
+  .site-header[data-overlay='true'] :global(.header-cta:hover) {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  /* Focus visibile — l'accent rosso non è leggibile sopra l'hero scurito
+     (1.1÷2.0:1, sotto il 3:1 di WCAG 1.4.11): in overlay l'anello diventa
+     bianco, come già fa Button per il tono `invert`. I .nav-link non
+     dichiaravano alcuno stile di focus e restavano al ring di default. */
+  .site-header .nav-link:focus-visible,
+  .mobile-nav > summary:focus-visible,
+  .site-header :global(.header-cta:focus-visible) {
+    outline: 2px solid color-mix(
+      in srgb, var(--color-accent) calc(var(--header-solid) * 100%), var(--color-fg-invert)
+    );
+    outline-offset: 2px;
   }
 
   /* Menu mobile — <details> nativo. Il pannello è in absolute sotto la barra:
@@ -206,15 +252,21 @@ function isActive(href: string) {
   }
   .mobile-nav > summary::-webkit-details-marker { display: none; }
   .mobile-nav > summary::marker { content: ''; }
-  .mobile-nav > summary:focus-visible {
-    outline: 2px solid var(--color-butik-red);
-    outline-offset: 2px;
-  }
 
   .mobile-panel {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header[data-overlay='true'],
+    .site-header[data-overlay='true'] .nav-link,
+    .site-header[data-overlay='true'] .mobile-toggle,
+    .site-header[data-overlay='true'] :global(.site-logo),
+    .site-header[data-overlay='true'] :global(.header-cta) {
+      transition: none;
+    }
   }
 </style>
