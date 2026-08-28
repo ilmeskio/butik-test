@@ -80,11 +80,15 @@ const metricSchema = z.object({
   label: z.string(),
 });
 
-// Card servizio in hero home: titolo, link, descrizione breve.
+// Card servizio in hero home: titolo, link, descrizione breve e la prova
+// (valore + etichetta) mostrata in fondo alla card. `href` porta alla scheda
+// servizio: da lì si ricava lo slug per l'icona, che resta config di design.
 const heroServizioSchema = z.object({
   title: z.string(),
   href: z.string(),
   description: z.string(),
+  statValue: z.string(),
+  statLabel: z.string(),
 });
 
 const paginaHome = z.object({

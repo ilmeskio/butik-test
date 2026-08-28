@@ -1,6 +1,11 @@
-// Dati per le card-servizio (usate da home e /servizi). Tutto reale:
-// titolo/descrizione brevi dal lancio in home, statistica dal proof di
-// serviziHero, tag pubblico sintetizzato dagli "Adatto a".
+// Dati di servizio condivisi dai blocchi della pagina /servizi (titolo, link,
+// prova). Tutto reale: titolo/descrizione brevi dal lancio in home, statistica
+// dal proof di serviziHero.
+//
+// TODO (ADR-0004): questo copy è ancora hardcoded, eredità della fase di
+// prototipazione. Va portato nella collection `servizi` insieme a
+// `data/serviziHero.ts`, quando sarà decisa l'architettura contenuti
+// (Sitepins o altro CMS).
 export interface ServiceCardData {
   slug: string;
   title: string;
@@ -9,8 +14,6 @@ export interface ServiceCardData {
   /** Statistica reale, separata in valore + etichetta per la variante "numero". */
   statValue: string;
   statLabel: string;
-  /** Tag pubblico sintetico per la variante "tag". */
-  tag: string;
 }
 
 export const serviziCards: ServiceCardData[] = [
@@ -21,7 +24,6 @@ export const serviziCards: ServiceCardData[] = [
     href: '/servizi/progettazione-culturale',
     statValue: '9',
     statLabel: 'bandi vinti',
-    tag: 'Per Comuni · Bandi',
   },
   {
     slug: 'consulenza-strategica',
@@ -30,7 +32,6 @@ export const serviziCards: ServiceCardData[] = [
     href: '/servizi/consulenza-strategica',
     statValue: '15+',
     statLabel: 'territori',
-    tag: 'Per Comuni e DMO',
   },
   {
     slug: 'formazione-capacity-building',
@@ -39,7 +40,6 @@ export const serviziCards: ServiceCardData[] = [
     href: '/servizi/formazione-capacity-building',
     statValue: '1000+',
     statLabel: 'giovani formati',
-    tag: 'Per operatori ed enti',
   },
   {
     slug: 'eventi-culturali-musicali',
@@ -48,7 +48,6 @@ export const serviziCards: ServiceCardData[] = [
     href: '/servizi/eventi-culturali-musicali',
     statValue: '70K+',
     statLabel: 'persone raggiunte',
-    tag: 'Per Comuni e industry',
   },
   {
     slug: 'prodotti-turistico-musicali',
@@ -57,6 +56,5 @@ export const serviziCards: ServiceCardData[] = [
     href: '/servizi/prodotti-turistico-musicali',
     statValue: '15+',
     statLabel: 'territori · itinerari',
-    tag: 'Per DMO e PA',
   },
 ];
