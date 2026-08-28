@@ -114,6 +114,22 @@
           "value": "",
           "isIgnored": false,
           "defaultValue": ""
+        },
+        {
+          "name": "statValue",
+          "label": "Stat Value",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "statLabel",
+          "label": "Stat Label",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
         }
       ]
     },

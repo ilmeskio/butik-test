@@ -1,18 +1,28 @@
 ---
-// Card-servizio con 4 varianti di prova above-the-fold:
-//   chip   → dato reale come sigillo in basso
-//   number → dato reale grande come aggancio in alto
-//   tag    → etichetta pubblico in alto + dato in basso
-//   icon   → glifo monolinea in alto + dato in basso
-import type { ServiceCardData } from '../../data/serviziCards';
+// Card-servizio: glifo monolinea + titolo + descrizione + prova in fondo.
+// È la presentazione scelta per i servizi nell'hero da tablet in su (da mobile
+// li presenta ServiceLauncher, vedi Hero.astro).
+//
+// I dati sono copy editoriale e arrivano come prop dal chiamante (ADR-0004):
+// in home dalla collezione `pagine` (entry `home`, array `heroServizi`).
+// L'icona resta config di design e vive qui, indicizzata per slug.
+export interface ServiceCardData {
+  /** Slug della collection `servizi`, usato per scegliere l'icona. */
+  slug: string;
+  title: string;
+  desc: string;
+  href: string;
+  /** Prova reale, in valore + etichetta ("9" · "bandi vinti"). */
+  statValue: string;
+  statLabel: string;
+}
 
 interface Props {
   data: ServiceCardData;
-  variant: 'chip' | 'number' | 'tag' | 'icon';
 }
-const { data, variant } = Astro.props;
+const { data } = Astro.props;
 
-// Icone monolinea per slug (solo variante "icon"). Geometriche, niente clip-art.
+// Icone monolinea per slug. Geometriche, niente clip-art.
 const icons: Record<string, string> = {
   'progettazione-culturale':
     '<path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/>',
@@ -28,44 +38,22 @@ const icons: Record<string, string> = {
 ---
 
 <a href={data.href} class="card group">
-  {variant === 'tag' && (
-    <span class="card__tag">{data.tag}</span>
-  )}
-
-  {variant === 'icon' && (
-    <svg
-      class="card__icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-      set:html={icons[data.slug]}
-    />
-  )}
-
-  {variant === 'number' && (
-    <div class="card__stat-lead">
-      <span class="card__stat-value">{data.statValue}</span>
-      <span class="card__stat-label">{data.statLabel}</span>
-    </div>
-  )}
+  <svg
+    class="card__icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    set:html={icons[data.slug]}
+  />
 
   <h3 class="card__title">{data.title}</h3>
   <p class="card__desc">{data.desc}</p>
 
-  {variant === 'chip' && (
-    <span class="card__chip">
-      <span class="card__chip-mark" aria-hidden="true">◢</span>
-      {`${data.statValue} ${data.statLabel}`}
-    </span>
-  )}
-
-  {(variant === 'tag' || variant === 'icon') && (
-    <span class="card__stat-inline">{`${data.statValue} ${data.statLabel}`}</span>
-  )}
+  <span class="card__stat">{`${data.statValue} ${data.statLabel}`}</span>
 
   <span class="card__go" aria-hidden="true">→</span>
 </a>
@@ -112,6 +100,21 @@ const icons: Record<string, string> = {
     margin: 0;
   }
 
+  .card__icon {
+    width: 2rem;
+    height: 2rem;
+    color: var(--color-butik-red);
+  }
+
+  .card__stat {
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-butik-dark) 55%, transparent);
+  }
+
   /* Affordance senza costo di spazio: la freccia è fuori dal flusso (angolo)
      e compare solo all'hover/focus. La card intera è il link. */
   .card__go {
@@ -131,80 +134,15 @@ const icons: Record<string, string> = {
     transform: none;
   }
   @media (prefers-reduced-motion: reduce) {
+    .card {
+      transition: box-shadow 160ms ease, border-color 160ms ease;
+    }
+    .card:hover {
+      transform: none;
+    }
     .card__go {
       transition: opacity 150ms ease;
       transform: none;
     }
-  }
-
-  /* Variante chip ──────────────────────────────────────────────── */
-  .card__chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    align-self: flex-start;
-    padding: 0.3rem 0.6rem;
-    background: color-mix(in srgb, var(--color-butik-red) 10%, transparent);
-    color: var(--color-butik-red);
-    font-family: var(--font-display);
-    font-size: 0.6875rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .card__chip-mark {
-    font-size: 0.6rem;
-    line-height: 1;
-  }
-
-  /* Variante number ────────────────────────────────────────────── */
-  .card__stat-lead {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 0.15rem;
-  }
-  .card__stat-value {
-    font-family: var(--font-heading);
-    font-size: 2.5rem;
-    font-weight: 900;
-    line-height: 0.95;
-    color: var(--color-butik-red);
-  }
-  .card__stat-label {
-    font-family: var(--font-display);
-    font-size: 0.6875rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--color-butik-dark) 60%, transparent);
-    margin-top: 0.25rem;
-  }
-
-  /* Variante tag ───────────────────────────────────────────────── */
-  .card__tag {
-    align-self: flex-start;
-    font-family: var(--font-display);
-    font-size: 0.625rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--color-butik-red);
-  }
-
-  /* Variante icon ──────────────────────────────────────────────── */
-  .card__icon {
-    width: 2rem;
-    height: 2rem;
-    color: var(--color-butik-red);
-  }
-
-  /* Stat inline (tag/icon) ─────────────────────────────────────── */
-  .card__stat-inline {
-    font-family: var(--font-display);
-    font-size: 0.6875rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--color-butik-dark) 55%, transparent);
   }
 </style>

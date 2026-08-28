@@ -1,6 +1,7 @@
 ---
-// LAB — indice interno dei prototipi e delle varianti non raggiungibili dal
-// menu principale. Serve al team Butik per valutare tutto in un posto solo.
+// LAB — indice interno delle pagine di servizio non raggiungibili dal menu.
+// I confronti fra varianti che vivevano qui sono chiusi: le direzioni scelte
+// sono in produzione, il catalogo dei componenti è Storybook (ADR-0008).
 import BaseLayout from '#layouts/BaseLayout.astro';
 
 interface LabLink {
@@ -20,72 +21,19 @@ const gruppi: LabGroup[] = [
     eyebrow: 'Design system',
     titolo: 'Workshop dei componenti',
     intro:
-      'Il workshop del catalogo è Storybook, con i componenti di @butik/ui come island React (ADR-0008). Qui restano l’anteprima in-site del Button e la nota storica del confronto gallery-vs-Storybook.',
+      'Il workshop del catalogo è Storybook, con i componenti di @butik/ui come island React (ADR-0008) — atomi, molecole, organismi e gli accenti di motion, ciascuno con varianti e stati. Qui resta l’anteprima in-site del Button e la nota storica del confronto gallery-vs-Storybook.',
     links: [
       { href: '/lab/workshop', title: 'Component workshop (anteprima in-site)', desc: 'Button (Primary · Ghost) reso a HTML statico, su token @butik/ui-tokens.' },
       { href: '/lab/workshop/readme', title: 'Nota storica: gallery vs Storybook', desc: 'Trade-off delle due strade e la decisione presa (Storybook + island React, ADR-0008).' },
     ],
   },
   {
-    eyebrow: 'Motion & grafica',
-    titolo: 'Tratti animati a tema musica',
-    intro: 'Studio di 4 motivi animati (+ bonus) riutilizzabili: equalizer, waveform, marquee, beat pulse, count-up.',
-    links: [
-      { href: '/lab/animazioni', title: 'Studio animazioni', desc: 'Equalizer · Waveform · Marquee cinetico · Beat pulse · Count-up, con varianti e note d’uso.' },
-    ],
-  },
-  {
-    eyebrow: 'Sezione Metodo',
-    titolo: 'Il percorso-metodo',
-    intro: 'Varianti grafiche del percorso a 5 tappe e studi a tema musica per arricchirlo. La versione in home resta invariata.',
-    links: [
-      { href: '/lab/metodo', title: 'Varianti metodo (1–4)', desc: 'Catena · Linea centrale · Archi (in home) · Serpentina, a confronto.' },
-      { href: '/lab/metodo-musica', title: 'Studi a tema musica', desc: 'Onde sonore · Vinili · Traccia DAW · Battito: grafiche e animazioni per l’area metodo.' },
-    ],
-  },
-  {
-    eyebrow: 'Homepage',
-    titolo: 'Above-the-fold della home',
-    intro:
-      'La home reale ha uno switcher flottante a due assi: Hero (Attuale / A numeri / B loghi) × Servizi (Cards / Chip / Numero / Tag / Icona / Lista / Strip). Si compongono liberamente, default = aspetto attuale.',
-    links: [
-      { href: '/', title: 'Home reale + switcher componibile', desc: 'Componi Hero × Servizi dallo switcher flottante in basso a destra.' },
-    ],
-  },
-  {
-    eyebrow: 'Pagina /servizi',
-    titolo: 'Direzioni della pagina servizi',
-    intro: 'Tre direzioni per la pagina indice dei servizi — focus sull’espandere i servizi (la proof sta in home). Switcher Attuale/A/B/C in basso a destra.',
-    links: [
-      { href: '/servizi-a', title: 'A · Router per pubblico', desc: 'Filtro Comuni / DMO / Operatori + blocchi servizio espansi (per chi · cosa ottieni).' },
-      { href: '/servizi-b', title: 'B · Sezioni espanse', desc: 'Ogni servizio una sezione ampia alternata: lettura approfondita.' },
-      { href: '/servizi-c', title: 'C · Indice + dettaglio', desc: 'Lista compatta che salta alle sezioni espanse sotto.' },
-    ],
-  },
-  {
-    eyebrow: 'Pagina servizio',
-    titolo: 'Hero del singolo servizio',
-    intro: 'Tre direzioni di hero per la scheda servizio, su tutti e 5 i servizi, con switcher Attuale/A/B/C.',
-    links: [
-      { href: '/servizi-hero', title: 'Hub schede servizio (A/B/C)', desc: 'Matrice 3 direzioni × 5 servizi + suggerimento CTA form/call.' },
-    ],
-  },
-  {
-    eyebrow: 'Card e launcher',
-    titolo: 'Come presentare i servizi',
-    intro: 'Catalogo delle varianti card (per /servizi) e dei launcher compatti (per l’hero).',
-    links: [
-      { href: '/card-varianti', title: 'Catalogo varianti', desc: 'Chip · Numero · Tag · Icona · Lista compatta · Strip, con barra di navigazione.' },
-      { href: '/servizi-compact', title: 'Lista vs strip + anteprima telefono', desc: 'Densità above-the-fold con riquadro a ~390px.' },
-    ],
-  },
-  {
     eyebrow: 'Condivisione & social',
     titolo: 'Card Open Graph',
     intro:
-      'Anteprima delle card che appariranno condividendo i link (WhatsApp, LinkedIn, ecc.): stile “anteprima discussione” con titolo, sottotitolo, metadati e call-to-action scelta dalla pagina. Saranno generate in automatico per ogni pagina alla pubblicazione.',
+      'Le card che appaiono condividendo i link (WhatsApp, LinkedIn, ecc.) sono generate in automatico per ogni pagina alla build. Questa pagina serve a controllarle.',
     links: [
-      { href: '/lab/og-card', title: 'Anteprima card OG (A/B)', desc: 'Due direzioni a confronto — Editoriale chiaro · Notturno — su progetto, servizio e home.' },
+      { href: '/lab/og-card', title: 'Card generate — verifica', desc: 'Elenco rotta → PNG generata, con le scorciatoie per opengraph.xyz e LinkedIn Post Inspector.' },
     ],
   },
   {
@@ -102,10 +50,11 @@ const gruppi: LabGroup[] = [
 <BaseLayout title="Lab — Butik" description="Indice interno dei prototipi e delle varianti in valutazione.">
   <section class="max-w-5xl mx-auto px-6 pt-24 pb-10">
     <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-3">Interno · non indicizzato dal menu</p>
-    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark mb-4">Lab — varianti in valutazione</h1>
+    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark mb-4">Lab — pagine di servizio</h1>
     <p class="font-sans text-base md:text-lg text-butik-body max-w-2xl leading-relaxed">
-      Tutte le varianti non raggiungibili dalle pagine principali, in un posto solo. Da condividere col team
-      per decidere. Niente di tutto questo è ancora in produzione.
+      Quel che resta non raggiungibile dal menu: il workshop dei componenti, la verifica delle card
+      social e le pagine comode da rivedere col team. I confronti fra varianti sono chiusi — le
+      direzioni scelte sono nelle pagine reali.
     </p>
   </section>
 

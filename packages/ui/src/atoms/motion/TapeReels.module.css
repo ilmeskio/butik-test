@@ -1,0 +1,53 @@
+.reels {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--reel-size, 40px) * 0.55);
+  --reel-c: var(--color-fg);
+}
+.onDark { --reel-c: var(--color-fg-invert); }
+
+.reel {
+  position: relative;
+  width: var(--reel-size, 40px);
+  height: var(--reel-size, 40px);
+  border-radius: 50%;
+  border: 2px solid var(--reel-c);
+  animation: reel-spin var(--reel-speed, 3s) linear infinite;
+}
+/* Mozzo centrale. */
+.reel::after {
+  content: '';
+  position: absolute;
+  inset: 38%;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+/* Le tre razze, a 120° l'una dall'altra. */
+.reel i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 46%;
+  background: var(--reel-c);
+  transform-origin: 50% 0;
+  transform: translate(-50%, 0) rotate(var(--rot, 0deg));
+}
+.reel i:nth-child(1) { --rot: 0deg; }
+.reel i:nth-child(2) { --rot: 120deg; }
+.reel i:nth-child(3) { --rot: 240deg; }
+
+.tape {
+  height: 2px;
+  width: calc(var(--reel-size, 40px) * 0.7);
+  background: var(--reel-c);
+  opacity: 0.5;
+}
+
+@keyframes reel-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reel { animation: none; }
+}

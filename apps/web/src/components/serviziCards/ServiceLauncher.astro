@@ -1,47 +1,40 @@
 ---
-// Launcher compatto dei servizi per l'HERO (dove lo spazio è prezioso, mobile
-// soprattutto). Due modalità:
-//   list  → una riga per servizio (nome + dato + freccia), tutti scansionabili
-//   strip → fascia orizzontale scorrevole, mantiene il "feel card" senza impilare
+// Launcher compatto dei servizi: una riga per servizio (nome + prova + freccia),
+// tutti scansionabili senza scroll. È la presentazione scelta per i servizi
+// nell'hero su mobile, dove le card non stanno sopra la piega (da tablet in su
+// li presenta ServiceCard, vedi Hero.astro).
+//
+// I dati sono copy editoriale e arrivano come prop dal chiamante (ADR-0004).
 // `tone` adatta i colori a sfondo chiaro o scuro (hero home = scuro).
-import { serviziCards } from '../../data/serviziCards';
+export interface ServiceLauncherItem {
+  slug: string;
+  title: string;
+  href: string;
+  statValue: string;
+  statLabel: string;
+}
 
 interface Props {
-  mode: 'list' | 'strip';
+  items: ServiceLauncherItem[];
   tone?: 'onLight' | 'onDark';
   /** Se true, ogni voce punta all'ancora #slug nella stessa pagina. */
   useAnchors?: boolean;
 }
-const { mode, tone = 'onLight', useAnchors = false } = Astro.props;
+const { items, tone = 'onLight', useAnchors = false } = Astro.props;
 const linkFor = (slug: string, href: string) => (useAnchors ? `#${slug}` : href);
 ---
 
-{mode === 'list' && (
-  <ul class:list={['launcher-list', tone]}>
-    {serviziCards.map((c) => (
-      <li>
-        <a href={linkFor(c.slug, c.href)} class="row">
-          <span class="row-title">{c.title}</span>
-          <span class="row-stat">{`${c.statValue} ${c.statLabel}`}</span>
-          <span class="row-chev" aria-hidden="true">›</span>
-        </a>
-      </li>
-    ))}
-  </ul>
-)}
-
-{mode === 'strip' && (
-  <ul class:list={['launcher-strip', tone]}>
-    {serviziCards.map((c) => (
-      <li>
-        <a href={linkFor(c.slug, c.href)} class="chip-card">
-          <span class="chip-card__title">{c.title}</span>
-          <span class="chip-card__stat">{`${c.statValue} ${c.statLabel}`}</span>
-        </a>
-      </li>
-    ))}
-  </ul>
-)}
+<ul class:list={['launcher-list', tone]}>
+  {items.map((c) => (
+    <li>
+      <a href={linkFor(c.slug, c.href)} class="row">
+        <span class="row-title">{c.title}</span>
+        <span class="row-stat">{`${c.statValue} ${c.statLabel}`}</span>
+        <span class="row-chev" aria-hidden="true">›</span>
+      </a>
+    </li>
+  ))}
+</ul>
 
 <style>
   /* ── LIST ──────────────────────────────────────────────────────────── */
@@ -112,71 +105,6 @@ const linkFor = (slug: string, href: string) => (useAnchors ? `#${slug}` : href)
     color: var(--accent);
   }
 
-  /* ── STRIP ─────────────────────────────────────────────────────────── */
-  .launcher-strip {
-    list-style: none;
-    margin: 0;
-    padding: 0 0 0.5rem;
-    display: flex;
-    gap: 0.75rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-  .launcher-strip::-webkit-scrollbar {
-    display: none;
-  }
-  .launcher-strip li {
-    flex: 0 0 auto;
-    scroll-snap-align: start;
-  }
-  .chip-card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    width: 12rem;
-    height: 100%;
-    padding: 0.9rem 1rem;
-    background: var(--card-bg);
-    border: 1px solid var(--rule);
-    text-decoration: none;
-    transition: transform 150ms ease, box-shadow 150ms ease;
-  }
-  .chip-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 26px rgba(7, 17, 8, 0.16);
-  }
-  .chip-card:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-  .chip-card__title {
-    font-family: var(--font-heading);
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: -0.005em;
-    line-height: 1.15;
-    color: var(--ink-card);
-  }
-  .chip-card__stat {
-    font-family: var(--font-display);
-    font-size: 0.625rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted-card);
-  }
-  .chip-card__arrow {
-    margin-top: auto;
-    font-size: 1.1rem;
-    line-height: 1;
-    color: var(--accent);
-    transition: transform 150ms ease;
-  }
-  .chip-card:hover .chip-card__arrow {
-    transform: translateX(5px);
-  }
-
   /* ── Tone tokens ───────────────────────────────────────────────────── */
   .onLight {
     --ink: var(--color-butik-dark);
@@ -184,9 +112,6 @@ const linkFor = (slug: string, href: string) => (useAnchors ? `#${slug}` : href)
     --rule: color-mix(in srgb, var(--color-butik-dark) 15%, transparent);
     --accent: var(--color-butik-red);
     --row-hover: color-mix(in srgb, var(--color-butik-dark) 6%, transparent);
-    --card-bg: #fff;
-    --ink-card: var(--color-butik-dark);
-    --muted-card: color-mix(in srgb, var(--color-butik-dark) 55%, transparent);
   }
   .onDark {
     --ink: #fff;
@@ -194,15 +119,11 @@ const linkFor = (slug: string, href: string) => (useAnchors ? `#${slug}` : href)
     --rule: rgba(255, 255, 255, 0.2);
     --accent: var(--color-butik-green);
     --row-hover: rgba(255, 255, 255, 0.1);
-    --card-bg: rgba(255, 255, 255, 0.96);
-    --ink-card: var(--color-butik-dark);
-    --muted-card: color-mix(in srgb, var(--color-butik-dark) 55%, transparent);
   }
 
   @media (prefers-reduced-motion: reduce) {
     .row,
-    .row-chev,
-    .chip-card {
+    .row-chev {
       transition: none;
     }
   }

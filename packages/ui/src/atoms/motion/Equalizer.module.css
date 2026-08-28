@@ -1,0 +1,46 @@
+.eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 0.18em;
+  height: 1.4em;
+}
+.sm { font-size: var(--font-size-xs); }
+.md { font-size: 1.25rem; }
+.lg { font-size: var(--font-size-2xl); }
+
+.eq i {
+  width: 0.18em;
+  height: 35%;
+  border-radius: 1px;
+  background: var(--eq-c, var(--color-highlight));
+}
+.onDark { --eq-c: var(--color-highlight); }
+.onLight { --eq-c: var(--color-accent); }
+.accent { --eq-c: var(--color-accent); }
+.highlight { --eq-c: var(--color-highlight); }
+
+/* Durate/ritardi diversi per barra → movimento organico, non sincronizzato. */
+.always i,
+.hover:hover i {
+  animation: eq-bounce 0.8s ease-in-out infinite;
+}
+.eq i:nth-child(1) { animation-duration: 0.62s; }
+.eq i:nth-child(2) { animation-duration: 0.94s; animation-delay: -0.2s; }
+.eq i:nth-child(3) { animation-duration: 0.72s; animation-delay: -0.5s; }
+.eq i:nth-child(4) { animation-duration: 1.1s;  animation-delay: -0.1s; }
+.eq i:nth-child(5) { animation-duration: 0.8s;  animation-delay: -0.35s; }
+.eq i:nth-child(6) { animation-duration: 0.66s; animation-delay: -0.15s; }
+.eq i:nth-child(7) { animation-duration: 1s;    animation-delay: -0.45s; }
+.eq i:nth-child(8) { animation-duration: 0.88s; animation-delay: -0.25s; }
+
+@keyframes eq-bounce {
+  0%, 100% { height: 22%; }
+  50% { height: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eq i {
+    animation: none !important;
+    height: 55%;
+  }
+}

@@ -53,6 +53,31 @@
       "defaultValue": ""
     },
     {
+      "name": "heroVariant",
+      "label": "HeroVariant",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": "banner"
+    },
+    {
+      "name": "audience",
+      "label": "Audience",
+      "type": "list",
+      "isIgnored": false,
+      "defaultValue": [],
+      "fields": [
+        {
+          "name": "id",
+          "label": "Id",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        }
+      ]
+    },
+    {
       "name": "order",
       "label": "Order",
       "type": "number",

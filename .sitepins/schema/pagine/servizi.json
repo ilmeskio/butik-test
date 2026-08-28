@@ -110,12 +110,29 @@
       ]
     },
     {
-      "name": "cardCtaLabel",
-      "label": "CardCtaLabel",
-      "type": "string",
-      "value": "",
+      "name": "filtri",
+      "label": "Filtri",
+      "type": "list",
       "isIgnored": false,
-      "defaultValue": ""
+      "defaultValue": [],
+      "fields": [
+        {
+          "name": "id",
+          "label": "Id",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "label",
+          "label": "Label",
+          "type": "string",
+          "value": "",
+          "isIgnored": false,
+          "defaultValue": ""
+        }
+      ]
     },
     {
       "name": "ctaTitle",

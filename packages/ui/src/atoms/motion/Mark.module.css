@@ -1,0 +1,29 @@
+.mark {
+  display: inline-flex;
+  width: var(--mark-size, 24px);
+  height: var(--mark-size, 24px);
+  color: var(--mark-c, var(--color-accent));
+}
+.mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.accent { --mark-c: var(--color-accent); }
+.highlight { --mark-c: var(--color-highlight); }
+.fg { --mark-c: var(--color-fg); }
+.accent2 { --mark-c: var(--color-accent-2); }
+
+.twinkle svg {
+  animation: mark-twinkle 2.4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes mark-twinkle {
+  0%, 100% { transform: scale(0.82) rotate(0deg); opacity: 0.7; }
+  50% { transform: scale(1) rotate(45deg); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .twinkle svg { animation: none; }
+}
