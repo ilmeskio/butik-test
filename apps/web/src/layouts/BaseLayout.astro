@@ -121,7 +121,7 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID as string | undefined;
     <meta property="twitter:image" content={ogImageURL} />
     <ClientRouter />
   </head>
-  <body class="flex flex-col min-h-screen">
+  <body class="page-body">
     {/* GTM fallback per client senza JS (ADR-0006). */}
     {gtmId && (
       <noscript
@@ -129,7 +129,7 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID as string | undefined;
       />
     )}
     <Header />
-    <main class="flex-1">
+    <main class="page-main">
       <slot />
     </main>
     <Footer />
@@ -149,3 +149,15 @@ const gtmId = import.meta.env.PUBLIC_GTM_ID as string | undefined;
     </script>
   </body>
 </html>
+
+<style>
+  .page-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .page-main {
+    flex: 1 1 0%;
+  }
+</style>
