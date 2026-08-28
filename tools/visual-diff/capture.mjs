@@ -76,10 +76,26 @@ for (const vp of VIEWPORTS) {
     const shots = {};
     for (const [tag, port] of [['before', 4501], ['after', 4502]]) {
       await page.goto(`http://localhost:${port}${path}`, { waitUntil: 'networkidle' });
-      // congela le animazioni e neutralizza i caroselli a tempo
+      // Congela le animazioni e neutralizza i caroselli a tempo.
       await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important}' });
-      await page.waitForTimeout(250);
-      shots[tag] = await page.screenshot({ fullPage: true });
+      // Le immagini sotto la piega sono lazy: lo screenshot fullPage scorre la
+      // pagina e le innesca A META' CATTURA, quindi due esecuzioni della stessa
+      // build danno risultati diversi. Le si forza tutte e si aspetta che siano
+      // decodificate, altrimenti il confronto segnala differenze inventate.
+      await page.evaluate(async () => {
+        for (const img of document.querySelectorAll('img')) {
+          img.loading = 'eager';
+          if (img.dataset.src && !img.src) img.src = img.dataset.src;
+        }
+        await Promise.all(
+          [...document.images]
+            .filter((i) => !i.complete)
+            .map((i) => new Promise((r) => { i.onload = i.onerror = r; })),
+        );
+        if (document.fonts) await document.fonts.ready;
+      });
+      await page.waitForTimeout(300);
+      shots[tag] = await page.screenshot({ fullPage: true, animations: 'disabled' });
     }
     const same = Buffer.compare(shots.before, shots.after) === 0;
     let diffPct = 0;
