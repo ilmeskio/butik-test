@@ -1,107 +1,151 @@
 ---
-import BaseLayout from '#layouts/BaseLayout.astro';
+// /servizi — router per pubblico: si sceglie chi si è, e la griglia mostra solo
+// i servizi che parlano a quel ruolo. Ogni servizio è un blocco espanso
+// (per chi · cosa ottieni), non una card-teaser: la prova sintetica sta in home.
 import { getCollection, getEntry } from 'astro:content';
-import { Image } from 'astro:assets';
+import BaseLayout from '#layouts/BaseLayout.astro';
+import ServiceExpanded from '#components/serviziCards/ServiceExpanded.astro';
+import Metodo from '#components/home/Metodo.astro';
+import type { MetodoIconName } from '#data/metodo';
 import CtaBanner from '#components/CtaBanner.astro';
-import ServiziPageSwitcher from '#components/serviziCards/ServiziPageSwitcher.astro';
-import SectionHeading from '@butik/ui/SectionHeading';
-import NumberBadge from '@butik/ui/NumberBadge';
 
-const servizi = (await getCollection('servizi', e => !e.data.draft))
-  .sort((a, b) => a.data.order - b.data.order);
-
-// Copy editoriale della pagina servizi content-driven (ADR-0004): header, intro
-// e passi del metodo (array) dalla collezione `pagine` (entry `servizi`). Le
-// card servizio restano dalla collezione `servizi`.
+// Copy editoriale content-driven (ADR-0004): header, intro, etichette dei
+// filtri, metodo e CTA finale dalla collezione `pagine` (entry `servizi`).
 const entry = await getEntry('pagine', 'servizi');
 if (!entry || entry.data.type !== 'servizi-index') {
   throw new Error('Contenuto pagina "servizi" mancante o non valido (collezione pagine).');
 }
 const c = entry.data;
-const metodo = c.metodo;
+
+// Il pubblico di ogni servizio è un campo della sua entry (`audience`): è la
+// stessa informazione degli "Adatto a" nel corpo della scheda, in forma di id.
+const servizi = (await getCollection('servizi', (e) => !e.data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+// Icone per tappa del metodo: config di design, non copy editoriale.
+const metodoIcons: MetodoIconName[] = ['ascolto', 'co-progettazione', 'protagonismo', 'formazione', 'eventi'];
 ---
 
-<BaseLayout
-  title={c.metaTitle}
-  description={c.metaDescription}
->
-  <!-- Page header -->
-  <div class="max-w-4xl mx-auto px-6 pt-20 md:pt-24 pb-12 text-center">
-    <div class="mb-6">
-      <SectionHeading as="h1" eyebrow={c.headerEyebrow} title={c.headerTitle} />
-    </div>
-    <p class="font-sans text-base md:text-lg text-butik-body leading-relaxed">
+<BaseLayout title={c.metaTitle} description={c.metaDescription}>
+  <section class="max-w-5xl mx-auto px-6 pt-20 md:pt-24 pb-8 text-center">
+    <p class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-4">{c.headerEyebrow}</p>
+    <h1 class="font-heading text-4xl md:text-5xl font-bold text-butik-dark mb-5">{c.headerTitle}</h1>
+    <p class="font-sans text-base md:text-lg text-butik-body leading-relaxed max-w-2xl mx-auto">
       {c.headerIntro1}
     </p>
-    <p class="font-sans text-base md:text-lg text-butik-body leading-relaxed mt-4" set:html={c.headerIntro2}></p>
-  </div>
+    <p class="font-sans text-base md:text-lg text-butik-body leading-relaxed max-w-2xl mx-auto mt-4" set:html={c.headerIntro2}></p>
+  </section>
 
-  <!-- Grid -->
   <section class="max-w-7xl mx-auto px-6 pb-20">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-      {servizi.map((s, i) => (
-        <a href={`/servizi/${s.id}`} class="group block">
-          <div class="overflow-hidden mb-5">
-            <Image
-              src={s.data.heroImage}
-              alt={s.data.heroAlt}
-              widths={[400, 700]}
-              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              quality={72}
-              loading={i < 3 ? 'eager' : 'lazy'}
-              class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
-              transition:name={`servizio-${s.id}`}
-            />
-          </div>
-          <h2 class="font-display text-xs font-bold tracking-widest uppercase text-butik-red mb-2" transition:name={`servizio-${s.id}-title`}>
-            {s.data.title}
-          </h2>
-          <p class="font-sans text-base text-butik-body leading-relaxed" transition:name={`servizio-${s.id}-subtitle`}>
-            {s.data.subtitle}
-          </p>
-          <span class="mt-4 inline-flex items-center gap-2 font-display text-xs font-bold tracking-widest uppercase text-butik-dark border-b-2 border-butik-red pb-0.5 group-hover:text-butik-red transition-colors">
-            {c.cardCtaLabel}
-            <span aria-hidden="true">→</span>
-          </span>
-        </a>
+    <div class="flex flex-wrap justify-center gap-2 mb-10" data-svc-filters role="group" aria-label="Filtra i servizi per pubblico">
+      {c.filtri.map((f, i) => (
+        <button
+          type="button"
+          class:list={['svc-filter', i === 0 && 'is-active']}
+          data-filter={f.id}
+          aria-pressed={i === 0 ? 'true' : 'false'}
+        >
+          {f.label}
+        </button>
       ))}
     </div>
-  </section>
 
-  <!-- Il nostro metodo -->
-  <section class="bg-white py-16 md:py-20">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="mb-10 md:mb-12">
-        <SectionHeading eyebrow={c.metodoEyebrow} title={c.metodoTitle} />
-      </div>
-      <ul class="space-y-6">
-        {metodo.map((m, i) => (
-          <li class="flex gap-4 md:gap-5">
-            <NumberBadge number={i + 1} />
-            <div class="pt-1">
-              <p class="metodo-title font-heading text-base md:text-lg font-bold text-butik-dark leading-snug">{m.title}</p>
-              <p class="font-sans text-sm md:text-base text-butik-dark/70 leading-relaxed mt-1">{m.description}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5" data-svc-grid>
+      {servizi.map((s) => (
+        <div data-audience={s.data.audience.map((a) => a.id).join(' ')} class="border border-butik-dark/12 p-6 md:p-8">
+          <ServiceExpanded slug={s.id} />
+        </div>
+      ))}
     </div>
+
+    <p class="sr-only" role="status" data-svc-status></p>
   </section>
 
-  <!-- CTA finale -->
+  <Metodo
+    eyebrow={c.metodoEyebrow}
+    title={c.metodoTitle}
+    tappe={c.metodo}
+    icons={metodoIcons}
+  />
+
   <CtaBanner
     title={c.ctaTitle}
     primaryCta={{ label: c.ctaPrimaryLabel, href: c.ctaPrimaryHref }}
     secondaryCta={{ label: c.ctaSecondaryLabel, href: c.ctaSecondaryHref }}
   />
-
-  <ServiziPageSwitcher current="orig" />
 </BaseLayout>
 
 <style>
-  .metodo-title {
-    text-transform: none;
-    letter-spacing: -0.005em;
+  .svc-filter {
+    padding: 0.5rem 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--color-butik-dark) 18%, transparent);
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     color: var(--color-butik-dark);
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+  }
+  .svc-filter:hover {
+    border-color: var(--color-butik-red);
+    color: var(--color-butik-red);
+  }
+  .svc-filter.is-active {
+    background: var(--color-butik-red);
+    border-color: var(--color-butik-red);
+    color: #fff;
+  }
+  .svc-filter:focus-visible {
+    outline: 2px solid var(--color-butik-red);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .svc-filter {
+      transition: none;
+    }
   }
 </style>
+
+<script>
+  // Filtro per pubblico. Idempotente e riagganciato a ogni navigazione: sotto
+  // le view transitions lo script gira una volta ma il DOM viene sostituito
+  // (docs/guidances/client-scripts.md). Senza JS restano visibili tutti i
+  // servizi, che è il default corretto.
+  function initServiziFilter() {
+    const filters = Array.from(
+      document.querySelectorAll<HTMLButtonElement>('[data-svc-filters] .svc-filter'),
+    );
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-svc-grid] [data-audience]'));
+    const status = document.querySelector<HTMLElement>('[data-svc-status]');
+    if (!filters.length) return;
+
+    const apply = (val: string) => {
+      let shown = 0;
+      cards.forEach((card) => {
+        const aud = (card.dataset.audience || '').split(' ');
+        const match = val === 'tutti' || aud.includes(val);
+        card.hidden = !match;
+        if (match) shown += 1;
+      });
+      filters.forEach((f) => {
+        const active = f.dataset.filter === val;
+        f.classList.toggle('is-active', active);
+        f.setAttribute('aria-pressed', String(active));
+      });
+      if (status) {
+        status.textContent = `${shown} ${shown === 1 ? 'servizio' : 'servizi'} in elenco.`;
+      }
+    };
+
+    filters.forEach((f) => {
+      if (f.dataset.svcBound) return;
+      f.dataset.svcBound = 'true';
+      f.addEventListener('click', () => apply(f.dataset.filter || 'tutti'));
+    });
+  }
+  document.addEventListener('astro:page-load', initServiziFilter);
+</script>

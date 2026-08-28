@@ -21,6 +21,10 @@ const serviziCollection = defineCollection({
     metaDescription: z.string().optional(),
     ogImage: image().optional(),
     ogCta: z.string().optional(),
+    // Pubblici a cui il servizio parla, come id dei filtri della pagina
+    // /servizi (vedi `filtri` in `pagine/servizi`). È la stessa informazione
+    // degli "Adatto a" nel corpo della scheda, in forma filtrabile.
+    audience: z.array(z.object({ id: z.string() })).optional().default([]),
     order: z.number().optional().default(0),
     draft: z.boolean().optional().default(false),
   }),
@@ -285,9 +289,13 @@ const paginaServizi = z.object({
     title: z.string(),
     description: z.string(),
   })),
-  // Card servizio: etichetta del richiamo, uguale per tutte le card. Solo
-  // testo: la freccia è decorazione del markup, non copy editoriale.
-  cardCtaLabel: z.string(),
+  // Filtri per pubblico della pagina /servizi. `id` deve combaciare con i
+  // valori in `audience` delle entry `servizi`; il primo filtro è quello
+  // attivo di default e vale "tutti".
+  filtri: z.array(z.object({
+    id: z.string(),
+    label: z.string(),
+  })),
   // CTA finale
   ctaTitle: z.string(),
   ctaPrimaryLabel: z.string(),
