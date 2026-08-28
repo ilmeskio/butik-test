@@ -21,7 +21,8 @@
     "./ImageBlock": "./src/molecules/ImageBlock.tsx",
     "./ImageLeft": "./src/molecules/ImageLeft.tsx",
     "./ImageRight": "./src/molecules/ImageRight.tsx",
-    "./ImageCarousel": "./src/molecules/ImageCarousel.tsx"
+    "./ImageCarousel": "./src/molecules/ImageCarousel.tsx",
+    "./vinylScratch": "./src/lib/vinylScratch.ts"
   },
   "dependencies": {
     "@butik/ui-tokens": "workspace:*"

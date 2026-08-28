@@ -105,7 +105,7 @@ export const serviziHero: Record<string, ServiceHeroContent> = {
       'Co-progettazione con gli attori locali',
     ],
     ctaPrimary: { label: 'Prenota una call conoscitiva', href: '/contatti' },
-    ctaSecondary: { label: 'Scopri il metodo', href: '/lab/metodo' },
+    ctaSecondary: { label: 'Scopri il metodo', href: '/servizi' },
     ledgerLabel: 'Al fianco di Comuni e DMO',
     ledger: [
       { k: 'Cremona', v: 'DMO Visit Cremona' },

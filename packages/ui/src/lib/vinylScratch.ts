@@ -1,12 +1,16 @@
 // ── Scratch + inerzia per dischi-vinile ────────────────────────────────────
-// Logica condivisa da Vinyl.astro (demo lab) e dalle varianti "metodo a tema
-// musica" (MetodoViniliScratch, MetodoViniliOnde).
+// Logica condivisa dall'atomo Vinyl del catalogo e dalla sezione Metodo del
+// sito: vive in @butik/ui perché la usano entrambi i package (ADR-0007).
 //
 // Ogni "nodo" è l'area che riceve il puntatore; dentro c'è un disco che ruota.
 // La rotazione è guidata da requestAnimationFrame, non dall'animazione CSS (che
-// resta solo come fallback no-JS): auto-spin di regime + scratch che segue il
-// mouse all'hover + inerzia che, al rilascio, mantiene la velocità del lancio e
-// rallenta fino a tornare al giro normale (effetto giradischi).
+// resta solo come fallback no-JS): auto-spin di regime + scratch mentre si tiene
+// premuto + inerzia che, al rilascio, mantiene la velocità del lancio e rallenta
+// fino a tornare al giro normale (effetto giradischi).
+//
+// Lo scratch parte al CLICK (pointerdown), non al passaggio del mouse: il disco
+// gira indisturbato finché non lo si prende in mano, e il gesto funziona identico
+// da touch. Con `prefers-reduced-motion` i dischi restano fermi.
 
 export interface VinylScratchOptions {
   /** Selettore dei nodi (area puntatore/hover). */
@@ -17,6 +21,12 @@ export interface VinylScratchOptions {
   speedVar: string;
   /** Secondi/giro usati se la var non è leggibile. Default 6. */
   defaultSpeed?: number;
+  /**
+   * Radice in cui cercare i nodi. Default `document`: il sito aggancia tutti i
+   * dischi della pagina. L'atomo React passa il proprio elemento, così ogni
+   * istanza aggancia solo il suo disco.
+   */
+  root?: ParentNode;
   /**
    * TAU — costante di tempo dell'attrito (secondi). Dopo un lancio, l'eccesso di
    * velocità rispetto al giro di regime decade esponenzialmente: in ~TAU secondi
@@ -56,23 +66,33 @@ const toDeg = (rad: number) => (rad * 180) / Math.PI;
 const angleDiff = (a: number, b: number) => ((a - b + 540) % 360) - 180;
 const clamp = (v: number, m: number) => Math.max(-m, Math.min(m, v));
 
+// Registro e loop unici per pagina: init può essere richiamata a ogni
+// navigazione, ma il requestAnimationFrame parte una volta sola.
+const vinili: Vinile[] = [];
+let looping = false;
+
 export function initVinylScratch(opts: VinylScratchOptions): void {
   const {
     nodeSelector,
     discSelector,
     speedVar,
     defaultSpeed = 6,
+    root = document,
     tau = 0.8,
     maxVel = 1800,
     stale = 120,
   } = opts;
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const vinili: Vinile[] = [];
 
-  document.querySelectorAll<HTMLElement>(nodeSelector).forEach((node) => {
+  root.querySelectorAll<HTMLElement>(nodeSelector).forEach((node) => {
     const disc = node.querySelector<HTMLElement>(discSelector);
     if (!disc) return;
+    // Sotto le view transitions lo script gira una volta ma il DOM viene
+    // sostituito: init va richiamata a ogni navigazione, e deve saltare i nodi
+    // già agganciati (docs/guidances/client-scripts.md).
+    if (node.dataset.vinylBound) return;
+    node.dataset.vinylBound = 'true';
     const speed = parseFloat(getComputedStyle(node).getPropertyValue(speedVar)) || defaultSpeed;
 
     // JS prende il controllo della rotazione → spegne l'animazione CSS di fallback
@@ -108,33 +128,43 @@ export function initVinylScratch(opts: VinylScratchOptions): void {
       v.disc.style.transform = `rotate(${v.angle}deg)`;
     };
 
-    node.addEventListener('pointerenter', (e) => {
-      v.scratching = true;
-      v.lastPointerAngle = pointerAngle(e);
-      v.lastT = e.timeStamp;
-      v.flingVel = 0;
-      node.addEventListener('pointermove', onMove);
-    });
-
-    node.addEventListener('pointerleave', (e) => {
+    const release = (e: PointerEvent) => {
+      if (!v.scratching) return;
       node.removeEventListener('pointermove', onMove);
       v.scratching = false;
       // lancio: tiene la velocità del gesto solo se il movimento è recente
       const idle = e.timeStamp - v.lastT;
       v.vel = !reduce && idle < stale ? v.flingVel : v.baseVel;
+    };
+
+    // Si prende il disco premendo, non passandoci sopra.
+    node.addEventListener('pointerdown', (e) => {
+      v.scratching = true;
+      v.lastPointerAngle = pointerAngle(e);
+      v.lastT = e.timeStamp;
+      v.flingVel = 0;
+      // Il puntatore resta agganciato al nodo anche uscendone: si può girare il
+      // disco con un gesto ampio senza che si "sganci" a metà.
+      node.setPointerCapture?.(e.pointerId);
+      node.addEventListener('pointermove', onMove);
     });
+
+    node.addEventListener('pointerup', release);
+    node.addEventListener('pointercancel', release);
   });
 
   // loop unico: fa girare i dischi e applica l'attrito che riporta la velocità
   // lanciata a quella di regime (effetto inerzia del giradischi)
-  if (!reduce && vinili.length) {
+  if (!reduce && vinili.length && !looping) {
+    looping = true;
     let last = -1;
     const tick = (now: number) => {
       if (last < 0) last = now;
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
       for (const v of vinili) {
-        if (v.scratching) continue;
+        // dischi di pagine già sostituite dalle view transitions: si scartano
+        if (!v.disc.isConnected || v.scratching) continue;
         // avvicinamento esponenziale alla velocità base
         v.vel = v.baseVel + (v.vel - v.baseVel) * Math.exp(-dt / tau);
         v.angle += v.vel * dt;

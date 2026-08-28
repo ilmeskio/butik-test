@@ -1,15 +1,20 @@
 ---
-// ── Il nostro metodo (issue #13) ──────────────────────────────────────────
-// Visualizzazione "cerchi con archi": ogni tappa è un cerchio bianco con arco
-// rosso (~290°), icona line-style al centro e badge numerato; le tappe sono in
-// fila orizzontale collegate da frecce tratteggiate. Su mobile diventa una
-// colonna verticale con rail tratteggiato a sinistra.
+// ── Il nostro metodo ──────────────────────────────────────────────────────
+// Visualizzazione "vinili + onde": ogni tappa è un disco che gira, con
+// l'icona come etichetta centrale e un badge numerato; i dischi sono uniti da
+// connettori a waveform che scorrono verso la tappa successiva. Su mobile
+// diventa una colonna con un'onda verticale continua dietro i dischi.
+//
+// I dischi si possono "scratchare": premendo e trascinando, il vinile segue il
+// puntatore come sotto la mano del dj, e al rilascio l'inerzia lo riporta al
+// giro di regime. Il gesto parte al click, non al passaggio del mouse, così il
+// disco gira indisturbato finché non lo si prende in mano — e funziona identico
+// da touch. Con `prefers-reduced-motion` resta tutto fermo.
 //
 // Copy (eyebrow/title/tappe) content-driven via Sitepins (ADR-0004): riusa la
-// stessa entry `pagine/servizi` di /servizi (issue #26 — prima duplicata in
-// src/data/metodo.ts, ora unica source of truth). L'icona per tappa resta
-// config di design passata come prop dal chiamante (come sdgStyle in
-// chi-siamo.astro): non è editoriale, non vive nello schema Sitepins.
+// stessa entry `pagine/servizi` di /servizi. L'icona per tappa resta config di
+// design passata come prop dal chiamante (come sdgStyle in chi-siamo.astro):
+// non è editoriale, non vive nello schema Sitepins.
 import type { MetodoIconName } from '../../data/metodo';
 import MetodoIcon from './MetodoIcon.astro';
 import SectionHeading from '@butik/ui/SectionHeading';
@@ -27,6 +32,28 @@ interface Props {
 }
 
 const { eyebrow, title, tappe, icons } = Astro.props;
+
+// Path onda sinusoidale (quadratiche), periodo 64px → loop di -64px perfetto.
+const W = 640;
+const SEG = 32;
+const AMP = 9;
+const MID = 16;
+let d = `M0 ${MID}`;
+let up = true;
+for (let x = 0; x < W; x += SEG) {
+  d += ` Q ${x + SEG / 2} ${up ? MID - AMP : MID + AMP} ${x + SEG} ${MID}`;
+  up = !up;
+}
+
+// Versione verticale per il rail mobile (onda continua che scende).
+const SEGV = 20;
+const H = 1600;
+let dv = `M${MID} 0`;
+let upv = true;
+for (let y = 0; y < H; y += SEGV) {
+  dv += ` Q ${upv ? MID - AMP : MID + AMP} ${y + SEGV / 2} ${MID} ${y + SEGV}`;
+  upv = !upv;
+}
 ---
 
 <section class="bg-white py-12 md:py-20 overflow-hidden">
@@ -35,30 +62,34 @@ const { eyebrow, title, tappe, icons } = Astro.props;
       <SectionHeading eyebrow={eyebrow} title={title} />
     </div>
 
-    <ol class="metodo">
+    <ol class="vino">
+      {/* rail-onda continuo che scende: visibile solo su mobile */}
+      <span class="vino-rail" aria-hidden="true">
+        <svg viewBox={`0 0 ${MID * 2} ${H}`} preserveAspectRatio="none">
+          <path d={dv} />
+        </svg>
+      </span>
       {
         tappe.map((tappa, i) => (
-          <li class="metodo-step">
-            <div class="metodo-node">
-              {/* arco rosso ~290° attorno al cerchio */}
-              <svg class="metodo-arc" viewBox="0 0 100 100" aria-hidden="true">
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="46"
-                  fill="none"
-                  stroke="var(--color-butik-red)"
-                  stroke-width="5"
-                  stroke-linecap="round"
-                  stroke-dasharray="230 60"
-                  transform="rotate(135 50 50)"
-                />
-              </svg>
-              <span class="metodo-num font-display">{String(i + 1).padStart(2, '0')}</span>
-              <MetodoIcon name={icons[i % icons.length]} size={30} class="metodo-icon" />
+          <li class="vino-step">
+            <div class="vino-node">
+              <span class="vino-disc" aria-hidden="true">
+                <span class="vino-glint"></span>
+              </span>
+              <span class="vino-label">
+                <MetodoIcon name={icons[i % icons.length]} size={26} class="vino-icon" />
+              </span>
+              <span class="vino-num font-display">{String(i + 1).padStart(2, '0')}</span>
             </div>
-            <div class="metodo-content">
-              <h3 class="metodo-title font-heading text-lg font-bold text-butik-dark">
+            {i < tappe.length - 1 && (
+              <span class="vino-link" aria-hidden="true">
+                <svg viewBox="0 0 640 32" preserveAspectRatio="none">
+                  <path d={d} />
+                </svg>
+              </span>
+            )}
+            <div class="vino-content">
+              <h3 class="vino-title font-heading text-lg font-bold text-butik-dark">
                 {tappa.title}
               </h3>
               <p class="font-sans text-sm text-butik-dark/70 leading-relaxed mt-1">
@@ -73,38 +104,80 @@ const { eyebrow, title, tappe, icons } = Astro.props;
 </section>
 
 <style>
-  .metodo {
+  .vino {
     list-style: none;
     margin: 0;
     padding: 0;
   }
-
-  .metodo-node {
+  .vino-node {
     position: relative;
     width: 6.5rem;
     height: 6.5rem;
-    border-radius: 9999px;
-    background: #fff;
+    flex-shrink: 0;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.1rem;
-    flex-shrink: 0;
-    color: var(--color-butik-red);
-    box-shadow: 0 14px 30px -16px rgba(7, 17, 8, 0.35);
+    cursor: grab;
+    touch-action: none;
+    --vino-speed: 7s;
   }
-  .metodo-arc {
+  .vino-node:active { cursor: grabbing; }
+  /* disco: solchi concentrici + ombra */
+  .vino-disc {
     position: absolute;
-    inset: -3px;
-    width: calc(100% + 6px);
-    height: calc(100% + 6px);
-    overflow: visible;
+    inset: 0;
+    border-radius: 50%;
+    background: repeating-radial-gradient(
+      circle at center,
+      #0c0c0c 0 1.6px,
+      #1f1f1f 1.6px 3.4px
+    );
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 14px 30px -16px rgba(7, 17, 8, 0.45);
+    /* fallback no-JS: spin a velocità fissa. Con JS la rotazione (e l'inerzia
+       dello scratch) è guidata da requestAnimationFrame, che disattiva questa. */
+    animation: vino-spin var(--vino-speed, 7s) linear infinite;
   }
-  .metodo-num {
+  /* riflesso luminoso che gira col disco: segnale di moto + lucidità */
+  .vino-glint {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    background: conic-gradient(
+      from -55deg,
+      rgba(255, 255, 255, 0.6) 0deg,
+      rgba(255, 255, 255, 0.05) 26deg,
+      transparent 60deg,
+      transparent 150deg,
+      rgba(255, 255, 255, 0.38) 180deg,
+      rgba(255, 255, 255, 0.03) 206deg,
+      transparent 240deg,
+      transparent 360deg
+    );
+  }
+  /* etichetta centrale rossa con icona — non ruota */
+  .vino-label {
+    position: relative;
+    z-index: 1;
+    width: 44%;
+    height: 44%;
+    border-radius: 50%;
+    background: var(--color-butik-red);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
+    pointer-events: none;
+  }
+  .vino-num {
     position: absolute;
     top: -0.6rem;
     left: -0.6rem;
+    z-index: 2;
     width: 2.1rem;
     height: 2.1rem;
     border-radius: 9999px;
@@ -116,66 +189,105 @@ const { eyebrow, title, tappe, icons } = Astro.props;
     font-weight: 700;
     font-size: 0.85rem;
     box-shadow: 0 0 0 4px #fff;
+    pointer-events: none;
   }
-  /* Override stile globale h3 (uppercase + rosso): serve !important per vincere
-     sul selettore di elemento globale. */
-  .metodo-title {
+  .vino-title {
     text-transform: none !important;
     letter-spacing: -0.005em !important;
     color: var(--color-butik-dark) !important;
   }
 
-  /* ── Mobile: colonna verticale (rail tratteggiato a sinistra) ─────────── */
+  @keyframes vino-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* onda di collegamento (un solo elemento, sempre allineato al centro nodo) */
+  .vino-link {
+    position: absolute;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--color-butik-red) 65%, transparent);
+  }
+  .vino-link svg {
+    display: block;
+    width: 200%;
+    height: 100%;
+    /* scorre verso destra (verso la tappa successiva) */
+    animation: vino-scroll 3.5s linear infinite;
+  }
+  .vino-link path,
+  .vino-rail path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+  /* rail verticale: nascosto di default, mostrato su mobile */
+  .vino-rail { display: none; }
+
+  @keyframes vino-scroll {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+  @keyframes vino-scroll-v {
+    from { transform: translateY(-50%); }
+    to { transform: translateY(0); }
+  }
+
+  /* ── Mobile: colonna con onda verticale continua dietro i dischi ───────── */
   @media (max-width: 767px) {
-    .metodo {
-      position: relative;
-    }
-    .metodo::before {
-      content: '';
+    .vino { position: relative; }
+    /* onda dietro la colonna, centrata sull'asse dei nodi; i dischi (z-index 1)
+       la coprono → l'onda "esce" solo tra un disco e l'altro */
+    .vino-rail {
+      display: block;
       position: absolute;
       top: 2rem;
       bottom: 2rem;
-      left: 3.25rem;
-      border-left: 2px dashed
-        color-mix(in srgb, var(--color-butik-red) 45%, transparent);
+      left: 2.75rem;
+      width: 2rem;
+      transform: translateX(-50%);
+      overflow: hidden;
+      color: color-mix(in srgb, var(--color-butik-red) 65%, transparent);
+      z-index: 0;
     }
-    .metodo-step {
+    .vino-rail svg {
+      display: block;
+      width: 100%;
+      height: 200%;
+      animation: vino-scroll-v 7s linear infinite;
+    }
+    .vino-step {
       position: relative;
       display: flex;
       align-items: flex-start;
       gap: 1.5rem;
       padding-bottom: 2.5rem;
+      z-index: 1;
     }
-    .metodo-step:last-child {
-      padding-bottom: 0;
-    }
-    .metodo-node {
+    .vino-step:last-child { padding-bottom: 0; }
+    .vino-node {
       width: 5.5rem;
       height: 5.5rem;
       z-index: 1;
     }
-    .metodo-content {
-      padding-top: 0.75rem;
-    }
+    .vino-content { padding-top: 0.75rem; }
+    .vino-link { display: none; }
   }
 
-  /* ── Desktop: fila orizzontale con frecce tratteggiate ────────────────── */
+  /* ── Desktop: fila orizzontale, onda tra i dischi ─────────────────────── */
   @media (min-width: 768px) {
-    .metodo {
-      /* gap condiviso tra flex e calcolo connettori: una sola fonte di verità */
-      --metodo-gap: clamp(0.5rem, 1.5vw, 1.5rem);
-      /* raggio nodo (6.5rem / 2) + respiro ai due lati del connettore */
-      --metodo-r: 3.25rem;
-      --metodo-pad: 0.4rem;
-      /* ancora destra della linea = bordo sinistro del nodo successivo - pad.
-         Distanza tra centri nodo = step + gap → va sottratto anche il gap. */
-      --metodo-end: calc(var(--metodo-r) + var(--metodo-pad) - var(--metodo-gap) - 50%);
+    .vino {
+      --vino-gap: clamp(0.5rem, 1.5vw, 1.5rem);
+      --vino-r: 3.25rem;
+      --vino-pad: 0.4rem;
+      --vino-end: calc(var(--vino-r) + var(--vino-pad) - var(--vino-gap) - 50%);
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: var(--metodo-gap);
+      gap: var(--vino-gap);
     }
-    .metodo-step {
+    .vino-step {
       position: relative;
       flex: 1 1 0;
       display: flex;
@@ -183,34 +295,41 @@ const { eyebrow, title, tappe, icons } = Astro.props;
       align-items: center;
       text-align: center;
     }
-    .metodo-content {
+    .vino-content {
       margin-top: 1.25rem;
       width: min(14rem, 95%);
     }
-    /* freccia-connettore tratteggiata tra i nodi (all'altezza del cerchio) */
-    .metodo-step:not(:last-child)::after {
-      content: '';
-      position: absolute;
+    /* l'onda parte dal bordo destro del disco e arriva a quello sinistro del
+       successivo: ancore relative allo step → connette i dischi */
+    .vino-link {
       top: 3.25rem;
-      left: calc(50% + var(--metodo-r) + var(--metodo-pad));
-      right: var(--metodo-end);
-      border-top: 2px dashed
-        color-mix(in srgb, var(--color-butik-red) 55%, transparent);
-    }
-    /* punta della freccia: stessa ancora `right` della linea → sempre allineata */
-    .metodo-step:not(:last-child)::before {
-      content: '';
-      position: absolute;
-      top: calc(3.25rem - 4px);
-      right: var(--metodo-end);
-      width: 8px;
-      height: 8px;
-      border-top: 2px solid
-        color-mix(in srgb, var(--color-butik-red) 55%, transparent);
-      border-right: 2px solid
-        color-mix(in srgb, var(--color-butik-red) 55%, transparent);
-      transform: rotate(45deg);
-      z-index: 1;
+      left: calc(50% + var(--vino-r) + var(--vino-pad));
+      right: var(--vino-end);
+      height: 2rem;
+      transform: translateY(-50%);
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vino-disc { animation: none; }
+    .vino-link svg,
+    .vino-rail svg { animation: none; }
+  }
 </style>
+
+<script>
+  // Lo script gira una volta per sessione, ma le view transitions sostituiscono
+  // il DOM a ogni navigazione: si riaggancia su astro:page-load, e initVinylScratch
+  // salta i dischi già agganciati (docs/guidances/client-scripts.md).
+  import { initVinylScratch } from '@butik/ui/vinylScratch';
+
+  const init = () =>
+    initVinylScratch({
+      nodeSelector: '.vino-node',
+      discSelector: '.vino-disc',
+      speedVar: '--vino-speed',
+      defaultSpeed: 7,
+    });
+
+  document.addEventListener('astro:page-load', init);
+</script>
