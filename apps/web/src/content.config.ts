@@ -21,6 +21,11 @@ const serviziCollection = defineCollection({
     metaDescription: z.string().optional(),
     ogImage: image().optional(),
     ogCta: z.string().optional(),
+    // Trattamento dell'hero di questa scheda: si sceglie servizio per
+    // servizio (vedi components/serviziHero/ServiceHero.astro).
+    //   banner = il trattamento comune a progetti e pagine
+    //   a/b/c  = split al target · claim tipografico · scheda-offerta
+    heroVariant: z.enum(['banner', 'a', 'b', 'c']).optional().default('banner'),
     // Pubblici a cui il servizio parla, come id dei filtri della pagina
     // /servizi (vedi `filtri` in `pagine/servizi`). È la stessa informazione
     // degli "Adatto a" nel corpo della scheda, in forma filtrabile.

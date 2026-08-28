@@ -53,6 +53,14 @@
       "defaultValue": ""
     },
     {
+      "name": "heroVariant",
+      "label": "HeroVariant",
+      "type": "string",
+      "value": "",
+      "isIgnored": false,
+      "defaultValue": "banner"
+    },
+    {
       "name": "audience",
       "label": "Audience",
       "type": "list",
