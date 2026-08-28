@@ -1,0 +1,55 @@
+.mq {
+  width: 100%;
+  overflow: hidden;
+  padding: 0.4em 0;
+}
+.onDark {
+  background: var(--color-bg-invert);
+  color: var(--color-fg-invert);
+}
+.onLight {
+  color: var(--color-fg);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  animation: mq-scroll var(--mq-speed, 22s) linear infinite;
+}
+.reverse {
+  animation-direction: reverse;
+}
+/* Si ferma al passaggio del puntatore: dà modo di leggere una voce. */
+.mq:hover .track {
+  animation-play-state: paused;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding-right: var(--space-6);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 4vw, 2.75rem);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.dot {
+  color: var(--color-accent);
+  font-size: 0.5em;
+}
+.onDark .dot {
+  color: var(--color-highlight);
+}
+
+@keyframes mq-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track { animation: none; }
+}

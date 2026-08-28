@@ -1,0 +1,48 @@
+.flow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 12px;
+  --flow-c: color-mix(in srgb, var(--color-fg) 45%, transparent);
+  --flow-dot: var(--color-accent);
+}
+.onDark {
+  --flow-c: color-mix(in srgb, var(--color-fg-invert) 40%, transparent);
+  --flow-dot: var(--color-highlight);
+}
+
+.line {
+  width: 100%;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--flow-c) 0 9px, transparent 9px 18px);
+  background-size: 18px 2px;
+  animation: flow-move var(--flow-speed, 3s) linear infinite;
+}
+.bollo {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  margin-top: -4.5px;
+  border-radius: var(--radius-full);
+  background: var(--flow-dot);
+  animation: flow-travel calc(var(--flow-speed, 3s) * 2.4) linear infinite;
+}
+
+@keyframes flow-move {
+  to { background-position-x: 18px; }
+}
+@keyframes flow-travel {
+  0% { left: 0; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line { animation: none; }
+  /* Il bollo esiste solo per il movimento: fermo non aggiunge nulla. */
+  .bollo { display: none; }
+}

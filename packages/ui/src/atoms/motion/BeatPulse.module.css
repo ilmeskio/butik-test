@@ -1,0 +1,39 @@
+.beat {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--beat-size, 14px);
+  height: var(--beat-size, 14px);
+  color: var(--beat-c, var(--color-accent));
+}
+.accent { --beat-c: var(--color-accent); }
+.highlight { --beat-c: var(--color-highlight); }
+.fg { --beat-c: var(--color-fg); }
+
+.dot {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: currentColor;
+}
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-full);
+  border: 2px solid currentColor;
+  opacity: 0;
+  animation: beat-pulse 2s ease-out infinite;
+}
+/* I tre anelli partono sfasati di un terzo di ciclo: il battito è continuo. */
+.beat .ring:nth-child(2) { animation-delay: 0.66s; }
+.beat .ring:nth-child(3) { animation-delay: 1.33s; }
+
+@keyframes beat-pulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(3.4); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring { animation: none; }
+}

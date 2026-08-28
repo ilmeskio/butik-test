@@ -22,7 +22,17 @@
     "./ImageLeft": "./src/molecules/ImageLeft.tsx",
     "./ImageRight": "./src/molecules/ImageRight.tsx",
     "./ImageCarousel": "./src/molecules/ImageCarousel.tsx",
-    "./vinylScratch": "./src/lib/vinylScratch.ts"
+    "./vinylScratch": "./src/lib/vinylScratch.ts",
+    "./Equalizer": "./src/atoms/motion/Equalizer.tsx",
+    "./Waveform": "./src/atoms/motion/Waveform.tsx",
+    "./Marquee": "./src/atoms/motion/Marquee.tsx",
+    "./BeatPulse": "./src/atoms/motion/BeatPulse.tsx",
+    "./CountUp": "./src/atoms/motion/CountUp.tsx",
+    "./Vinyl": "./src/atoms/motion/Vinyl.tsx",
+    "./TapeReels": "./src/atoms/motion/TapeReels.tsx",
+    "./FlowDivider": "./src/atoms/motion/FlowDivider.tsx",
+    "./Underline": "./src/atoms/motion/Underline.tsx",
+    "./Mark": "./src/atoms/motion/Mark.tsx"
   },
   "dependencies": {
     "@butik/ui-tokens": "workspace:*"
